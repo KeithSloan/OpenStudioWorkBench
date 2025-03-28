@@ -1,0 +1,116 @@
+4.1. IDD CONVENTIONS 13
+! \ retaincase Retains the alphabetic case for alpha type fields
+!
+! \key Possible value for "\ type choice" (blanks are significant )
+! use multiple \key lines to indicate all valid choices
+!
+! \object -list Name of a list of user - provided object names that are valid
+! entries for this field (used with "\ reference ")
+! see Zone and BuildingSurface :Detailed objects below for
+! examples .
+! ** Note that a field may have multiple \object -list commands .
+!
+! \external -list The values for this field should be selected from a special
+! list generated outside of the IDD file. The choices for the
+! special lists are:
+! autoRDDvariable
+! autoRDDmeter
+! autoRDDvariableMeter
+! When one of these are selected the options for the field
+! are taken from the RDD or MDD file or both.
+!
+! \ reference Name of a list of names to which this object belongs
+! used with "\ type object -list" and with "\ object -list"
+! see Zone and BuildingSurface :Detailed objects below for
+! examples :
+!
+! Zone ,
+! A1 , \field Name
+! \type alpha
+! \ reference ZoneNames
+!
+! BuildingSurface :Detailed ,
+! A4 , \field Zone Name
+! \note Zone the surface is a part of
+! \type object -list
+! \object -list ZoneNames
+!
+! For each zone , the field "Name" may be referenced
+! by other objects , such as BuildingSurface :Detailed , so it is
+! commented with "\ reference ZoneNames "
+! Fields that reference a zone name , such as BuildingSurface :Detailed 's
+! "Zone Name", are commented as
+! "\ type object -list" and "\ object -list ZoneNames "
+! ** Note that a field may have multiple \ reference commands .
+! ** This is useful if the object belongs to a small specific
+! object -list as well as a larger more general object -list.
+!
+! Object -level comments :
+!
+! \memo Memo describing the object. If multiple lines , start each line
+! with \memo.
+! Limit line length to 100 characters .
+!
+! \unique -object To flag objects which should appear only once in an idf
+! (this comment has no "value ")
+!
+! \required -object To flag objects which are required in every idf
+! (this comment has no "value ")
+!
+! \min -fields Minimum number of fields that should be included in the
+! object. If appropriate , the Input Processor will fill
+! any missing fields with defaults (for numeric fields).
+! It will also supply that number of fields to the "get"
+! routines using blanks for alpha fields (note -- blanks
+! may not be allowable for some alpha fields).
+!
+! \obsolete This object has been replaced though is kept (and is read)
+! in the current version. Please refer to documentation as
+! to the dispersal of the object. If this object is
+! encountered in an IDF , the InputProcessor will post an
+! appropriate message to the error file.
+! usage: \obsolete New = >[New object name]
+!
+! \ extensible :<\#> This object is dynamically extensible -- meaning , if you
+! change the IDD appropriately (if the object has a simple list
+! structure -- just add items to the list arguments (i.e. BRANCH
+! LIST). These will be automatically redimensioned and used during
+! the simulation . <\#> should be entered by the developer to signify
+! how many of the last fields are needed to be extended (and EnergyPlus
+! will attempt to auto -extend the object). The first field of the first
+! instance of the extensible field set is marked with \begin - extensible .
+!
+! \begin - extensible See previous item , marks beginning of extensible fields in
+! an object.
+!
+! \format The object should have a special format when saved in
+! the IDF Editor with the special format option enabled.
+! The options include SingleLine , Vertices , CompactSchedule ,
+! FluidProperties , ViewFactors , and Spectral.
+! The SingleLine option puts all the fields for the object
+! on a single line. The Vertices option is used in objects
+! that use X, Y and Z fields to format those three fields
+! on a single line.
+! The CompactSchedule formats that specific object.
+! The FluidProperty option formats long lists of fluid
+! properties to ten values per line.
+! The ViewFactor option formats three fields related to
+! view factors per line.
+! The Spectral option formats the four fields related to
+! window glass spectral data per line.
+!
+! \reference -class -name Adds the name of the class to the reference list
+! similar to \ reference .
+!
+! Group -level comments :
+!
+! \group Name for a group of related objects
+!
+!
+! Notes on comments
+! -----------------
+!
+! 1. If a particular comment is not applicable (such as units , or default)
+! then simply omit the comment rather than indicating N/A.
+!
+! 2. Memos and notes should be brief ( recommend 5 lines or less per block).

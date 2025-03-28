@@ -1,2 +1,2 @@
-#import FreeCAD
-#FreeCAD.addImportType("3DM (*.3dm)","freecad.importNURBS.import3DM")
+import FreeCAD
+FreeCAD.addExportType("OpenStudio Sketch Plugin xml (*.xml)","freecad.openStudio.skp_export")

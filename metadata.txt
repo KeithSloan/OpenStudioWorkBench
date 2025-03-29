@@ -1,2 +1,2 @@
 workbenches=BIM
-pylibs= xgbxml
+pylibs= xgbxml, shapely, lxml, matplotlib, triangle

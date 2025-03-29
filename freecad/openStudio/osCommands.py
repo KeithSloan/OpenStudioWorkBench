@@ -29,7 +29,7 @@ __url__ = ["http://www.freecadweb.org"]
 from PySide import QtGui, QtCore
 from PySide.QtCore import Qt
 
-from freecad.openstudio import add_gdmxl
+from freecad.openStudio import add_gbxml
 
 import FreeCADGui
 
@@ -37,6 +37,7 @@ class AddGBxmlFeature:
     def Activated(self):
 
         print("Add gbxml properties")
+        add_gbxml()
         return
 
     def IsActive(self):

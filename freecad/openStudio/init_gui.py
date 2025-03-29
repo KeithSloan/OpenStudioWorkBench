@@ -35,8 +35,6 @@
 import FreeCAD
 import FreeCADGui
 
-from freecad.openStudio import commands
-
 def joinDir(path) :
     import os
     __dirname__ = os.path.dirname(__file__)
@@ -56,7 +54,7 @@ class OpenStudio_Workbench ( FreeCADGui.Workbench ):
         def QT_TRANSLATE_NOOP(scope, text):
             return text
         
-        import freecad.openStudio.commands
+        from freecad.openStudio import osCommands
         
         commandList=['addGBxmlCmd', \
         ]

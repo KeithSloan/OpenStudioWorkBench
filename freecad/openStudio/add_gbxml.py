@@ -25,33 +25,12 @@
 #              a directory structure starting at the specified Volume Name *
 #                                                                          *
 #                                                                          *
-#    python3 buildDirStruct.py <parms> <Volume> <gdml_file> <Out_dir>      *
-#                                                                          *
-#       parms for future use ( use 1 for now )                             *
-#       Volume    : Name of Volume to be extracted                         *
-#       gdml_file : Source GDML file                                       *
-#       Out_dir   : Output Directory                                       *
-#                                                                          *
-#  Where each Volume, Assembly is created as a sub directory               *
-#                                                                          *
-#           volumeName.gdml                                                *
-#           volumeName_define.xml                                          *
-#           volumeName_materials.xml                                       *
-#           volumeName_solids.xml                                          *
-#           volumeName_struct.xml                                          *
-#           volumeName_setup.xml                                           *
-#           < sub Volumes/Assemblies >                                     *
-#                                                                          *
 ############################################################################
 
 import FreeCAD, FreeCADGui
-import sys, os
-#from freecad.openStudio import skp_lxml
-#import copy
 
-
-if open.__module__ in ['__builtin__', 'io']:
-    pythonopen = open # to distinguish python built-in open function from the one declared here
+#if open.__module__ in ['__builtin__', 'io']:
+#    pythonopen = open # to distinguish python built-in open function from the one declared here
 
 class switch(object):
     value = None
@@ -119,7 +98,7 @@ def processSpace(sObj):
     if hasattr(sObj, "Boundaries"):
         processBoundaries(sObj.Boundaries)
 
-def processExport(obj):
+def addGBxml(obj):
     objType = getType(obj)
     print(f"Label {obj.Label} Type {objType}")
     while switch (objType):
@@ -129,23 +108,9 @@ def processExport(obj):
              
         return
 
-def export(exportList, filename):
-    "called when FreeCAD exports a file"
-
-    # process Objects
-    print("\nStart OpenStudio Export skp xml 0.1\n")
-    print(f"Open Output File : ExportList {exportList}")
-    for e in exportList:
-        processExport(e)
-
-
-def exportEntity(dirPath, elemName, elem):
-    import os
-    global gdml, docString
-
-    etree.ElementTree(elem).write(os.path.join(dirPath, elemName))
-    docString += '<!ENTITY '+elemName+' SYSTEM "'+elemName+'">\n'
-    gdml.append(etree.Entity(elemName))
+# process Objects
+print("\nStart OpenStudio Add gbxml properties 0.1\n")
+addGBxml(FreeCAD.ActiveDocument.rootObjects)
 
 
 

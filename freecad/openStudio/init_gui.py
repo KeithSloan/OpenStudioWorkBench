@@ -34,7 +34,8 @@
 #from FreeCAD import *
 import FreeCAD
 import FreeCADGui
-#from freecad.toSketch import toSCommands
+
+from freecad.openStudio import commands
 
 def joinDir(path) :
     import os
@@ -55,19 +56,17 @@ class OpenStudio_Workbench ( FreeCADGui.Workbench ):
         def QT_TRANSLATE_NOOP(scope, text):
             return text
         
-        #import 2SCommands
-        #commands=['toSPlaneCommand', \
-        ##            ]
-
-        #toolbarcommands=['toSPlaneCommand', \
-        #            'toScaleCommand','toResetOriginCommand']
-
-        import PartGui
-        #self.appendToolbar(QT_TRANSLATE_NOOP('Workbench', \
-        #                   'toSketch_Tools'),toolbarcommands)
-        #self.appendToolbar(QT_TRANSLATE_NOOP('Workbench', \
-        #                   'toSketch_Tools Part Tools'),parttoolbarcommands)
-        #self.appendMenu('toSketch',commands)
+        import freecad.openStudio.commands
+        
+        commandList=['addGBxmlCmd', \
+        ]
+        self.appendMenu("GBXML", commandList)
+        
+        toolbarCmds = commandList
+        self.appendToolbar(
+            QT_TRANSLATE_NOOP("Workbench", "gbxml"), toolbarCmds
+        )
+        
         FreeCADGui.addIconPath(joinDir("Resources/icons"))
         FreeCADGui.addLanguagePath(joinDir("Resources/translations"))
         #FreeCADGui.addPreferencePage(joinDir("Resources/ui/toSketch-base.ui"),"Face2Sketch")

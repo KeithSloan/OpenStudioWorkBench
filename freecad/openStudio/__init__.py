@@ -1,2 +1,3 @@
 import FreeCAD
-FreeCAD.addExportType("OpenStudio Sketch Plugin xml (*.xml)","freecad.openStudio.export_gbxml")
+FreeCAD.addImportType("OpenStudio Sketch Plugin gbxml (*.gbxml)","freecad.openStudio.import_gbxml")
+FreeCAD.addExportType("OpenStudio Sketch Plugin gbxml (*.xml)","freecad.openStudio.export_gbxml")

@@ -69,31 +69,38 @@ class gbxml_lxml() :
         import xgbxml
 
         self.gbxml = xgbxml.create_gbXML()
+        # uses xgbxml to generate a lxml parser to read gbXML version 0.37
+        self.parser=self.gbxml.get_parser(version='0.37')
 
-    def parse(self, filename):   
-        try:
-            from lxml import etree
-            print('Running with lxml.etree\n')
-            print(filename)
-            parser = etree.XMLParser(resolve_entities=True)
-            self.root = etree.parse(filename, parser=parser)
+    def setFileDetails(self, filename):
+        import os
+        split = os.path.splitext(fileame)
+        self.filename  = filename
+        self.pathDir = split[0]
+        self.docName = split[1][0]
+        self.fileType = os.path.splitext(filename)[1][1:]
 
-        except ImportError:
-            try:
-                import xml.etree.ElementTree as etree
-                print("Rnning with etree.ElementTree (import limitations)\n")
-                self.tree = etree.parse(filename)
-                self.root = self.tree.getroot()
-            except:
-                print('No lxml or xml')
+    def parse(self, filename):
+        self.setFileDetails(filename)   
+            
+        from self.gbxml import etree
+        print('Running with gbxml.etree\n')
+        print(filename)
+        #parser = etree.XMLParser(resolve_entities=True)
+        self.root = etree.parse(filename, parser=self.parser)
 
     def export(self, filename):
         self.tree = self.gbxml.getroottree()
         self.tree.write(filename)
 
     def printElement(self, elem):
-        import lxml.html as html
+        import gbxml.html as html
         print(html.tostring(elem))
+    
+    def appendEntity(self, filename, elemName):
+        docString += "<!ENTITY " + elemName + ' SYSTEM "' + filename + '">\n'
+        #self.gbxml.append(ET.Entity(elemName))
+        #self.tree.ElementTree(elem).write(os.path.join(self.dirPath, elem))
 
 
     def printMaterials(self):

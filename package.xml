@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
+
   <name>OpenStudio_Workbench</name>
+
   <description>Workbench for Creating OpenStudio required data</description>
-  <version>1.0.1</version>
+
+  <version>0.1.0</version>
+
+  <date>2025-03-31</date>
+
   <maintainer email="ipad2@sloan-home.co.uk">Keith Sloan</maintainer>
+
   <license file="LICENSE">GPL-2.0</license>
-  <url type="repository" branch="main">https://github.com/KeithSloan/OpenStudioWorkBench</url>
+
+  <url branch="main" type="repository">https://github.com/KeithSloan/OpenStudioWorkBench</url>
+
   <url type="readme">https://github.com/KeithSloan/OpenStudioWorkBench/blob/main/README.md</url>
+
+  <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
 
   <content>
     <workbench>
+      <freecadmin>0.19.0</freecadmin>
+      <depend optional="False" type="automatic"> xgbxml </depend>
+      <depend optional="False" type="automatic"> shapely</depend>
+      <depend optional="False" type="automatic"> lxml</depend>
+      <depend optional="False" type="automatic"> matplotlib</depend>
+      <depend optional="False" type="automatic"> triangle</depend>
+      <tag>openStudio</tag>
+      <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
       <classname>OpenStudio_Workbench</classname>
       <subdirectory>./</subdirectory>
-      <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
-      <freecadmin>0.19.0</freecadmin>
-      <tag>openStudio</tag>
-      <depend> xgbxml </depend>
-      <depend> shapely</depend>
-      <depend> lxml</depend>
-      <depend> matplotlib</depend>
-      <depend> triangle</depend>
     </workbench>
   </content>
 

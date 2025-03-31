@@ -111,4 +111,5 @@ def addGBxml(obj):
 # process Objects
 print("\nStart OpenStudio Add gbxml properties 0.1\n")
 doc = FreeCAD.ActiveDocument
-addGBxml(doc.rootObjects)
+if doc is not None:
+    addGBxml(doc.rootObjects)

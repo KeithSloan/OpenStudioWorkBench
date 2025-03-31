@@ -52,12 +52,13 @@ def case(*args):
     return any((arg == switch.value for arg in args))
 
 from freecad.openStudio.gbxml_lxml import gbxml_lxml
+from freecad.openStudio.processGBXML import processGBXML
 
 #def open(filename, processType=1, prompt=True):
 def open(filename):
     "called when freecad opens a file."
     global doc
-    print(f"Open : {filename} {processType}")
+    print(f"Open : {filename}")
     docName = os.path.splitext(os.path.basename(filename))[0]
     print(f"path : {filename}")
     if filename.lower().endswith(".gdxml"):
@@ -88,19 +89,19 @@ def open(filename):
 
 def insert(filename, docName):
     "called when freecad imports a file"
-    print("Insert filename : " + filename + " docname : " + docname)
+    print("Insert filename : " + filename + " docname : " + docName)
     global doc
 
     # print(f'volDict : {volDict}')
     #groupname = os.path.splitext(os.path.basename(filename))[0]
     try:
-        doc = FreeCAD.getDocument(docname)
+        doc = FreeCAD.getDocument(docName)
     except NameError:
-        doc = FreeCAD.newDocument(docname)
+        doc = FreeCAD.newDocument(docName)
     if filename.lower().endswith(".gbxml"):
         # False flag indicates import
         #processGDXML(doc, False, filename, True, 1, False)
-        processGDXML(doc, filename, docName)
+        processGBXML(doc, filename, docName)
 
     #elif filename.lower().endswith(".xml"):
     #    processXML(doc, filename)

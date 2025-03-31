@@ -69,6 +69,8 @@ class gbxml_lxml() :
         import xgbxml
 
         self.gbxml = xgbxml.create_gbXML()
+        # docString ?? default defintion !!!
+        self.docString = ''
         # uses xgbxml to generate a lxml parser to read gbXML version 0.37
         self.parser=self.gbxml.get_parser(version='0.37')
 
@@ -98,7 +100,7 @@ class gbxml_lxml() :
         print(html.tostring(elem))
     
     def appendEntity(self, filename, elemName):
-        docString += "<!ENTITY " + elemName + ' SYSTEM "' + filename + '">\n'
+        self.exportdocString += "<!ENTITY " + elemName + ' SYSTEM "' + filename + '">\n'
         #self.gbxml.append(ET.Entity(elemName))
         #self.tree.ElementTree(elem).write(os.path.join(self.dirPath, elem))
 
@@ -110,98 +112,3 @@ class gbxml_lxml() :
     def printName(self, elem):
         name = elem.attrib.get('name')
         print(f"{elem} : {name}")
-
-def getType(obj):
-    if obj.TypeId == "Part::FeaturePython":
-        if hasattr(obj, "Proxy"):
-            if hasattr(obj.Proxy, "ifcType"):
-                return obj.Proxy.ifcType
-            elif hasattr(obj.Proxy, "Type"):
-                return obj.Proxy.Type
-    else:
-        return obj.TypeId
-
-def processSpaceSketch(wallObj, sketch):
-    for sObj in sketch.Geometry:
-        print(sObj.TypeId)
-        gType = sObj.TypeId
-        #while switch(gType):
-        #    if case("Part::GeomLineSegment"):
-        #        print(f"{sObj.StartPoint} , {sObj.EndPoint}")
-        #
-        #    print(f"{gType} Not yet handled")
-        #    return
-        if gType == "Part::GeomLineSegment":
-            print(f"{sObj.StartPoint} , {sObj.EndPoint}")
-        else:
-            print(f"{gType} Not yet handled")
-
-
-def processWall(wObj):
-    if hasattr(wObj, "Base"):
-        print(wObj.Base)
-        if wObj.Base is not None:
-            if wObj.Base.TypeId == "Sketcher::SketchObject":
-                processSpaceSketch(wObj, wObj.Base)
-
-def getFace(obj, fName):
-    print(f"{obj.Label} Get Face {fName}")
-
-def processBoundaryObjFaces(objFaces):
-    # objFaces - tuples
-    print(f"objFaces {objFaces}")
-    processWall(objFaces[0])
-    #for wObj in objFaces(0): 
-    #    processWall(wObj)
-
-    #print(f"{obj.Label} type {getType(obj)}")
-    #for fn in fNames:
-    #    face = getFace(obj, fn)
-
-def processBoundaries(bObjs):
-    print(bObjs)
-    for b in bObjs :
-        processBoundaryObjFaces(b)
-    #print(boundType)
-
-def processSpace(sObj):
-    if hasattr(sObj, "Boundaries"):
-        processBoundaries(sObj.Boundaries)
-
-def processExport(obj):
-
-    gbxml = gbxml_lxml(filename)
-    
-    objType = getType(obj)
-    print(f"Label {obj.Label} Type {objType}")
-    while switch (objType):
-        if case("Site"):
-            print(f"Site")
-            #processSpace(obj)
-             
-        return
-
-def export(exportList, filename):
-    "called when FreeCAD exports a file"
-
-    # process Objects
-    print("\nStart Export gbxml 0.1\n")
-    print(f"Open Output File : ExportList {exportList}")
-    gbxml = gbxml_lxml()
-    gdxml.export(filename)
-
-    #for e in exportList:
-    #    processExport(e)
-
-
-def exportEntity(dirPath, elemName, elem):
-    import os
-    global gdml, docString
-
-    etree.ElementTree(elem).write(os.path.join(dirPath, elemName))
-    docString += '<!ENTITY '+elemName+' SYSTEM "'+elemName+'">\n'
-    gdml.append(etree.Entity(elemName))
-
-
-
-

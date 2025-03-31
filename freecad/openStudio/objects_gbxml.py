@@ -29,9 +29,37 @@
 # *                                                                         *
 ############################################################################*
 
+class gbxml_common:
+    def __init__(self, obj):
+        """Init"""
+
+    def __getstate__(self):
+        """When saving the document this object gets stored using Python's
+        json module.
+        Since we have some un-serializable parts here -- the Coin stuff --
+        we must define this method
+        to return a tuple of all serializable objects or None."""
+        if hasattr(self, "Type"):  # If not saved just return
+            return {"type": self.Type}
+        else:
+            pass
+
+    def __setstate__(self, arg):
+        """When restoring the serialized object from document we have the
+        chance to set some internals here.
+        Since no data were serialized nothing needs to be done here."""
+        # Handle bug in FreeCAD 0.21.2 handling of json
+        #print(f"setstate : arg {arg} type {type(arg)}")
+        if arg is not None and arg != {}:
+            if 'type' in arg:
+                self.Type = arg["type"]
+            else: #elif 'Type' in arg:
+                self.Type = arg["Type"]
+            #print(self.Type)
+
 
 class Campus(gbxml_common):
-    def __init__(self,  id):
+    def __init__(self,  obj, id):
         super().__init__()
         #obj.addProperty("App::PropertyFloat", "x", "GDMLBox", "Length x").x = x
         #obj.addProperty("App::PropertyFloat", "y", "GDMLBox", "Length y").y = y
@@ -62,8 +90,9 @@ class Campus(gbxml_common):
         #<CADModelAzimuth>0</CADModelAzimuth>
         #<Name>Boston, MA</Name>
 
+
 class  Building(gbxml_common):
-    def __init__(self, buildingType="MultiFamily", id="aim0013")
+    def __init__(self, obj, buildingType, id):
         super().__init__()
         self.buildingType = buildingType
         self.id = id
@@ -75,8 +104,9 @@ class  Building(gbxml_common):
         # <StreetAddress>Boston, MA</StreetAddress>
         #<Area>6664.153</Area>
 
+
 class Space(gbxml_common):
-    def __init__(self, spaceType, zoneIdRef, lightScheduleIdRef):
+    def __init__(self, obj, spaceType, zoneIdRef, lightScheduleIdRef):
         super().__init__()
         self.spaceType = spaceType
         self.zoneIdRef = zoneIdRef
@@ -95,32 +125,3 @@ class Space(gbxml_common):
         #<Area>404.9365</Area>
         #Area>404.9365</Area>
         #<Volume>4458.979</Volume>
-
-
-class gbxml_common:
-    def __init__(self, obj):
-        """Init"""
-
-    def __getstate__(self):
-        """When saving the document this object gets stored using Python's
-        json module.
-        Since we have some un-serializable parts here -- the Coin stuff --
-        we must define this method
-        to return a tuple of all serializable objects or None."""
-        if hasattr(self, "Type"):  # If not saved just return
-            return {"type": self.Type}
-        else:
-            pass
-
-    def __setstate__(self, arg):
-        """When restoring the serialized object from document we have the
-        chance to set some internals here.
-        Since no data were serialized nothing needs to be done here."""
-        # Handle bug in FreeCAD 0.21.2 handling of json
-        #print(f"setstate : arg {arg} type {type(arg)}")
-        if arg is not None and arg != {}:
-            if 'type' in arg:
-                self.Type = arg["type"]
-            else: #elif 'Type' in arg:
-                self.Type = arg["Type"]
-            #print(self.Type)

@@ -49,6 +49,10 @@ def case(*args):
     return any((arg == switch.value for arg in args))
 
 from freecad.openStudio.gbxml_lxml import gbxml_lxml
+from freecad.openStudio.docTree_gbxml import buildDocTree
+
+gbxml = gbxml_lxml()
+global gbxml
 
 def getType(obj):
     if obj.TypeId == "Part::FeaturePython":
@@ -108,9 +112,6 @@ def processSpace(sObj):
         processBoundaries(sObj.Boundaries)
 
 def processExport(obj):
-
-    gbxml = gbxml_lxml(filename)
-    
     objType = getType(obj)
     print(f"Label {obj.Label} Type {objType}")
     while switch (objType):
@@ -122,21 +123,16 @@ def processExport(obj):
 
 def export(exportList, filename):
     "called when FreeCAD exports a file"
-
+    from freecad.openStudio import gbxml_lxml
     # process Objects
     print("\nStart Export gbxml 0.1\n")
     print(f"Open Output File : ExportList {exportList}")
-    gbxml = gbxml_lxml()
-    gdxml.export(filename)
+    gbxml.setFileDetails(filename)
+    # global childObjects
+    # childObjects = {}  # dictionary of list of child objects for each object
+    # buildDocTree now creates global childObjects 
+    buildDocTree()  # creates global childObjects
+    #processExport()
 
     #for e in exportList:
     #    processExport(e)
-
-
-def exportEntity(dirPath, elemName, elem):
-    import os
-    global gdml, docString
-
-    etree.ElementTree(elem).write(os.path.join(dirPath, elemName))
-    docString += '<!ENTITY '+elemName+' SYSTEM "'+elemName+'">\n'
-    gdml.append(etree.Entity(elemName))

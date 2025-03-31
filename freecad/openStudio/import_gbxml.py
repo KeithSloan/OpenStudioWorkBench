@@ -28,6 +28,9 @@
 # *                                                                         *
 # *                                                                         *
 ############################################################################*
+__title__ = "FreeCAD - GBXML importer"
+__author__ = "Keith Sloan <ipad2@sloan-home.co.uk>"
+__url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
 import FreeCAD, FreeCADGui
 import sys, os
@@ -50,93 +53,54 @@ def case(*args):
 
 from freecad.openStudio.gbxml_lxml import gbxml_lxml
 
-def getType(obj):
-    if obj.TypeId == "Part::FeaturePython":
-        if hasattr(obj, "Proxy"):
-            if hasattr(obj.Proxy, "ifcType"):
-                return obj.Proxy.ifcType
-            elif hasattr(obj.Proxy, "Type"):
-                return obj.Proxy.Type
-    else:
-        return obj.TypeId
+#def open(filename, processType=1, prompt=True):
+def open(filename):
+    "called when freecad opens a file."
+    global doc
+    print(f"Open : {filename} {processType}")
+    docName = os.path.splitext(os.path.basename(filename))[0]
+    print(f"path : {filename}")
+    if filename.lower().endswith(".gdxml"):
 
-def processSpaceSketch(wallObj, sketch):
-    for sObj in sketch.Geometry:
-        print(sObj.TypeId)
-        gType = sObj.TypeId
-        #while switch(gType):
-        #    if case("Part::GeomLineSegment"):
-        #        print(f"{sObj.StartPoint} , {sObj.EndPoint}")
-        #
-        #    print(f"{gType} Not yet handled")
-        #    return
-        if gType == "Part::GeomLineSegment":
-            print(f"{sObj.StartPoint} , {sObj.EndPoint}")
-        else:
-            print(f"{gType} Not yet handled")
+        # import cProfile, pstats
+        # profiler = cProfile.Profile()
+        # profiler.enable()
+        doc = FreeCAD.newDocument(docName)
+        # prompt = True
+        #if processType == 2:
+        #    prompt = False
+        #processGBXML(doc, True, filename, prompt, processType, False)
+        processGBXML(doc, filename, docName)
+        # profiler.disable()
+        # stats = pstats.Stats(profiler).sort_stats('cumtime')
+        # stats.print_stats()
 
+    #elif filename.lower().endswith(".xml"):
+    #    try:
+    #        doc = FreeCAD.ActiveDocument()
+    #        print("Active Doc")
 
-def processWall(wObj):
-    if hasattr(wObj, "Base"):
-        print(wObj.Base)
-        if wObj.Base is not None:
-            if wObj.Base.TypeId == "Sketcher::SketchObject":
-                processSpaceSketch(wObj, wObj.Base)
+    #   except:
+    #        print("New Doc")
+    #        doc = FreeCAD.newDocument(docName)
 
-def getFace(obj, fName):
-    print(f"{obj.Label} Get Face {fName}")
+     #   processXML(doc, filename)
 
-def processBoundaryObjFaces(objFaces):
-    # objFaces - tuples
-    print(f"objFaces {objFaces}")
-    processWall(objFaces[0])
-    #for wObj in objFaces(0): 
-    #    processWall(wObj)
+def insert(filename, docName):
+    "called when freecad imports a file"
+    print("Insert filename : " + filename + " docname : " + docname)
+    global doc
 
-    #print(f"{obj.Label} type {getType(obj)}")
-    #for fn in fNames:
-    #    face = getFace(obj, fn)
+    # print(f'volDict : {volDict}')
+    #groupname = os.path.splitext(os.path.basename(filename))[0]
+    try:
+        doc = FreeCAD.getDocument(docname)
+    except NameError:
+        doc = FreeCAD.newDocument(docname)
+    if filename.lower().endswith(".gbxml"):
+        # False flag indicates import
+        #processGDXML(doc, False, filename, True, 1, False)
+        processGDXML(doc, filename, docName)
 
-def processBoundaries(bObjs):
-    print(bObjs)
-    for b in bObjs :
-        processBoundaryObjFaces(b)
-    #print(boundType)
-
-def processSpace(sObj):
-    if hasattr(sObj, "Boundaries"):
-        processBoundaries(sObj.Boundaries)
-
-def processExport(obj):
-
-    gbxml = gbxml_lxml(filename)
-    
-    objType = getType(obj)
-    print(f"Label {obj.Label} Type {objType}")
-    while switch (objType):
-        if case("Site"):
-            print(f"Site")
-            #processSpace(obj)
-             
-        return
-
-def export(exportList, filename):
-    "called when FreeCAD exports a file"
-
-    # process Objects
-    print("\nStart Export gbxml 0.1\n")
-    print(f"Open Output File : ExportList {exportList}")
-    gbxml = gbxml_lxml()
-    gdxml.export(filename)
-
-    #for e in exportList:
-    #    processExport(e)
-
-
-def exportEntity(dirPath, elemName, elem):
-    import os
-    global gdml, docString
-
-    etree.ElementTree(elem).write(os.path.join(dirPath, elemName))
-    docString += '<!ENTITY '+elemName+' SYSTEM "'+elemName+'">\n'
-    gdml.append(etree.Entity(elemName))
+    #elif filename.lower().endswith(".xml"):
+    #    processXML(doc, filename)

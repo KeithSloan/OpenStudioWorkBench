@@ -5,6 +5,8 @@
 This is ane experimental workbench looking to create valid input
 for OpenStudio & EnergyPlus
 
+Rename to BIM or BEM workbench ?
+
 ## Installation
 
 It can be installed via the [Addon Manager](https://github.com/FreeCAD/FreeCAD-addons) (from Tools menu)

@@ -29,15 +29,25 @@
 # *                                                                         *
 ############################################################################*
 
-#from.openStudio.gblxml import gbxml_lxml
+from freecad.openStudio.gbxml_lxml import gbxml_lxml
 
-#def GGMLfile():
-#    def __init__(self, filename):
-#        self.gbxml = gbxml_lxml()
-#        self.gbxml.setFileDetails(filename)
-#        
-#    def processGBXML(self):
-#        print(f"Process GBXML file {self.docName} path {self.filename}")
-#        self.gbxml.parse()
-#
+class GBXML_file:
+    def __init__(self):
+        print("Init GDML file")
+        self.gbxml = gbxml_lxml()
 
+    def FileDetails(self, filename):
+        print(f"Set file details {filename}")
+        import os
+        split = os.path.splitext(filename)
+        self.filename  = filename
+        self.pathDir = split[0]
+        self.docName = split[1][0]
+        self.fileType = os.path.splitext(filename)[1][1:]
+
+    def parseGBXML(self, doc, filename):
+        self.FileDetails(filename)
+        print(f"Process GBXML file {doc.Name} path {filename} Name{self.docName}")
+        self.gbxml.parse(filename)
+
+    

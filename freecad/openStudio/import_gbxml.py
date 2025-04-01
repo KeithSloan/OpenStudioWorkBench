@@ -51,8 +51,8 @@ class switch(object):
 def case(*args):
     return any((arg == switch.value for arg in args))
 
+#from freecad.openStudio.gbxml_lxml import gbxml_lxml
 from freecad.openStudio.gbxml_lxml import gbxml_lxml
-from freecad.openStudio.processGBXML import processGBXML
 
 #def open(filename, processType=1, prompt=True):
 def open(filename):
@@ -60,8 +60,7 @@ def open(filename):
     global doc
     print(f"Open : {filename}")
     docName = os.path.splitext(os.path.basename(filename))[0]
-    print(f"path : {filename}")
-    if filename.lower().endswith(".gdxml"):
+    if filename.lower().endswith(".xml"):
 
         # import cProfile, pstats
         # profiler = cProfile.Profile()
@@ -71,7 +70,9 @@ def open(filename):
         #if processType == 2:
         #    prompt = False
         #processGBXML(doc, True, filename, prompt, processType, False)
-        processGBXML(doc, filename, docName)
+        #gdml_file.FileDetails(filename)
+        my_gbxml = gbxml_lxml()
+        my_gbxml.parseGBXML(doc, filename)
         # profiler.disable()
         # stats = pstats.Stats(profiler).sort_stats('cumtime')
         # stats.print_stats()
@@ -101,7 +102,10 @@ def insert(filename, docName):
     if filename.lower().endswith(".gbxml"):
         # False flag indicates import
         #processGDXML(doc, False, filename, True, 1, False)
-        processGBXML(doc, filename, docName)
+        gl  = gbxml_lxml()
+        #gdml_file.setFileDetails(filename)
+        gl.parseGBXML(doc, filename)
+        #processGBXML(doc, filename, docName)
 
     #elif filename.lower().endswith(".xml"):
     #    processXML(doc, filename)

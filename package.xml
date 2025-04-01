@@ -22,11 +22,11 @@
   <content>
     <workbench>
       <freecadmin>0.19.0</freecadmin>
-      <depend optional="False" type="automatic"> xgbxml </depend>
-      <depend optional="False" type="automatic"> shapely</depend>
-      <depend optional="False" type="automatic"> lxml</depend>
-      <depend optional="False" type="automatic"> matplotlib</depend>
-      <depend optional="False" type="automatic"> triangle</depend>
+      <depend>xgbxml</depend>
+      <depend>shapely</depend>
+      <depend>lxml</depend>
+      <depend>matplotlib</depend>
+      <depend>triangle</depend>
       <tag>openStudio</tag>
       <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
       <classname>OpenStudio_Workbench</classname>

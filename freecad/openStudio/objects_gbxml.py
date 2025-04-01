@@ -89,6 +89,7 @@ class Campus(gbxml_common):
         #<Elevation>154</Elevation>
         #<CADModelAzimuth>0</CADModelAzimuth>
         #<Name>Boston, MA</Name>
+        
 
 
 class  Building(gbxml_common):

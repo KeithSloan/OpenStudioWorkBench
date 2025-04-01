@@ -68,29 +68,29 @@ class gbxml_lxml() :
     def __init__(self):
         import xgbxml
 
-        self.gbxml = xgbxml.create_gbXML()
+        print("init gbxml lxml")
+        #self.gbxml = xgbxml.create_gbXML()
         # docString ?? default defintion !!!
         self.docString = ''
         # uses xgbxml to generate a lxml parser to read gbXML version 0.37
-        self.parser=self.gbxml.get_parser(version='0.37')
-
+        #self.parser = self.gbxml.get_parser(version='0.37')
+        self.parser = xgbxml.get_parser("0.37")
+    
     def setFileDetails(self, filename):
         import os
-        split = os.path.splitext(fileame)
+        split = os.path.splitext(filename)
         self.filename  = filename
         self.pathDir = split[0]
         self.docName = split[1][0]
         self.fileType = os.path.splitext(filename)[1][1:]
 
-    def parse(self, filename):
-        self.setFileDetails(filename)   
-            
-        from self.gbxml import etree
-        print('Running with gbxml.etree\n')
-        print(filename)
-        #parser = etree.XMLParser(resolve_entities=True)
-        self.root = etree.parse(filename, parser=self.parser)
-
+    def parseGBXML(self, doc, filename):
+        from lxml import etree
+        #self.setFileDetails(filename)
+        print(f"Parse file {filename}")   
+        self.tree = etree.parse(filename, self.parser)
+        self.gbxml = self.tree.getroot()
+    
     def export(self, filename):
         self.tree = self.gbxml.getroottree()
         self.tree.write(filename)

@@ -37,12 +37,14 @@ def generate_feature_class(xsd_file, element_name):
 
     # Look for the complexType inside the element.
     complexType = elem.find('xs:complexType', namespaces=ns)
+    print(f"ComplexType {complexType}")
     if complexType is None:
         print(f"Element '{element_name}' does not have a complexType definition.")
         sys.exit(1)
 
     # Find sub-elements (assumed to be in a sequence)
     subelements = complexType.xpath(".//xs:element", namespaces=ns)
+    print(f"subelemnts {subelements}")
     properties = []  # Each property is (name, fc_property_type, enumeration_values)
 
     for sub in subelements:

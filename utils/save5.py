@@ -51,9 +51,13 @@ def generate_feature_class(xsd_file, element_name):
         sys.exit(1)
     elem = elems[0]
 
+    print(f"element {element_name}")
+    print(dir(elem))
+    
     # Look for the complexType inside the element.
-    print(f"ComplexType {elem.find('xs:complexType', namespaces=ns)}")
-    if (elem.find('xs:complexType', namespaces=ns)) is None:
+    complexType = elem.find('xs:complexType', namespaces=ns)
+    print(f"ComplexType {complexType}")
+    if complexType is None:
         print(f"Element '{element_name}' does not have a complexType definition.")
         sys.exit(1)
 
@@ -61,10 +65,11 @@ def generate_feature_class(xsd_file, element_name):
     subelements = (elem.find('xs:complexType', namespaces=ns)).xpath(".//xs:element", namespaces=ns)
     properties = []  # Each property is (name, fc_property_type, enumeration_values)
 
-    print(f"subelemnts {subelements}")
+    print(f"Subelemnts {subelements}")
     for sub in subelements:
         # Try to get the 'name' attribute; if not available, try 'ref'
         prop_name = sub.get('name') or sub.get('ref')
+        print(f"subelement {prop_name}")
         if not prop_name:
             continue
 

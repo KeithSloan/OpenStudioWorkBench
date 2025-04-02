@@ -55,11 +55,9 @@ def generate_feature_class(xsd_file, element_name):
 
     # Try to detect a simpleContent extension using XPath.
     ext_nodes = elem.xpath("./*[local-name()='complexType']/*[local-name()='simpleContent']/*[local-name()='extension']")
-    print(f"ext nodes {ext_nodes}")
     if ext_nodes:
         extension = ext_nodes[0]
         # Process the base type.
-        print(f"base {base}")
         base = extension.get("base")
         if base:
             base_type = base.split(':')[-1].strip().lower()
@@ -100,7 +98,6 @@ def generate_feature_class(xsd_file, element_name):
     else:
         # Fallback: process subelements in a sequence.
         subelements = elem.xpath(".//*[local-name()='element']")
-        print(f"Sub Elements {subelements}")
         for sub in subelements:
             prop_name = sub.get('name') or sub.get('ref')
             if not prop_name:
@@ -234,3 +231,4 @@ if __name__ == "__main__":
     with open(output_filename, "w") as f:
         f.write(code)
     print(f"Generated code written to {output_filename}")
+

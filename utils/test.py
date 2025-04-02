@@ -41,7 +41,8 @@ def resolve_xsd_type(custom_type, root):
     return custom_type.lower()
 
 def generate_feature_class(xsd_file, element_name):
-    tree = etree.parse(xsd_file)
+    xsd_prs = etree.XMLParser(remove_blank_text=True)
+    tree = etree.parse(xsd_file,xsd_prs)
     root = tree.getroot()
 
     # Use XPath with local-name() to find the target element regardless of prefix.
@@ -55,11 +56,9 @@ def generate_feature_class(xsd_file, element_name):
 
     # Try to detect a simpleContent extension using XPath.
     ext_nodes = elem.xpath("./*[local-name()='complexType']/*[local-name()='simpleContent']/*[local-name()='extension']")
-    print(f"ext nodes {ext_nodes}")
     if ext_nodes:
         extension = ext_nodes[0]
         # Process the base type.
-        print(f"base {base}")
         base = extension.get("base")
         if base:
             base_type = base.split(':')[-1].strip().lower()
@@ -100,7 +99,6 @@ def generate_feature_class(xsd_file, element_name):
     else:
         # Fallback: process subelements in a sequence.
         subelements = elem.xpath(".//*[local-name()='element']")
-        print(f"Sub Elements {subelements}")
         for sub in subelements:
             prop_name = sub.get('name') or sub.get('ref')
             if not prop_name:

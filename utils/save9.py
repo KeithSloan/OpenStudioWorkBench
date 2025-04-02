@@ -55,7 +55,6 @@ def generate_feature_class(xsd_file, element_name):
 
     # Try to detect a simpleContent extension using XPath.
     ext_nodes = elem.xpath("./*[local-name()='complexType']/*[local-name()='simpleContent']/*[local-name()='extension']")
-    print(f"ext nodes {ext_nodes}")
     if ext_nodes:
         extension = ext_nodes[0]
         # Process the base type.

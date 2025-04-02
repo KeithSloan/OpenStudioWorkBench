@@ -1,0 +1,8 @@
+XML Schema has a lot of built-in data types. The most common types are:
+
+xs:string
+xs:decimal
+xs:integer
+xs:boolean
+xs:date
+xs:time

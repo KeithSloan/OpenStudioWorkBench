@@ -50,4 +50,8 @@ class GBXML_file:
         print(f"Process GBXML file {doc.Name} path {filename} Name{self.docName}")
         self.gbxml.parse(filename)
 
+    def exportSite(self, siteObj):
+        print(f"Export Site")
+        print(dir(siteObj))
+
     

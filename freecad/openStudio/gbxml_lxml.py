@@ -72,6 +72,7 @@ class gbxml_lxml() :
         #self.gbxml = xgbxml.create_gbXML()
         # docString ?? default defintion !!!
         self.docString = ''
+        self.gbxml = xgbxml.create_gbXML()
         # uses xgbxml to generate a lxml parser to read gbXML version 0.37
         #self.parser = self.gbxml.get_parser(version='0.37')
         self.parser = xgbxml.get_parser("0.37")
@@ -94,6 +95,16 @@ class gbxml_lxml() :
     def export(self, filename):
         self.tree = self.gbxml.getroottree()
         self.tree.write(filename)
+
+    def exportSite(self, siteObj):
+        print(dir(siteObj))
+        print(f"Campus {dir('Campus')}")
+        self.campus=self.gbxml.add_Campus(id='my_campus')
+        building1=self.campus.add_Building(id='my_building1')
+        #print([x for x in dir(self.gbxml) if not x.startswith('_')])
+        #prints "['AirLoop', 'AirLoops', 'Campus', 'Campuss', 'Construction', 'Constructions', 'DaySchedule', 'DaySchedules', 'DocumentHistory', 'DocumentHistorys', 'ExtEquip', 'ExtEquips', 'HydronicLoop', 'HydronicLoops', 'IntEquip', 'IntEquips', 'Layer', 'Layers', 'LightingControl', 'LightingControls', 'LightingSystem', 'LightingSystems', 'Material', 'Materials', 'Meter', 'Meters', 'Results', 'Resultss', 'Schedule', 'Schedules', 'SimulationParameters', 'SimulationParameterss', 'SurfaceReferenceLocation', 'Weather', 'Weathers', 'WeekSchedule', 'WeekSchedules', 'WindowType', 'WindowTypes', 'Zone', 'Zones', 'add_AirLoop', 'add_Campus', 'add_Construction', 'add_DaySchedule', 'add_DocumentHistory', 'add_ExtEquip', 'add_HydronicLoop', 'add_IntEquip', 'add_Layer', 'add_LightingControl', 'add_LightingSystem', 'add_Material', 'add_Meter', 'add_Results', 'add_Schedule', 'add_SimulationParameters', 'add_Weather', 'add_WeekSchedule', 'add_WindowType', 'add_Zone', 'add_aecXML', 'add_child', 'addnext', 'addprevious', 'aecXML', 'aecXMLs', 'append', 'areaUnit', 'attrib', 'base', 'clear', 'cssselect', 'engine', 'extend', 'find', 'findall', 'findtext', 'get', 'get_attribute', 'get_attributes', 'get_child', 'get_children', 'getchildren', 'getiterator', 'getnext', 'getparent', 'getprevious', 'getroottree', 'id', 'index', 'insert', 'items', 'iter', 'iterancestors', 'iterchildren', 'iterdescendants', 'iterfind', 'itersiblings', 'itertext', 'keys', 'lengthUnit', 'makeelement', 'nntag', 'ns', 'nsmap', 'prefix', 'remove', 'replace', 'set', 'set_attribute', 'sourceline', 'tag', 'tail', 'temperatureUnit', 'text', 'tostring', 'useSIUnitsForResults', 'value', 'values', 'version', 'volumeUnit', 'xpath', 'xsd_schema']"
+        self.tree=self.gbxml.getroottree()
+        self.tree.write(self.filename, pretty_print=True)
 
     def printElement(self, elem):
         import gbxml.html as html

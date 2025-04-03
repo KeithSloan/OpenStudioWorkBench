@@ -51,8 +51,8 @@ def case(*args):
 from freecad.openStudio.gbxml_lxml import gbxml_lxml
 from freecad.openStudio.docTree_gbxml import buildDocTree
 
-gbxml = gbxml_lxml()
 global gbxml
+gbxml = gbxml_lxml()
 
 def getType(obj):
     if obj.TypeId == "Part::FeaturePython":
@@ -118,7 +118,9 @@ def processExport(obj):
         if case("Site"):
             print(f"Site")
             #processSpace(obj)
-             
+            print(gbxml)
+            print(dir(gbxml))
+            gbxml.exportSite(obj) 
         return
 
 def export(exportList, filename):
@@ -133,6 +135,7 @@ def export(exportList, filename):
     # buildDocTree now creates global childObjects 
     buildDocTree()  # creates global childObjects
     #processExport()
-
-    #for e in exportList:
-    #    processExport(e)
+    print(f"Export List {exportList}")
+    for e in exportList:
+        if getType(e) == 'Site':
+            processExport(e)

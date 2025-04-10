@@ -96,20 +96,30 @@ def processBoundaries(bObjs):
         processBoundaryObjFaces(b)
     #print(boundType)
 
+
 def processSpace(sObj):
     if hasattr(sObj, "Boundaries"):
         processBoundaries(sObj.Boundaries)
 
-def addGBxml(obj):
-	objType = getType(obj)
-	print(f"Label {obj.Label} Type {objType}")
-	while switch (objType):
-		if case("Space"):
-			print(f"Space")
-			processSpace(obj)
-			bmiClass.add(obj)
-             
-		return
+def processSite(bmiclass, sObj):
+    print(f"Process Site ")
+
+def addGBxml(bmiClass, obj):
+    objType = getType(obj)
+    print(f"Label {obj.Label} Type {objType}")
+    while switch (objType):
+        if case("Site"):
+            print(f"Site")
+            processSite(bmiClass, obj)
+            break
+
+        if case("Space"):
+            print(f"Space")
+            processSpace(obj)
+            bmiClass.add(obj)
+            break
+        
+    return
 
 # process Objects
 print("\nStart OpenStudio Add gbxml properties 0.1\n")
@@ -119,4 +129,4 @@ bmiClass = BMIinfo()
 if doc is not None:
 	bmiClass = BMIinfo()
 	for obj in doc.RootObjects:
-		addGBxml(obj)
+		addGBxml(bmiClass, obj)

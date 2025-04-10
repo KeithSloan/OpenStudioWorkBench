@@ -29,17 +29,21 @@ __url__ = ["http://www.freecadweb.org"]
 from PySide import QtGui, QtCore
 from PySide.QtCore import Qt
 
-from freecad.openStudio import add_gbxml
-from freecad.openStudio.BMIclass import BMIinfo
-
-import FreeCADGui
+import FreeCAD, FreeCADGui
 
 class AddGBxmlFeature:
 	def Activated(self):
+		from freecad.openStudio.add_gbxml import addGBxml, getType
+		from freecad.openStudio.BMIclass import BMIinfo
 		self.bmiClass = BMIinfo()
-
+		#for obj in FreeCADGui.Selection.getSelection():
 		print("Add gbxml properties")
-		add_gbxml()
+		selectEx = FreeCADGui.Selection.getSelectionEx()
+		for sel in selectEx :
+			print("Add gbxml properties")
+			GBtype = getType(sel.Object)
+			print(f"Selected-Ex {sel.ObjectName} {GBtype}")
+			addGBxml(self.bmiClass, sel.Object)
 		return
 
 	def addBMIclass(self, obj):

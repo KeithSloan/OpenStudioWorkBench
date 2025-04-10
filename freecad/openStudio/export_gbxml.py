@@ -120,7 +120,7 @@ def processExport(obj):
             #processSpace(obj)
             print(gbxml)
             print(dir(gbxml))
-            gbxml.exportSite(obj) 
+            gbxml.exportSite() 
         return
 
 def export(exportList, filename):

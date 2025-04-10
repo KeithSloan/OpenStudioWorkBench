@@ -53,5 +53,48 @@ class GBXML_file:
     def exportSite(self, siteObj):
         print(f"Export Site")
         print(dir(siteObj))
+        print([x for x in dir(gbxml) if not x.startswith('_')])
+        prints "['AirLoop', \
+                'AirLoops', \
+                'Campus', \
+                'Campuss', \
+                'Construction', \
+                'Constructions', \
+                'DaySchedule', \
+                'DaySchedules', \
+                'DocumentHistory', \
+                'DocumentHistorys', \
+                'ExtEquip', \
+                'ExtEquips', \
+                'HydronicLoop', \
+                'HydronicLoops', \
+                'IntEquip', \
+                'IntEquips', \
+                'Layer', \
+                'Layers', \
+                'LightingControl', \
+                'LightingControls', \
+                'LightingSystem', \
+                'LightingSystems', \
+                'Material', \
+                'Materials', \
+                'Meter', \
+                'Meters', \
+                'Results', \
+                'Resultss', \
+                'Schedule', \
+                'Schedules', \
+                'SimulationParameters', \
+                'SimulationParameterss', \
+                'SurfaceReferenceLocation', \
+                'Weather', \
+                'Weathers', \
+                'WeekSchedule', \
+                'WeekSchedules', \
+                'WindowType', \
+                'WindowTypes', \
+                'Zone', \
+                'Zones', \
+                'add_AirLoop', 'add_Campus', 'add_Construction', 'add_DaySchedule', 'add_DocumentHistory', 'add_ExtEquip', 'add_HydronicLoop', 'add_IntEquip', 'add_Layer', 'add_LightingControl', 'add_LightingSystem', 'add_Material', 'add_Meter', 'add_Results', 'add_Schedule', 'add_SimulationParameters', 'add_Weather', 'add_WeekSchedule', 'add_WindowType', 'add_Zone', 'add_aecXML', 'add_child', 'addnext', 'addprevious', 'aecXML', 'aecXMLs', 'append', 'areaUnit', 'attrib', 'base', 'clear', 'cssselect', 'engine', 'extend', 'find', 'findall', 'findtext', 'get', 'get_attribute', 'get_attributes', 'get_child', 'get_children', 'getchildren', 'getiterator', 'getnext', 'getparent', 'getprevious', 'getroottree', 'id', 'index', 'insert', 'items', 'iter', 'iterancestors', 'iterchildren', 'iterdescendants', 'iterfind', 'itersiblings', 'itertext', 'keys', 'lengthUnit', 'makeelement', 'nntag', 'ns', 'nsmap', 'prefix', 'remove', 'replace', 'set', 'set_attribute', 'sourceline', 'tag', 'tail', 'temperatureUnit', 'text', 'tostring', 'useSIUnitsForResults', 'value', 'values', 'version', 'volumeUnit', 'xpath', 'xsd_schema']"
 
     

@@ -30,32 +30,37 @@ from PySide import QtGui, QtCore
 from PySide.QtCore import Qt
 
 from freecad.openStudio import add_gbxml
+from freecad.openStudio.BMIclass import BMIinfo
 
 import FreeCADGui
 
 class AddGBxmlFeature:
-    def Activated(self):
+	def Activated(self):
+		self.bmiClass = BMIinfo()
 
-        print("Add gbxml properties")
-        add_gbxml()
-        return
+		print("Add gbxml properties")
+		add_gbxml()
+		return
 
-    def IsActive(self):
-        return True
-        if FreeCAD.ActiveDocument is None:
-            return False
-        else:
-            return True
+	def addBMIclass(self, obj):
+		self.bmiClass.addClass(obj)
 
-    def GetResources(self):
-        return {
-            "Pixmap": "AddGBxmlFeature",
-            "MenuText": QtCore.QT_TRANSLATE_NOOP(
-                "AddGBxmlFeature", "Add gbxml Properites"
-            ),
-            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
-                "AddGBxmlFeature", "Add gbxml Properties"
-            ),
-        }
+	def IsActive(self):
+		return True
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+			"Pixmap": "AddGBxmlFeature",
+			"MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"AddGBxmlFeature", "Add gbxml Properites"
+			),
+			"ToolTip": QtCore.QT_TRANSLATE_NOOP(
+				"AddGBxmlFeature", "Add gbxml Properties"
+			),
+		}
 
 FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())

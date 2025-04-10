@@ -29,6 +29,8 @@
 
 import FreeCAD, FreeCADGui
 
+from freecad.openStudio.BMIclass import BMIinfo
+
 #if open.__module__ in ['__builtin__', 'io']:
 #    pythonopen = open # to distinguish python built-in open function from the one declared here
 
@@ -99,17 +101,22 @@ def processSpace(sObj):
         processBoundaries(sObj.Boundaries)
 
 def addGBxml(obj):
-    objType = getType(obj)
-    print(f"Label {obj.Label} Type {objType}")
-    while switch (objType):
-        if case("Space"):
-            print(f"Space")
-            processSpace(obj)
+	objType = getType(obj)
+	print(f"Label {obj.Label} Type {objType}")
+	while switch (objType):
+		if case("Space"):
+			print(f"Space")
+			processSpace(obj)
+			bmiClass.add(obj)
              
-        return
+		return
 
 # process Objects
 print("\nStart OpenStudio Add gbxml properties 0.1\n")
 doc = FreeCAD.ActiveDocument
+global bmiClass
+bmiClass = BMIinfo()
 if doc is not None:
-    addGBxml(doc.rootObjects)
+	bmiClass = BMIinfo()
+	for obj in doc.RootObjects:
+		addGBxml(obj)

@@ -2,6 +2,7 @@
 # *                                                                        *
 # *   Copyright (c) 2025 Keith Sloan <keith@sloan-home.co.uk>              *
 # *                                                                        *
+# *                                                                        *
 # *   This program is free software; you can redistribute it and/or modify *
 # *   it under the terms of the GNU Lesser General Public License (LGPL)   *
 # *   as published by the Free Software Foundation; either version 2 of    *
@@ -19,49 +20,31 @@
 # *   USA                                                                  *
 # *                                                                        *
 # *   Acknowledgements :                                                   *
-# *                                                                        *
-# **************************************************************************
-
-__title__ = "FreeCAD GBxml Workbench - GUI Commands"
-__author__ = "Keith Sloan"
-__url__ = ["http://www.freecadweb.org"]
-
-from PySide import QtGui, QtCore
-from PySide.QtCore import Qt
+#                                                                          *
+#    Takes as input a Volume Name, GDML file  and outputs                  *
+#              a directory structure starting at the specified Volume Name *
+#                                                                          *
+#                                                                          *
+############################################################################
 
 import FreeCAD, FreeCADGui
 
-class AddGBxmlFeature:
-	def Activated(self):
-		from freecad.openStudio.BMIclass import BMIinfo
-		self.bmiClass = BMIinfo()
-		#for obj in FreeCADGui.Selection.getSelection():
-		print("Add gbxml properties")
-		selectEx = FreeCADGui.Selection.getSelectionEx()
-		for sel in selectEx :
-			print("Add gbxml properties")
-			self.bmiClass.createGBxmlObject(sel.Object)
-		return
+from freecad.openStudio.BMIclass import BMIinfo
 
-	def addBMIclass(self, obj):
-		self.bmiClass.addClass(obj)
+#if open.__module__ in ['__builtin__', 'io']:
+#    pythonopen = open # to distinguish python built-in open function from the one declared here
 
-	def IsActive(self):
+class switch(object):
+	value = None
+
+	def __new__(class_, value):
+		class_.value = value
 		return True
-		if FreeCAD.ActiveDocument is None:
-			return False
-		else:
-			return True
 
-	def GetResources(self):
-		return {
-			"Pixmap": "AddGBxmlFeature",
-			"MenuText": QtCore.QT_TRANSLATE_NOOP(
-				"AddGBxmlFeature", "Add gbxml Properites"
-			),
-			"ToolTip": QtCore.QT_TRANSLATE_NOOP(
-				"AddGBxmlFeature", "Add gbxml Properties"
-			),
-		}
+def case(*args):
+	return any((arg == switch.value for arg in args))
 
-FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())
+
+def processSite(sObj):
+	print(f"Process Site")
+

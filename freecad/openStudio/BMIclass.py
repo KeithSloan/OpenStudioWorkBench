@@ -31,6 +31,16 @@
 
 import FreeCAD as App
 
+class switch(object):
+    value = None
+
+    def __new__(class_, value):
+        class_.value = value
+        return True
+
+def case(*args):
+    return any((arg == switch.value for arg in args))
+
 class BMIinfo():
 
 	def __init__(self):
@@ -48,8 +58,30 @@ class BMIinfo():
 			if self.group is None:
 				self.initBMI
 				self.add(obj)
+			else:
+				print(f"Error {e}")
 
+	def getType(self, obj):
+		if obj.TypeId == "Part::FeaturePython":
+			if hasattr(obj, "Proxy"):
+				if hasattr(obj.Proxy, "Type"):
+					return obj.Proxy.Type
+		else:
+			return obj.TypeId
 
-	
+	def createGBxmlObject(self, obj):
+		from freecad.openStudio.processSite import processSite
+		from freecad.openStudio.processSpace import processSpace
 
-	
+		objType = self.getType(obj)
+		print(f"Label {obj.Label} Type {objType}")
+		while switch (objType):
+			if case("Site"):
+				print(f"Site")
+				processSite(obj)
+				break
+
+			if case("Space"):
+				print(f"Space")
+				processSpace(obj)
+				break

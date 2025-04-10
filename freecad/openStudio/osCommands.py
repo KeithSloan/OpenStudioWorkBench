@@ -64,4 +64,27 @@ class AddGBxmlFeature:
 			),
 		}
 
+class SyncGBxmlFeature:
+	def Activated(self):
+		print(f"Sync activated")
+
+	def IsActive(self):
+		return True
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+			"Pixmap": "SyncGBxmlFeature",
+			"MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"SyncGBxmlFeature", "Sync gbxml Properites"
+			),
+			"ToolTip": QtCore.QT_TRANSLATE_NOOP(
+				"SyncGBxmlFeature", "Sync gbxml Properties"
+			),
+		}
+
 FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())
+FreeCADGui.addCommand("syncGBxmlCmd", SyncGBxmlFeature())

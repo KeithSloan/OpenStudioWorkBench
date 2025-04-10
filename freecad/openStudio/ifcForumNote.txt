@@ -1,0 +1,20 @@
+User avatarsemhustej
+Posts: 644
+Joined: Sat Apr 22, 2023 8:42 am
+Contact: Contact semhustej
+Re: IfcProject and IfcSite do not play nicely together
+by semhustej » Wed Apr 09, 2025 9:32 am
+Hi,
+
+it is not the problem if IfcProject and IfcSite.
+
+In the first case, your 'Site' object is native FreeCAD objects. When you move the 'Site' object into an IfcProject container, it is transformed to an IFC object. Native IFC objects do not have all of the properties of the native FreeCAD objects. As of FreeCAD 1.0, there are lot of limitations on what you can do to native IFC objects.
+
+I think FreeCAD is currently (as of FreeCAD 1.0) not able to offer practical native IFC modelling. In the future this should change.
+
+If you want to get an IFC file out of FreeCAD, I would recommend you to model in native FreeCAD mode (you can add all the needed IFC data - poperties, attributes, etc. in FreeCAD mode) and than export or convert the project to IFC when it's finished.
+
+This video moght be helpful in understanding FreeCAD native, IFC native and hybrid modes: https://youtu.be/vvEFXYrVOwU?si=_k9t-csil4sgOHVF
+
+Tom
+

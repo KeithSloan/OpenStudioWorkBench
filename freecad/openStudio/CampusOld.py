@@ -81,4 +81,73 @@ class baseObject:
                 self.Type = arg["type"]
             else: #elif 'Type' in arg:
                 self.Type = arg["Type"]
-            #print(self.Type)
+			#print(self.Type)
+
+#class Campus(baseObject):
+#    def __init__(self,  obj, id):
+#        super().__init__()
+        #obj.addProperty("App::PropertyFloat", "x", "GDMLBox", "Length x").x = x
+        #obj.addProperty("App::PropertyFloat", "y", "GDMLBox", "Length y").y = y
+        #obj.addProperty("App::PropertyFloat", "z", "GDMLBox", "Length z").z = z
+        #obj.addProperty(
+        #    "App::PropertyEnumeration", "lunit", "GDMLBox", "lunit"
+        #obj.addProperty(
+        #    "App::PropertyEnumeration", "material", "GDMLBox", "Material"
+        #)
+        #setMaterial(obj, material)
+        #if FreeCAD.GuiUp:
+        #    updateColour(obj, colour, material)
+        #    # Suppress Placement - position & Rotation via parent App::Part
+        #    # this makes Placement via Phyvol easier and allows copies etc
+
+        # One change of FreeCAD changed PythonFeaturs use of Proxy so set Type in bothe
+ #       self.Type = "Campus"
+ #       self.id = id
+ #       obj.Proxy = self
+ #       obj.Proxy.Type = "Campus"
+
+        #<Location>
+        #<StationId IDType="WMO">53158_2004</StationId>
+        #<ZipcodeOrPostalCode>00000</ZipcodeOrPostalCode>
+        #<Longitude>-71.033</Longitude>
+        #<Latitude>42.213</Latitude>
+        #<Elevation>154</Elevation>
+        #<CADModelAzimuth>0</CADModelAzimuth>
+        #<Name>Boston, MA</Name>
+        
+
+
+class  Building(baseObject):
+    def __init__(self, obj, buildingType, id):
+        super().__init__()
+        self.buildingType = buildingType
+        self.id = id
+        # One change of FreeCAD changed PythonFeaturs use of Proxy so set Type in bothe
+        self.Type = "Building"
+        obj.Proxy = self
+        obj.Proxy.Type = "Campus"
+        # If id is not passed use ufa?
+        # <StreetAddress>Boston, MA</StreetAddress>
+        #<Area>6664.153</Area>
+
+
+class Space(baseObject):
+    def __init__(self, obj, spaceType, zoneIdRef, lightScheduleIdRef):
+        super().__init__()
+        self.spaceType = spaceType
+        self.zoneIdRef = zoneIdRef
+        self.lightScheduleIdRef = lightScheduleIdRef
+        #<PeopleNumber unit="NumberOfPeople">2.85822</PeopleNumber>
+        #<PeopleHeatGain unit="BtuPerHourPerson" heatGainType="Total">0</PeopleHeatGain>
+        #<PeopleHeatGain unit="BtuPerHourPerson" heatGainType="Latent">0</PeopleHeatGain>
+        #<PeopleHeatGain unit="BtuPerHourPerson" heatGainType="Sensible">0</PeopleHeatGain>
+        #<LightPowerPerArea unit="WattPerSquareFoot">1.1</LightPowerPerArea>
+        #<EquipPowerPerArea unit="WattPerSquareFoot">0.54</EquipPowerPerArea>
+        #
+        #
+        #
+        # The following can change sp set on export
+        #
+        #<Area>404.9365</Area>
+        #Area>404.9365</Area>
+        #<Volume>4458.979</Volume>

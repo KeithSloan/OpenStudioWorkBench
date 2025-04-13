@@ -33,8 +33,8 @@ import FreeCAD, FreeCADGui
 
 class AddGBxmlFeature:
 	def Activated(self):
-		from freecad.openStudio.BMIclass import BMIinfo
-		self.bmiClass = BMIinfo()
+		from freecad.openStudio.BMIclass import BMIclass
+		self.bmiClass = BMIclass()
 		#for obj in FreeCADGui.Selection.getSelection():
 		print("Add gbxml properties")
 		selectEx = FreeCADGui.Selection.getSelectionEx()

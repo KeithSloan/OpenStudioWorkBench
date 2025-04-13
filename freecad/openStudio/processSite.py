@@ -29,7 +29,7 @@
 
 import FreeCAD, FreeCADGui
 
-from freecad.openStudio.BMIclass import BMIinfo
+from freecad.openStudio.BMIclass import BMIclass
 
 #if open.__module__ in ['__builtin__', 'io']:
 #    pythonopen = open # to distinguish python built-in open function from the one declared here
@@ -45,6 +45,11 @@ def case(*args):
 	return any((arg == switch.value for arg in args))
 
 
-def processSite(sObj):
-	print(f"Process Site")
+def processSite(BMIclass, sObj):
+	if BMIclass.Campus is not None:
+		print(f"Process Site")
+
+	else:
+		print(f"Create Campus")
+		BMIclass.createCampus(sObj.Name)
 

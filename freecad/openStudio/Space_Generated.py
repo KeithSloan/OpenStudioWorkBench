@@ -28,57 +28,25 @@
 # *                                                                         *
 # *                                                                         *
 ############################################################################*
+from freecad.openStudio.baseObject import baseObject
 
-class baseObject:
-    def __init__(self, obj):
-        """Init"""
-        self.possibleProp = []
-        self.currentProp = []
-        self.linkedObject = None
-    
-    def addPossibleProp(self, prop):
-        if prop not in self.possibleProp:
-            self.possibleProp.append(prop)
-            
-    def addCurrentProp(self, prop):
-        if prop not in self.possibleProp:
-            raise ValueError("Invalid Prop")
-        self.currentProp.append(prop)
-
-    def updateLinkedProperties(self):
-        if self.linkedObject is not None:
-            for p in self.linkedObject.PropertiesList:
-                print(f"Check and Update {p}")
-                try:
-                    self.p = self.linkedObject.p
-                except e:
-                    # Check p in AlternateNameDict
-                    pass
-
-    def __getstate__(self):
-        """
-        When saving the document this object gets stored using Python's
-		json module.
-		Since we have some un-serializable parts here -- the Coin stuff --
-		we must define this method
-		to return a tuple of all serializable objects or None.
-        """
-        if hasattr(self, "Type"):  # If not saved just return
-            return {"type": self.Type}
-        else:
-            	pass
-
-    def __setstate__(self, arg):
-        """
-        When restoring the serialized object from document we have the
-		chance to set some internals here.
-		Since no data were serialized nothing needs to be done here.
-        """
-		# Handle bug in FreeCAD 0.21.2 handling of json
-		#print(f"setstate : arg {arg} type {type(arg)}")
-        if arg is not None and arg != {}:
-            if 'type' in arg:
-                self.Type = arg["type"]
-            else: #elif 'Type' in arg:
-                self.Type = arg["Type"]
-            #print(self.Type)
+class SpaceGenerated(baseObject):
+    def __init__(self, obj, spaceType, zoneIdRef, lightScheduleIdRef):
+        super().__init__()
+        self.spaceType = spaceType
+        self.zoneIdRef = zoneIdRef
+        self.lightScheduleIdRef = lightScheduleIdRef
+        #<PeopleNumber unit="NumberOfPeople">2.85822</PeopleNumber>
+        #<PeopleHeatGain unit="BtuPerHourPerson" heatGainType="Total">0</PeopleHeatGain>
+        #<PeopleHeatGain unit="BtuPerHourPerson" heatGainType="Latent">0</PeopleHeatGain>
+        #<PeopleHeatGain unit="BtuPerHourPerson" heatGainType="Sensible">0</PeopleHeatGain>
+        #<LightPowerPerArea unit="WattPerSquareFoot">1.1</LightPowerPerArea>
+        #<EquipPowerPerArea unit="WattPerSquareFoot">0.54</EquipPowerPerArea>
+        #
+        #
+        #
+        # The following can change sp set on export
+        #
+        #<Area>404.9365</Area>
+        #Area>404.9365</Area>
+        #<Volume>4458.979</Volume>

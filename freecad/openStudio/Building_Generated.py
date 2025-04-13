@@ -21,73 +21,16 @@
 # *                                                                         *
 # *   Acknowledgements :                                                    *
 # *                                                                         *
-# *   Takes as input a Volume Name, GDML file  and outputs                  *
-# *             a directory structure starting at the specified Volume Name *
-# *                                                                         *
-# *                                                                         *
-# *                                                                         *
 # *                                                                         *
 ############################################################################*
 
-import FreeCAD as App
+from freecad.openStudio.baseObject import baseObject
 
-class switch(object):
-    value = None
-
-    def __new__(class_, value):
-        class_.value = value
-        return True
-
-def case(*args):
-    return any((arg == switch.value for arg in args))
-
-class BMIclass():
-
-	def __init__(self):
-		super().__init__()
-		self.label = "BMIinfo"
-		self.Campus = None
-
-	def initBMI(self):
-		#self.group = doc.getObjectsByLabel(label)[0]
-		self.group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.label)
-
-	def add(self, obj):
-		try:
-			self.group.newObject(obj)
-		except e:
-			if self.group is None:
-				self.initBMI
-				self.add(obj)
-			else:
-				print(f"Error {e}")
-
-	def getType(self, obj):
-		if obj.TypeId == "Part::FeaturePython":
-			if hasattr(obj, "Proxy"):
-				if hasattr(obj.Proxy, "Type"):
-					return obj.Proxy.Type
-		else:
-			return obj.TypeId
-
-	def createGBxmlObject(self, obj):
-		from freecad.openStudio.processSite import processSite
-		from freecad.openStudio.processSpace import processSpace
-
-		objType = self.getType(obj)
-		print(f"Label {obj.Label} Type {objType}")
-		while switch (objType):
-			if case("Site"):
-				print(f"Site")
-				processSite(self, obj)
-				break
-
-			if case("Space"):
-				print(f"Space")
-				processSpace(obj)
-				break
-
-	def createCampus(self, obj):
-		from   freecad.openStudio.Campus_Feature import CampusFeature
-		self.Campus = CampusFeature(obj)
-
+class  BuildingGenerated(baseObject):
+    def __init__(self, obj, buildingType, id):
+        super().__init__()
+        self.buildingType = buildingType
+        self.id = id
+        # One change of FreeCAD changed PythonFeaturs use of Proxy so set Type in bothe
+        self.Type = "Building"
+        obj.Proxy = self

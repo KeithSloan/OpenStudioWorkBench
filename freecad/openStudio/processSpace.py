@@ -29,7 +29,7 @@
 
 import FreeCAD, FreeCADGui
 
-from freecad.openStudio.BMIclass import BMIinfo
+from freecad.openStudio.BMIclass import BMIclass
 
 #if open.__module__ in ['__builtin__', 'io']:
 #    pythonopen = open # to distinguish python built-in open function from the one declared here

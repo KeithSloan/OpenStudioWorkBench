@@ -1,13 +1,11 @@
 import FreeCAD
-from PySide2 import QtWidgets
 
 from freecad.openStudio.Campus_Generated  import CampusGenerated
 
 class CampusFeature(CampusGenerated):
-    def __init__(self, obj):
+	def __init__(self, obj):
 		super().__init__(obj)
 		pass
-	
 
 	def create_from_ifc_obj(self, obj):
 		pass

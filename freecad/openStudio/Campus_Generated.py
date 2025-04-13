@@ -4,7 +4,7 @@ from PySide2 import QtWidgets
 from freecad.openStudio import baseObject
 
 class CampusGenerated(baseObject):
-    def __init__(self, obj):
+	def __init__(self, obj):
 		super().__init__(obj)
 		# Set the element name property
 		obj.addProperty("App::PropertyString", "ElementName", "Base", "XSD Element Name")
@@ -87,11 +87,11 @@ class CampusGenerated(baseObject):
 						setattr(self.obj, prop, input_field.value())
 					elif prop_type == "App::PropertyInteger":
 						setattr(self.obj, prop, input_field.value())
-						elif prop_type == "App::PropertyBool":
+					elif prop_type == "App::PropertyBool":
 							setattr(self.obj, prop, input_field.isChecked())
-						elif prop_type == "App::PropertyEnumeration":
+					elif prop_type == "App::PropertyEnumeration":
 							setattr(self.obj, prop, input_field.currentText())
-						else:
+					else:
 							setattr(self.obj, prop, input_field.text())
 				FreeCAD.ActiveDocument.recompute()
 				self.accept()

@@ -34,6 +34,7 @@ class baseObject:
 			"""Init"""
 		self.possibleProp = []
 		self.currentProp = []
+		self.linkedObject = None
 
 	def addPossibleProp(self, prop):
 		if prop not in self.possibleProp:
@@ -45,6 +46,15 @@ class baseObject:
 			if prop not in self.possibleProp:
 		elif prop not in self,currentProp:
 			self.currentProp.append(prop)
+
+	def updateLinkedProperties(self):
+		if self.linkedObject is not None:
+			for p in self.linkedObject.PropertiesList:
+				print(f"Check and Update {p}")
+				try:
+					self.p = self.linkedObject.p
+				except e:
+					# Check p in AlternateNameDict
 
 	def __getstate__(self):
 		"""When saving the document this object gets stored using Python's

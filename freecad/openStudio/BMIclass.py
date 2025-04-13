@@ -45,8 +45,7 @@ class BMIclass():
 
 	def __init__(self):
 		super().__init__()
-		self.label = "BMIinfo"
-		self.Campus = None
+		self.label = "BMIinfo"		
 
 	def initBMI(self):
 		#self.group = doc.getObjectsByLabel(label)[0]
@@ -78,7 +77,7 @@ class BMIclass():
 		print(f"Label {obj.Label} Type {objType}")
 		while switch (objType):
 			if case("Site"):
-				print(f"Site")
+				print(f"Obj Type Site")
 				processSite(self, obj)
 				break
 
@@ -87,7 +86,14 @@ class BMIclass():
 				processSpace(obj)
 				break
 
-	def createCampus(self, obj):
-		from   freecad.openStudio.Campus_Feature import CampusFeature
-		self.Campus = CampusFeature(obj)
+	def checkCampus(self, obj):
+		#from   freecad.openStudio.Campus_Feature import CampusFeature
+		from .Campus_Feature import CampusFeatureClass
+		print(f"Check Campus")
+		self.Campus = CampusFeatureClass(obj)
+		return
+		if self.Campus is None:
+			self.Campus = CampusFeature()
+			#self.Campus = CampusFeature(obj)
+			print(f"Camous created")
 

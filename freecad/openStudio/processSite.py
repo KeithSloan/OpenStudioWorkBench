@@ -45,11 +45,6 @@ def case(*args):
 	return any((arg == switch.value for arg in args))
 
 
-def processSite(BMIclass, sObj):
-	if BMIclass.Campus is not None:
-		print(f"Process Site")
-
-	else:
-		print(f"Create Campus")
-		BMIclass.createCampus(sObj.Name)
-
+def processSite(self, sObj):
+	self.checkCampus(sObj)
+	print(f"Process Site")

@@ -1,9 +1,9 @@
 import FreeCAD
 from PySide2 import QtWidgets
 
-from freecad.openStudio import baseObject
+from freecad.openStudio.baseObject import baseObjectClass
 
-class CampusGenerated(baseObject):
+class CampusGeneratedClass(baseObjectClass):
 	def __init__(self, obj):
 		super().__init__(obj)
 		# Set the element name property
@@ -12,7 +12,8 @@ class CampusGenerated(baseObject):
 		# Property for Name
 		obj.addProperty("App::PropertyString", "Name", "Base", "Name")
 		# Property for Description
-		obj.addProperty("App::PropertyString", "Description", "Base", "Description")
+		#obj.addProperty("App::PropertyString", "Description", "Base", "Description")
+		print("Add Property Description ???")
 		# Property for Location
 		obj.addProperty("App::PropertyString", "Location", "Base", "Location")
 		# Property for Building
@@ -97,5 +98,3 @@ class CampusGenerated(baseObject):
 				self.accept()
 				dialog = ParameterDialog(obj)
 				dialog.exec_()
-
-

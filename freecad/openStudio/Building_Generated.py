@@ -24,9 +24,9 @@
 # *                                                                         *
 ############################################################################*
 
-from freecad.openStudio.baseObject import baseObject
+from freecad.openStudio.baseObject import baseObjectClass
 
-class  BuildingGenerated(baseObject):
+class  BuildingGeneratedClass(baseObjectClass):
     def __init__(self, obj, buildingType, id):
         super().__init__()
         self.buildingType = buildingType

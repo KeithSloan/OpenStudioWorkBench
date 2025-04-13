@@ -29,7 +29,7 @@
 # *                                                                         *
 ############################################################################*
 
-class baseObject:
+class baseObjectClass:
     def __init__(self, obj):
         """Init"""
         self.possibleProp = []

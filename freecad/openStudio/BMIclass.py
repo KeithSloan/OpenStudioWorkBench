@@ -45,21 +45,17 @@ class BMIclass():
 
 	def __init__(self):
 		super().__init__()
-		self.label = "BMIinfo"		
+		self.Label = "BMIinfo"
+		self.GroupLabel = "GBXml"
+		self.Group = None	
 
 	def initBMI(self):
-		#self.group = doc.getObjectsByLabel(label)[0]
-		self.group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.label)
+		print(f"Create Group")
+		self.Group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.label)
 
-	def add(self, obj):
-		try:
-			self.group.newObject(obj)
-		except e:
-			if self.group is None:
-				self.initBMI
-				self.add(obj)
-			else:
-				print(f"Error {e}")
+	def add2group(self, obj):
+		self.checkGroup()
+		self.Group.addObject(obj)
 
 	def getType(self, obj):
 		if obj.TypeId == "Part::FeaturePython":
@@ -86,14 +82,26 @@ class BMIclass():
 				processSpace(obj)
 				break
 
+	def checkGroup(self):
+		import FreeCAD
+		doc = FreeCAD.ActiveDocument
+		grp = doc.getObjectsByLabel(self.GroupLabel)
+		if len(grp) == 0 or self.Group is None:
+			self.Group = doc.addObject("App::DocumentObjectGroup", self.GroupLabel
+			)
+
 	def checkCampus(self, obj):
 		#from   freecad.openStudio.Campus_Feature import CampusFeature
 		from .Campus_Feature import CampusFeatureClass
 		print(f"Check Campus")
 		self.Campus = CampusFeatureClass(obj)
-		return
-		if self.Campus is None:
-			self.Campus = CampusFeature()
-			#self.Campus = CampusFeature(obj)
-			print(f"Camous created")
+		self.add2group(self.Campus)
+		self.updateView()
+
+	def updateView(self):
+		import FreeCADGui
+		App.ActiveDocument.recompute()
+		if App.GuiUp:
+			FreeCADGui.SendMsgToActiveView("ViewFit")
+		
 

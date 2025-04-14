@@ -38,8 +38,9 @@ class AddGBxmlFeature:
 		#for obj in FreeCADGui.Selection.getSelection():
 		print("Add gbxml properties")
 		selectEx = FreeCADGui.Selection.getSelectionEx()
-		sel = selectEx[0]
-		self.bmiClass.createGBxmlObject(sel.Object)
+		if len(selectEx) > 0:
+			sel = selectEx[0]
+			self.bmiClass.createGBxmlObject(sel.Object)
 		#for sel in selectEx:
 		#	print("Add gbxml properties")
 		#	self.bmiClass.createGBxmlObject(sel.Object)
@@ -47,6 +48,7 @@ class AddGBxmlFeature:
 
 	def addBMIclass(self, obj):
 		self.bmiClass.addClass(obj)
+
 
 	def IsActive(self):
 		return True

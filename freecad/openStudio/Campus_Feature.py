@@ -6,6 +6,9 @@ class CampusFeatureClass(CampusGeneratedClass):
 	def __init__(self, obj):
 		super().__init__(obj)
 		print("Campus Feature")
+		self.Type = "GBxmlCampus"
+		obj.Proxy = self
+		obj.Proxy.Type = "GBxmlCampus"
 
 	def create_from_ifc_obj(self, obj):
 		pass

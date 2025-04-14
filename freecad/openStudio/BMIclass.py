@@ -46,8 +46,9 @@ class BMIclass():
 	def __init__(self):
 		super().__init__()
 		self.Label = "BMIinfo"
-		self.GroupLabel = "GBXml"
-		self.Group = None	
+		self.GroupLabel = "GBxml"
+		self.Group = None
+		self.Campus = None
 
 	def initBMI(self):
 		print(f"Create Group")
@@ -85,16 +86,23 @@ class BMIclass():
 	def checkGroup(self):
 		import FreeCAD
 		doc = FreeCAD.ActiveDocument
-		grp = doc.getObjectsByLabel(self.GroupLabel)
-		if len(grp) == 0 or self.Group is None:
-			self.Group = doc.addObject("App::DocumentObjectGroup", self.GroupLabel
-			)
+		grps = doc.getObjectsByLabel(self.GroupLabel)
+		if len(grps) == 0 or self.Group is None:
+			self.Group = doc.addObject("App::DocumentObjectGroup", self.GroupLabel)
 
-	def checkCampus(self, obj):
+	def checkCampus(self, sourceObj):
 		#from   freecad.openStudio.Campus_Feature import CampusFeature
 		from .Campus_Feature import CampusFeatureClass
-		print(f"Check Campus")
-		self.Campus = CampusFeatureClass(obj)
+		print(f"Check Campus {self.Campus}")
+		if self.Campus is None:
+			self.createCampus(sourceObj.Label)
+
+	def createCampus(self, name):
+		import FreeCAD
+		doc = FreeCAD.ActiveDocument
+		# Part::Feature or App::Feature or App::Group ?
+		#self.Campus = doc.addObject("App::FeaturePython", "Campus")
+		self.Campus = doc.addObject("App::DocumentObjectGroup", "Campus") 
 		self.add2group(self.Campus)
 		self.updateView()
 
@@ -103,5 +111,3 @@ class BMIclass():
 		App.ActiveDocument.recompute()
 		if App.GuiUp:
 			FreeCADGui.SendMsgToActiveView("ViewFit")
-		
-

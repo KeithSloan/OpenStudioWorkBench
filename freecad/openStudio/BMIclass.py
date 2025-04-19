@@ -83,6 +83,23 @@ class BMIclass():
 				processSpace(obj)
 				break
 
+	def copyParametersSameName(self, srcObj, trtObj):
+		"""
+		Properties of Target Obj are created from parsing GBxml.xsd
+		"""
+		print(f"Copy Properties with same Name {srcObj.Label} {trtObj.Label}/n")
+		print(f"Source Prop {srcObj.PropertiesList}/n/n")
+		commonList = []
+		for p in srcObj.PropertiesList:
+			if p in trtObj.PropertiesList:
+				commonList.append(p)
+				try:
+					trtObj.p = p
+				except:
+					pass
+
+		print(f"Common List {commonList}")
+	
 	def checkGroup(self):
 		import FreeCAD
 		doc = FreeCAD.ActiveDocument
@@ -90,19 +107,19 @@ class BMIclass():
 		if len(grps) == 0 or self.Group is None:
 			self.Group = doc.addObject("App::DocumentObjectGroup", self.GroupLabel)
 
-	def checkCampus(self, sourceObj):
-		#from   freecad.openStudio.Campus_Feature import CampusFeature
-		from .Campus_Feature import CampusFeatureClass
+	def checkCampus(self, srcObj):
 		print(f"Check Campus {self.Campus}")
 		if self.Campus is None:
-			self.createCampus(sourceObj.Label)
+			self.createCampus(srcObj.Label, srcObj)
 
-	def createCampus(self, name):
+	def createCampus(self, name, sObj):
+		from .Campus_Feature import CampusFeatureClass
 		import FreeCAD
 		doc = FreeCAD.ActiveDocument
 		# Part::Feature or App::Feature or App::Group ?
 		#self.Campus = doc.addObject("App::FeaturePython", "Campus")
 		self.Campus = doc.addObject("App::DocumentObjectGroup", "Campus") 
+		CampusFeatureClass(self.Campus, sObj)
 		self.add2group(self.Campus)
 		self.updateView()
 

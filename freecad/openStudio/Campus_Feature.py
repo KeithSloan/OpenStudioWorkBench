@@ -3,12 +3,14 @@ import FreeCAD
 from freecad.openStudio.Campus_Generated  import CampusGeneratedClass
 
 class CampusFeatureClass(CampusGeneratedClass):
-	def __init__(self, obj):
-		super().__init__(obj)
+	def __init__(self, obj, sObj):
+		super().__init__(obj, sObj)
 		print("Campus Feature")
 		self.Type = "GBxmlCampus"
-		obj.Proxy = self
-		obj.Proxy.Type = "GBxmlCampus"
+		print(dir(obj))
+		# No Proxy for App::Pythonfeatures just Part::PythonFeatures
+		#obj.Proxy = self
+		#obj.Proxy.Type = "GBxmlCampus"
 
 	def create_from_ifc_obj(self, obj):
 		pass

@@ -45,6 +45,9 @@ def case(*args):
 	return any((arg == switch.value for arg in args))
 
 
-def processSite(self, sObj):
-	self.checkCampus(sObj)
-	print(f"Process Site")
+#	processSite(BMIclass, CampusObj, siteObj)
+def processSite(self, siteObj):
+	self.checkCampus(siteObj)
+	print(f"Process Site {self}  {siteObj}")
+	print(dir(self.Campus.LinkedObj))
+	self.copyParametersSameName(siteObj,self.Campus)

@@ -4,8 +4,8 @@ from PySide2 import QtWidgets
 from freecad.openStudio.baseObject import baseObjectClass
 
 class CampusGeneratedClass(baseObjectClass):
-	def __init__(self, obj):
-		super().__init__(obj)
+	def __init__(self, obj, sObj):
+		super().__init__(obj, sObj)
 		# Set the element name property
 		obj.addProperty("App::PropertyString", "ElementName", "Base", "XSD Element Name")
 		obj.ElementName = "Campus"
@@ -42,7 +42,6 @@ class CampusGeneratedClass(baseObjectClass):
 		obj.addProperty("App::PropertyString", "Lighting", "Base", "Lighting")
 		# Property for LightControlId
 		obj.addProperty("App::PropertyString", "LightControlId", "Base", "LightControlId")
-		obj.Proxy = self
 
 	@staticmethod
 	def createDialog(obj):

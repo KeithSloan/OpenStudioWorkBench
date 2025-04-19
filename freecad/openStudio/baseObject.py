@@ -30,11 +30,17 @@
 ############################################################################*
 
 class baseObjectClass:
-    def __init__(self, obj):
+    def __init__(self, obj, srcObj):
         """Init"""
+        import FreeCAD as App
+
         self.possibleProp = []
         self.currentProp = []
-        self.linkedObject = None
+        print(f"Set LinkedObj {srcObj}")
+        obj.addProperty("App::PropertyLink", "LinkedObj", "Base", "Initial Source Object" \
+            ).LinkedObj = srcObj
+        # No Proxy for App::Group ?
+        #obj.Proxy = self
     
     def addPossibleProp(self, prop):
         if prop not in self.possibleProp:
@@ -51,7 +57,7 @@ class baseObjectClass:
                 print(f"Check and Update {p}")
                 try:
                     self.p = self.linkedObject.p
-                except e:
+                except:
                     # Check p in AlternateNameDict
                     pass
 

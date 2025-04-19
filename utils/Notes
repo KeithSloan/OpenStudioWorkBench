@@ -1,0 +1,11 @@
+pip install lxml
+
+14th April
+
+	parsePrintAll.py
+	parsePrintAllElement.py
+	testParsePrintAll.sh
+
+python3  parsePrintAllElements.py ./GBxml.xsd GBxml | more
+sh testParsePrintAll.sh
+

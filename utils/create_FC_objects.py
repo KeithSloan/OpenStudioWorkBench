@@ -46,17 +46,26 @@ def getElementTypeOld(element):
         print(f"isdigit {sibling.isdigit()}")
         #print(dir(sibling))
 
-def getElementType(element):
+def getElementType(root, eName):
     #
     #   1 enum
     #
+    print(f"Get Element Type by Name {eName}")
+    print('./xsd:element[@name="'+eName+'"]')
+    element = root.find('./xsd:element[@name="'+eName+'"]', namespaces)
+    #element = root.find("./xsd:element[@name='{}']/Assignment".format(elemName), namespaces)
+    print(f"element {element.text}")
+    #print(f"Element Found {element.get('name')}")
     for elem in element:
         localName = elem.xpath('local-name()')
         if localName == "element":
             print(f"{localName}")
         elif localName == "choice":
             return "enum"
+        elif localName == "complexType":
+            return "complexType"    
         else:
+            # annotation - just print
             print(localName)
     
 def getElementInfo(element):
@@ -68,17 +77,18 @@ def getElementInfo(element):
     elemType = getElementType(element)
     print(f"Element {refName} type {elemType}")
 
-def processChoice(element):
+def processChoice(root, element):
     print("Deal with Choice Type")
     #for subElem in element.findall('./xsd:element', namespaces):
     for elem in element.xpath('./xsd:*', namespaces=ns):
         localName = elem.xpath('local-name()')
         if localName == "element":
-            print(f"Choice : {localName} : {elem.get('ref')} {getElementType(elem)}")
+            type_ = getElementType(root, elem.get('ref'))
+            print(f"Choice : {localName} : {elem.get('ref')} <=== {type_}")
         else:
             print(f"Choice {localName}")
 
-def processComplexType(element):
+def processComplexType(root, element):
     name = element.get('name')
     print(f"Process ComplexType : {name}")   
     for elem in element:
@@ -90,7 +100,7 @@ def processComplexType(element):
         #elif localName == "ComplexType":
         #    print("Deal with Complex Type")
         elif localName == "choice":
-            processChoice(elem)
+            processChoice(root, elem)
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
         elif localName == "attribute":
@@ -113,9 +123,9 @@ def processElement(etree, root, element):
             print(f"{localName} : {elem.get('ref')}")
         elif localName == "complexType":
             print("Deal with Complex Type")
-            processComplexType(elem)
+            processComplexType(root, elem)
         elif localName == "choice":
-            processChoice(elem)
+            processChoice(root, elem)
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
         elif localName == "attribute":

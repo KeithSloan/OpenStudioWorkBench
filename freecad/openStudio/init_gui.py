@@ -56,8 +56,10 @@ class OpenStudio_Workbench ( FreeCADGui.Workbench ):
         
         from freecad.openStudio import osCommands
         
-        commandList=['addGBxmlCmd', \
-			'syncGBxmlCmd' \
+        commandList=[
+            'buildGBxmlCmd', \
+            'addGBxmlCmd', \
+			'syncGBxmlCmd', \
         ]
         self.appendMenu("GBXML", commandList)
         

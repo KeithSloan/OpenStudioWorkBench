@@ -49,28 +49,48 @@ class BMIclass():
 		self.GroupLabel = "GBxml"
 		self.Group = None
 		self.Campus = None
+		self.initBMI()
 
 	def initBMI(self):
 		print(f"Create Group")
-		self.Group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.label)
+		self.Group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.Label)
+		self.initLXML()
+		self.parse_xsd()
+
+	def initLXML(self):
+		import os
+		print(f"Init lxml Class")
+		self.namespaces = {'xsd': 'http://www.w3.org/2001/XMLSchema'}
+		self.Resources = os.path.join(App.getUserAppDataDir(), "Mod", \
+			"OpenStudioWorkBench","freecad", "openStudio","Resources")
+		self.xsd_file = os.path.join(self.Resources,"GBxml.xsd")
+
+	def parse_xsd(self):
+		print("Parse GBxml xsd")
+    	# Define a function to parse the XSD schema and extract the elements and their properties
+		from lxml import etree as ET
+
+		self.etree = ET.parse(self.xsd_file)
+		self.xmlRoot = self.etree.getroot()
+        # Define the namespace for XSD elements
+		#    namespaces = {'xsd': 'http://www.w3.org/2001/XMLSchema'}
+    	#gbXML = root.find('./xsd:element[@name="gbXML"]', namespaces)
 
 	def add2group(self, obj):
 		self.checkGroup()
 		self.Group.addObject(obj)
 
-	def getType(self, obj):
-		if obj.TypeId == "Part::FeaturePython":
-			if hasattr(obj, "Proxy"):
-				if hasattr(obj.Proxy, "Type"):
-					return obj.Proxy.Type
-		else:
-			return obj.TypeId
+	def createGBxmlStructure(self):
+		from freecad.openStudio.createStructure import createStructure
+
+		self.checkGroup()
+		createStructure(self)
 
 	def createGBxmlObject(self, obj):
 		from freecad.openStudio.processSite import processSite
 		from freecad.openStudio.processSpace import processSpace
 
-		objType = self.getType(obj)
+		objType = self.getFCType(obj)
 		print(f"Label {obj.Label} Type {objType}")
 		while switch (objType):
 			if case("Site"):
@@ -122,6 +142,14 @@ class BMIclass():
 		CampusFeatureClass(self.Campus, sObj)
 		self.add2group(self.Campus)
 		self.updateView()
+
+	def getFCType(self, obj):
+		if obj.TypeId == "Part::FeaturePython":
+			if hasattr(obj, "Proxy"):
+				if hasattr(obj.Proxy, "Type"):
+					return obj.Proxy.Type
+		else:
+			return obj.TypeId
 
 	def updateView(self):
 		import FreeCADGui

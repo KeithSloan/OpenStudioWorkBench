@@ -68,6 +68,33 @@ class AddGBxmlFeature:
 			),
 		}
 
+class BuildGBxmlFeature:
+	def Activated(self):
+		from freecad.openStudio.BMIclass import BMIclass
+		self.bmiClass = BMIclass()
+		#for obj in FreeCADGui.Selection.getSelection():
+		print("Build gbxml Group Structure")
+		self.bmiClass.createGBxmlStructure()
+		return
+
+	def IsActive(self):
+		return True
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+			"Pixmap": "BuildGBxmlFeature",
+			"MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"BuildGBxmlFeature", "Build GBxml Group Structure"
+			),
+			"ToolTip": QtCore.QT_TRANSLATE_NOOP(
+				"BuildGBxmlFeature", "Build GBxml Group Structure"
+			),
+		}
+
 class SyncGBxmlFeature:
 	def Activated(self):
 		print(f"Sync activated")
@@ -90,5 +117,6 @@ class SyncGBxmlFeature:
 			),
 		}
 
+FreeCADGui.addCommand("buildGBxmlCmd", BuildGBxmlFeature())
 FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())
 FreeCADGui.addCommand("syncGBxmlCmd", SyncGBxmlFeature())

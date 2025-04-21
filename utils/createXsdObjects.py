@@ -31,6 +31,9 @@ def parseXSD(xsd_file, output_filename):
 	# Or, if you have a string, use etree.fromstring() instead
 	# Iterate over all elements in the document
 	fp = open(output_filename,"w")
+	gbXML = root.find('./xsd:element[@name="gbXML"]', namespaces)
+    name = gbXML.get('name')
+
 	for elem in tree.iter():
 		name = elem.get('name')
 		if name is not None:

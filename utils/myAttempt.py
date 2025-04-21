@@ -77,7 +77,7 @@ def generate_feature_class(xsd_file, element_name):
         # Try to get the 'name' attribute; if not available, try 'ref'
         prop_name = sub.get('name') or sub.get('ref')
         if not prop_name:
-            continue
+            continue:
 
         # Determine the XSD type.
         xsd_type = sub.get('type')

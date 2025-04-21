@@ -84,7 +84,7 @@ def processChoice(root, element):
         localName = elem.xpath('local-name()')
         if localName == "element":
             type_ = getElementType(root, elem.get('ref'))
-            print(f"Choice : {localName} : {elem.get('ref')} <=== {type_}")
+            print(f"Choice : {localName} : {elem.get('ref')} <=== /p{type_}")
         else:
             print(f"Choice {localName}")
 

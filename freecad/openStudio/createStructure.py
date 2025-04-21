@@ -31,16 +31,13 @@ import FreeCAD, FreeCADGui
 
 from freecad.openStudio.BMIclass import BMIclass
 
-#if open.__module__ in ['__builtin__', 'io']:
-#    pythonopen = open # to distinguish python built-in open function from the one declared here
-
 def createStructure(self):
 	print(f"Create GBxml Structure {self}")
 	self.checkGroup()
-	self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', self.namespaces)
+	self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
 	name = self.gbXML.get('name')
 	print(f"gbXML {self.gbXML} {name}")
-	self.processElement(self.gbXML)
+	processElement(self, self.gbXML)
 
 def printInfo(self, element):
     print(f"values {element.values()}")
@@ -69,7 +66,7 @@ def getElementType(self, eName):
     #
     print(f"Get Element Type by Name {eName}")
     print('./xsd:element[@name="'+eName+'"]')
-    element = self.root.find('./xsd:element[@name="'+eName+'"]', self.namespaces)
+    element = self.xmlRoot.find('./xsd:element[@name="'+eName+'"]', namespaces=self.ns)
     #element = root.find("./xsd:element[@name='{}']/Assignment".format(elemName), namespaces)
     print(f"element {element.text}")
     #print(f"Element Found {element.get('name')}")
@@ -85,15 +82,26 @@ def getElementType(self, eName):
             # annotation - just print
             print(localName)
     #for subElem in element.findall('./xsd:element', namespaces):
-    for elem in element.xpath('./xsd:*', namespaces=ns):
+    for elem in element.xpath('./xsd:*', namespaces=self.ns):
         localName = elem.xpath('local-name()')
         if localName == "element":
-            type_ = getElementType(root, elem.get('ref'))
+            type_ = getElementType(self.xmlRoot, elem.get('ref'))
             print(f"Choice : {localName} : {elem.get('ref')} <=== /p{type_}")
         else:
             print(f"Choice {localName}")
 
-def processComplexType(root, element):
+def processChoice(self, element):
+    print("Deal with Choice Type")
+    #for subElem in element.findall('./xsd:element', namespaces):
+    for elem in element.xpath('./xsd:*', namespaces=self.ns):
+        localName = elem.xpath('local-name()')
+        if localName == "element":
+            type_ = getElementType(self, elem.get('ref'))
+            print(f"Choice : {localName} : {elem.get('ref')} <=== /p{type_}")
+        else:
+            print(f"Choice {localName}")
+
+def processComplexType(self, element):
     name = element.get('name')
     print(f"Process ComplexType : {name}")
     for elem in element:
@@ -105,7 +113,7 @@ def processComplexType(root, element):
         #elif localName == "ComplexType":
         #    print("Deal with Complex Type")
         elif localName == "choice":
-            processChoice(root, elem)
+            processChoice(self, elem)
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
         elif localName == "attribute":
@@ -113,11 +121,11 @@ def processComplexType(root, element):
         elif localName == "enumeration":
              print(f"{localName} : {elem.get('value')}")
         elif localName == "documentation":
-        elif localName == "documentation":
             print(f"{localName} : {elem.text}")
         else:
             print(localName)
-def processElement(etree, root, element):
+
+def processElement(self, element):
     name = element.get('name')
     print(f"Process Element : {name}")
     for elem in element:
@@ -128,9 +136,9 @@ def processElement(etree, root, element):
             print(f"{localName} : {elem.get('ref')}")
         elif localName == "complexType":
             print("Deal with Complex Type")
-            processComplexType(root, elem)
+            processComplexType(self, elem)
         elif localName == "choice":
-            processChoice(root, elem)
+            processChoice(self, elem)
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
         elif localName == "attribute":
@@ -138,17 +146,11 @@ def processElement(etree, root, element):
         elif localName == "enumeration":
              print(f"{localName} : {elem.get('value')}")
         elif localName == "documentation":
-   elif localName == "documentation":
             print(f"{localName} : {elem.text}")
         else:
             print(localName)
 
-   elif localName == "documentation":
-            print(f"{localName} : {elem.text}")
-        else:
-            print(localName)
-
-def createFCObject(etree, root, element):
+def createFCObject(self, element):
     print(f"create FC Object")
     name = element.get('name')
     print(f"FC Object : {name}")
@@ -167,14 +169,10 @@ def createFCObject(etree, root, element):
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
         elif localName == "attribute":
-
-          print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
+            print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
         elif localName == "enumeration":
              print(f"{localName} : {elem.get('value')}")
         elif localName == "documentation":
             print(f"{localName} : {elem.text}")
         else:
             print(localName)
-
-
-

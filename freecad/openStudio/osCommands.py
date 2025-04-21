@@ -51,7 +51,6 @@ class AddGBxmlFeature:
 
 
 	def IsActive(self):
-		return True
 		if FreeCAD.ActiveDocument is None:
 			return False
 		else:
@@ -78,7 +77,6 @@ class BuildGBxmlFeature:
 		return
 
 	def IsActive(self):
-		return True
 		if FreeCAD.ActiveDocument is None:
 			return False
 		else:
@@ -100,7 +98,6 @@ class SyncGBxmlFeature:
 		print(f"Sync activated")
 
 	def IsActive(self):
-		return True
 		if FreeCAD.ActiveDocument is None:
 			return False
 		else:

@@ -60,7 +60,7 @@ class BMIclass():
 	def initLXML(self):
 		import os
 		print(f"Init lxml Class")
-		self.namespaces = {'xsd': 'http://www.w3.org/2001/XMLSchema'}
+		self.ns = {'xsd': 'http://www.w3.org/2001/XMLSchema'}
 		self.Resources = os.path.join(App.getUserAppDataDir(), "Mod", \
 			"OpenStudioWorkBench","freecad", "openStudio","Resources")
 		self.xsd_file = os.path.join(self.Resources,"GBxml.xsd")

@@ -155,48 +155,76 @@ def processChoice(self, parent, element, decend):
 def processRestriction(self, parent, element):
     print(f"Process <=== Restriction ===> ")
     for elem in element:
-    #or elem in element.xpath('./xsd:*', namespaces=self.ns):
         localName = elem.xpath('local-name()')
+        eNumLst = []
         if localName == "enumeration":
-            print(f"Enumeration {elem.get('value')}")
+            eNumValue = elem.get('value')
+            print(f"Enumeration {eMumValue}")
+            eNumList.append(eNumValue)
+            
         else:
             print(f"Restriction {localName}")
 
-def processSimpleTypeByName(self, parent, elemName):
-    element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-    processSimpleType(self, parent, element)
+        return eNumLst
 
-def processSimpleContentType(self, parent, element):
-    print(f"Process <=== SimpleType ===>")
+def processXsdType(self, obj, name, type_):
+    print(f"type_ {type_} {type(type_)}")
+    print(f"Add property {name} to {obj.Label} type {type_}")
+    XSD_TO_FC_MAP = {
+        "xsd:string": "App::PropertyString",
+        "xsd:int": "App::PropertyInteger",
+        "xsd:integer": "App::PropertyInteger",
+        "xsd:float": "App::PropertyFloat",
+        "xsd:double": "App::PropertyFloat",
+        "xsd:decimal": "App::PropertyFloat",
+        "xsd:boolean": "App::PropertyBool"
+        }
+    FC_Type = XSD_TO_FC_MAP.get(type_)
+    if FC_Type is None:
+        print(f" Not Mapped must be Enumerate")
+        FC_Type = "App::PropertyEnumration"
+        element = self.xmlRoot.find('./xsd:element[@name="'+name+'"]', namespaces=self.ns)
+        eNumLst = processRestriction(self, obj, element)
+        obj.addProperty("App::PropertyEnumeration", name, "GBxml", "Description")
+        setattr(obj, name, eNumLst)
+    obj.addProperty(FC_Type, name, "GBxml")
+    #if Value is not None:
+    #    setattr(obj, name, value)
+
+def processSimpleType(self, parent, element):
+    print(f"Process <=== SimpleType ===> Parent Name {parent.Label}")
+
+    # SimpleType -m should only be one elem
     for elem in element:
         localName = elem.xpath('local-name()')
         if localName == "extension":
-            print(f"Extentsion {elem.get('base')}")
+            varType = elem.get('base')
+            print(f"Extension {varType} Parent {parent.Label}")
+            processXsdType(self, parent, parent.Label, varType)
+            processRestriction(self, parent, elem)
         else:
             print(f"simpleType {localName}")
 
-#def processSimpleType(self, element, obj):
-#    name = element.get('name')
-#    #print(f"Process <=== SimpleType ===> - Name : {name}")
-#    for elem in element:
-#        localName = elem.xpath('local-name()')
-#        if localName == "annotation":
-#            print("annottaion")
-#        elif localName == "documenttion":
-#            print("documentation {elem.text}")
-#        elif localName == "restriction":
-#            processRestriction(self, elem, obj)
-#        elif localName == "enumeration":
-#             print(f"Enumeration {elem.get('value')}")
-    
+def processSimpleTypeByName(self, parent, elemName):
+    # processEnum
+    #
+    print(f"Process SingleType By Name {elemName}")
+    element = self.xmlRoot.find('./xsd:simpleType[@name="'+elemName+'"]', namespaces=self.ns)
+    print(f"Found {element}")
+    processSimpleType(self, parent, element)
 
+    
 def processAttribute(self, parent, elem):
     print(f"Process Attribute {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
-    processSimpleContentType(self, parent, elem)
+    name = elem.get('name')
+    typeName = elem.get('type')
+    use = elem.get('use')
+    # eNum types are enumerations in restricted in simplType
+    eNumList = processSimpleTypeByName(self, parent, typeName)
 
 def processComplexType(self, element, parent, decend=False):
     name = element.get('name')
-    print(f"Process <=== ComplexType ===> - Name : {name}")
+    print(f"Process <=== ComplexType ===> - Name : {name} ParentName {parent.Label}")
     for elem in element:
         localName = elem.xpath('local-name()')
         print(f"{localName}")
@@ -204,6 +232,7 @@ def processComplexType(self, element, parent, decend=False):
             print(f"{localName} : {elem.get('ref')}")
             elemName = elem.get('ref')
             parent.addProperty("App::PropertyLink", elemName, "GBxml", "Description - "+elemName)
+            print(f"Add property {elemName} to {parent.Label}")
             if not decend:
                 parent.ThePropertyName = None
             else:
@@ -213,15 +242,13 @@ def processComplexType(self, element, parent, decend=False):
         elif localName == "attribute":
             processAttribute(self, parent, elem)
         elif localName == "simpleContent":
-            processSimpleContentType(self, parent, elem)
+            processSimpleType(self, parent, elem)
         #
         # Following ??
         #
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
             processRestriction(self, elem, obj)
-        elif localName == "simpleContent":
-            processSimpleContent(self, elem, obj)
         elif localName == "attribute":
             processAttribute(self, elem)
             print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")

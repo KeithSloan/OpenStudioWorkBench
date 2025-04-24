@@ -38,6 +38,8 @@ and gbxml.
 
     * Export GGxml - Export GBxml structure to gbxml file ( to be developed )
 
+    * Import Weatheer - ToDo
+
 ## Info
 
 Energy+.idd         # from Energy Plus - (Single file subdirectory ?)

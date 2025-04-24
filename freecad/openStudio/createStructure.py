@@ -46,11 +46,11 @@ def createStructure(self):
     print(f"Create GBxml Structure {self}")
     #doc = FreeCAD.ActiveDocument
     #self.checkGroup()
-    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
+    self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="AltEnergySource"]', namespaces=self.ns)
-    self.gbXML = self.xmlRoot.find('./xsd:element[@name="MinFlow"]', namespaces=self.ns)
+    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="MinFlow"]', namespaces=self.ns)
     name = self.gbXML.get('name')
     print(f"gbXML {self.gbXML} {name}")
     obj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
@@ -177,6 +177,8 @@ def processXsdType(self, obj, name, type_):
         "xsd:double": "App::PropertyFloat",
         "xsd:decimal": "App::PropertyFloat",
         "xsd:boolean": "App::PropertyBool",
+        "xsd:dateTime": "App::PropertyTime",
+        "xsd:duration": "App::PropertyTime",
         "xsd:ID" : "App::PropertyString",
         "xsd:IDREF" : "App::PropertyString",
         }

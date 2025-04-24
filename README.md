@@ -24,6 +24,20 @@ Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_mo
 Investingating creating the data as per OpenStudio's Skectcher plug
 and gbxml.
 
+## Gui Icons
+
+    * Build GBxml Group Structure ( For testing )
+      - Create GBxml structure from hard coded Element - Element depends on Branch
+          - Branch Cost
+
+    * Add GBxml - Properties ( under development )
+      - Select FC object, create GBxml structure and set property values
+
+    * Sync GBxml - Properties ( to be developed )
+      - Sync FC object Properties with GBxml structure
+
+    * Export GGxml - Export GBxml structure to gbxml file ( to be developed )
+
 
 ## Info
 

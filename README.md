@@ -38,7 +38,7 @@ and gbxml.
 
     * Export GGxml - Export GBxml structure to gbxml file ( to be developed )
 
-    * Import Weatheer - ToDo
+    * Import Weather - ToDo
 
 ## Info
 

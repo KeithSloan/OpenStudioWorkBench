@@ -36,7 +36,7 @@ and gbxml.
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure
 
-    * Export GGxml - Export GBxml structure to gbxml file ( to be developed )
+    * Export GBxml - Export GBxml structure to gbxml file ( to be developed )
 
     * Import Weather - ToDo
 

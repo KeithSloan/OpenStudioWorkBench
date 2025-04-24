@@ -47,7 +47,8 @@ def createStructure(self):
     #doc = FreeCAD.ActiveDocument
     #self.checkGroup()
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
-    self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
+    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
+    self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
     name = self.gbXML.get('name')
     print(f"gbXML {self.gbXML} {name}")
     obj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
@@ -176,7 +177,9 @@ def processXsdType(self, obj, name, type_):
         "xsd:float": "App::PropertyFloat",
         "xsd:double": "App::PropertyFloat",
         "xsd:decimal": "App::PropertyFloat",
-        "xsd:boolean": "App::PropertyBool"
+        "xsd:boolean": "App::PropertyBool",
+        "xsd:ID" : "App::PropertyString",
+        "xsd:IDREF" : "App::PropertyString",
         }
     FC_Type = XSD_TO_FC_MAP.get(type_)
     if FC_Type is not None:
@@ -284,71 +287,81 @@ def processElementByName(self, parent, elemName, decend=False):
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
     processElement(self, parent, element, decend)
 
+def addElementProperty(self, parent, name, type_):
+    # Maybe call processXsdType direct
+    processXsdType(self, parent, name, type_)
+
 def processElement(self, parent, element, decend=False):
     #from freecad.openStudio.baseObject import ViewProvider 
-    
     parentType = type(parent)
     name = element.get('name')
-    print(f"Process Element : {name} parent type {parentType}")
-    parent = parent.newObject("App::DocumentObjectGroupPython", name) 
-    #print(f"Element {name} type {getElementType(self, element)}")
-    for elem in element:
-        localName  = elem.xpath('local-name()')
-        print(f"localName {localName}")
-        if localName == "element":
-            continue
-        elif localName == "complexType":
-            state = localName
-            processComplexType(self, elem, parent, decend)
-            break
+    print(f"Process Element : {name} parent {parent.Label}")
+    type_ = element.get('type')
+    if type_ is not None:
+        addElementProperty(self, parent, name, type_)
+        return
+    else:   # Create as Group Object    
+        #parent = parent.newObject("App::DocumentObjectGroupPython", name)
+        parent = parent.newObject("App::DocumentObjectGroup", name)
+        # FC creates unique name so make sure Label reflects name
+        # setattr(parent,"Label", name)
+        for elem in element:
+            localName  = elem.xpath('local-name()')
+            print(f"localName {localName}")
+            if localName == "element":
+                continue
+            elif localName == "complexType":
+                state = localName
+                processComplexType(self, elem, parent, decend)
+                break
 
-        # Following ????
-        #
-        elif localName == "simpleContent":
-            state = localName
-            continue
-        elif localName == "extension":
-            if 'base' in elem.keys:
-                return elem.get('base')
-        elif localName == "choice":
-            processChoice(self, elem)
-            break
-        else:
-            # annotation - just print
-            print(localName)
+            # Following ????
+            #
+            elif localName == "simpleContent":
+                state = localName
+                continue
+            elif localName == "extension":
+                if 'base' in elem.keys:
+                    return elem.get('base')
+            elif localName == "choice":
+                processChoice(self, elem)
+                break
+            else:
+                # annotation - just print
+                print(localName)
 
-    return 
-    parentType = type(parent)
-    print(f"Process Element : {name} parent type {parentType}")
-    if isinstance(parent, FreeCAD.Document):
-        #obj  = parent.addObject("App::DocumentObjectGroup", name)
-        obj = parent.addObject("App::DocumentObjectGroupPython", name)
-    else:
-        #obj  = parent.Group.addObject("App::DocumentObjectGroup", name)
-        obj  = parent.newObject("App::DocumentObjectGroup", name)
-    #ViewProvider(obj.ViewObject)
-    for elem in element:
-        localName = elem.xpath('local-name()')
-        if localName == "element":
-            print(f"{localName} : {elem.get('ref')}")
-        elif localName == "complexType":
-            print("Deal with Complex Type")
-            return processComplexType(self, elem, obj, decend)
-        elif localName == "choice":
-            processChoice(self, elem)
-        elif localName =="simpleType":
-            processSimpleType(self, elem, obj)
-        elif localName == "restriction":
-            print(f"{localName} : {elem.get('base')}")
-        elif localName == "attribute":
-            print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
-        elif localName == "enumeration":
-             print(f"{localName} : {elem.get('value')}")
-        elif localName == "documentation":
-            print(f"{localName} : {elem.text}")
+        return 
+        parentType = type(parent)
+        print(f"Process Element : {name} parent type {parentType}")
+        if isinstance(parent, FreeCAD.Document):
+            #obj  = parent.addObject("App::DocumentObjectGroup", name)
+            obj = parent.addObject("App::DocumentObjectGroupPython", name)
         else:
-            print(localName)
-        return None
+            #obj  = parent.Group.addObject("App::DocumentObjectGroup", name)
+            obj  = parent.newObject("App::DocumentObjectGroup", name)
+        #ViewProvider(obj.ViewObject)
+        for elem in element:
+            localName = elem.xpath('local-name()')
+            if localName == "element":
+                print(f"{localName} : {elem.get('ref')}")
+            elif localName == "complexType":
+                print("Deal with Complex Type")
+                return processComplexType(self, elem, obj, decend)
+            elif localName == "choice":
+                processChoice(self, elem)
+            elif localName =="simpleType":
+                processSimpleType(self, elem, obj)
+            elif localName == "restriction":
+                print(f"{localName} : {elem.get('base')}")
+            elif localName == "attribute":
+                print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
+            elif localName == "enumeration":
+                print(f"{localName} : {elem.get('value')}")
+            elif localName == "documentation":
+                print(f"{localName} : {elem.text}")
+            else:
+                print(localName)
+            return None
 
 def findAndProcessSubElement(self, parent, elemName):
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)

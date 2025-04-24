@@ -27,7 +27,7 @@ and gbxml.
 ## Gui Icons
 
     * Build GBxml Group Structure ( For testing )
-      - Create GBxml structure from hard coded Element - Element depends on Branch
+      - Create GBxml structure from GBxml.xsd  : Elements - hard coded - Element depends on Branch
           - Branch Cost
 
     * Add GBxml - Properties ( under development )

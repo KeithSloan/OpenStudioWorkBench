@@ -28,7 +28,10 @@ and gbxml.
 
     * Build GBxml Group Structure ( For testing )
       - Create GBxml structure from GBxml.xsd  : Elements - hard coded - Element depends on Branch
-          - Branch Cost
+          - Branches
+             * Cost
+             * LighteningSystem
+             * MinFlow
 
     * Add GBxml - Properties ( under development )
       - Select FC object, create GBxml structure and set property values

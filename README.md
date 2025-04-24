@@ -38,7 +38,6 @@ and gbxml.
 
     * Export GGxml - Export GBxml structure to gbxml file ( to be developed )
 
-
 ## Info
 
 Energy+.idd         # from Energy Plus - (Single file subdirectory ?)

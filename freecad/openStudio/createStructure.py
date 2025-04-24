@@ -47,8 +47,9 @@ def createStructure(self):
     #doc = FreeCAD.ActiveDocument
     #self.checkGroup()
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
-    self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
+    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
+    self.gbXML = self.xmlRoot.find('./xsd:element[@name="AltEnergySource"]', namespaces=self.ns)
     name = self.gbXML.get('name')
     print(f"gbXML {self.gbXML} {name}")
     obj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
@@ -231,20 +232,45 @@ def processSimpleTypeByName(self, parent, elemName):
     print(f"Process SingleType By Name - Found {element}")
     return processSimpleType(self, parent, element)
 
-def processAttribute(self, parent, elem):
-    print(f"Process Attribute parent {parent.Label} name {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
-    elemName = elem.get('name')
-    typeName = elem.get('type')
-    use = elem.get('use')
+def processAnnotation(self, parent, element):
+    print(f"Process <=== Annotation ===> Parent Name {parent.Label}")
+    for elem in element:
+        localName = elem.xpath('local-name()')
+        if localName == "documentation":
+            print(f"{localName} : {elem.text}")
+        else:
+            print(f"Annotation Not Handled {localName}")
+
+
+def processAttribute(self, parent, element):
+    print(f"Process Attribute parent {parent.Label} name {element.get('name')} type {element.get('type')} use {element.get('use')}")
+    elemName = element.get('name')
+    typeName = element.get('type')
+    use = element.get('use')
+    if typeName is None:
+        print(f"Process Attribute - Type is None")
+        for elem in element:
+            localName = elem.xpath('local-name()')
+            if localName == "simpleType":
+                XsdEnumLst = processSimpleType(self, parent, elem)
+            else:
+                print(f"Not  Handled - Process Attribute {localName}")
+                break
+            print(f"Add Enumertion Property to {parent.Label} name {elemName} length {len(XsdEnumLst)}")
+            eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxml", elemName+"Desctription")
+            setattr(eNumObj, elemName, XsdEnumLst) 
+
     # Check for eNum types are enumerations in restricted in simplType
     #eNumList = processSimpleTypeByName(self, parent, typeName)
-    if not processXsdType(self, parent, elemName, typeName):
+    elif not processXsdType(self, parent, elemName, typeName):
         element = self.xmlRoot.find('./xsd:simpleType[@name="'+typeName+'"]', namespaces=self.ns)
         print(f"Process XsdType - Found {element}")
         XsdEnumLst = processSimpleType(parent, parent, element)
         print(f"Add Enumertion Property to {parent.Label} name {elemName} length {len(XsdEnumLst)}")
         eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxml", elemName+"Desctription")
         setattr(eNumObj, elemName, XsdEnumLst)        
+    else:
+        print("Not Handled Process Attribute")
 
 def processComplexType(self, element, parent, decend=False):
     name = element.get('name')
@@ -326,6 +352,8 @@ def processElement(self, parent, element, decend=False):
             elif localName == "choice":
                 processChoice(self, elem)
                 break
+            elif localName == "annotation":
+                print(f"{localName} : {elem.text}")
             else:
                 # annotation - just print
                 print(localName)
@@ -357,8 +385,6 @@ def processElement(self, parent, element, decend=False):
                 print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
             elif localName == "enumeration":
                 print(f"{localName} : {elem.get('value')}")
-            elif localName == "documentation":
-                print(f"{localName} : {elem.text}")
             else:
                 print(localName)
             return None

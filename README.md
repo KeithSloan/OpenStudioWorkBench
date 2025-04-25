@@ -24,6 +24,9 @@ Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_mo
 Investingating creating the data as per OpenStudio's Skectcher plug
 and gbxml.
 
+## FreeCAD setting
+  Set the FreeCAD Preference for Document - Allow duplicate object labels in one document
+
 ## Gui Icons
 
     * Build GBxml Group Structure ( For testing )

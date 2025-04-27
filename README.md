@@ -24,11 +24,17 @@ Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_mo
 Investingating creating the data as per OpenStudio's Skectcher plug
 and gbxml.
 
+## FreeCAD setting
+  Set the FreeCAD Preference for Document - Allow duplicate object labels in one document
+
 ## Gui Icons
 
     * Build GBxml Group Structure ( For testing )
-      - Create GBxml structure from hard coded Element - Element depends on Branch
-          - Branch Cost
+      - Create GBxml structure from GBxml.xsd  : Elements - hard coded - Element depends on Branch
+          - Branches
+             * Cost
+             * LighteningSystem
+             * MinFlow
 
     * Add GBxml - Properties ( under development )
       - Select FC object, create GBxml structure and set property values
@@ -36,7 +42,9 @@ and gbxml.
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure
 
-    * Export GGxml - Export GBxml structure to gbxml file ( to be developed )
+    * Export GBxml - Export GBxml structure to gbxml file ( to be developed )
+
+    * Import Weather - ToDo
 
 ## Info
 

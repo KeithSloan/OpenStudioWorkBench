@@ -44,17 +44,18 @@ def case(*args):
 def createStructure(self):
     import FreeCAD
     print(f"Create GBxml Structure {self}")
-    #doc = FreeCAD.ActiveDocument
+    doc = FreeCAD.ActiveDocument
     #self.checkGroup()
-    self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
+    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
-    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
+    self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="AltEnergySource"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="MinFlow"]', namespaces=self.ns)
     name = self.gbXML.get('name')
     print(f"gbXML {self.gbXML} {name}")
     obj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
     processElement(self, obj, self.gbXML, decend=False)
+    #processElement(self, doc, self.gbXML, decend=False)
 
 def printInfo(self, element):
     print(f"values {element.values()}")
@@ -357,6 +358,9 @@ def processElement(self, parent, element, decend=False):
     else:   # Create as Group Object    
         #parent = parent.newObject("App::DocumentObjectGroupPython", name)
         parent = parent.newObject("App::DocumentObjectGroup", chkName)
+        #
+        # for gbXML - Object Group alreadt created
+        #
         # FC creates unique name so make sure Label reflects name
         setattr(parent,"Label", name)
         for elem in element:

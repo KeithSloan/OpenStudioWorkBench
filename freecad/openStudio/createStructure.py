@@ -44,18 +44,17 @@ def case(*args):
 def createStructure(self):
     import FreeCAD
     print(f"Create GBxml Structure {self}")
-    doc = FreeCAD.ActiveDocument
+    #doc = FreeCAD.ActiveDocument
     #self.checkGroup()
-    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
+    self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="Cost"]', namespaces=self.ns)
-    self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
+    #self.gbXML = self.xmlRoot.find('./xsd:element[@name="LightingSystem"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="AltEnergySource"]', namespaces=self.ns)
     #self.gbXML = self.xmlRoot.find('./xsd:element[@name="MinFlow"]', namespaces=self.ns)
     name = self.gbXML.get('name')
     print(f"gbXML {self.gbXML} {name}")
     obj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
     processElement(self, obj, self.gbXML, decend=False)
-    #processElement(self, doc, self.gbXML, decend=False)
 
 def printInfo(self, element):
     print(f"values {element.values()}")
@@ -191,8 +190,9 @@ def processXsdType(self, obj, name, type_):
     #    eNumLst = processRestriction(self, obj, element)
     #    obj.addProperty("App::PropertyEnumeration", name, "GBxml", "Description")
     #    setattr(obj, name, eNumLst)
-        print(f"Add property {name} to {obj.Label} type {type_}")
-        obj.addProperty(FC_Type, name, "GBxml")
+        chkName = checkName(self, name)
+        print(f"Add property {chkName} to {obj.Label} type {type_}")
+        obj.addProperty(FC_Type, chkName, "GBxml")
         return True
     else:
         print("Not Single processXsdType {type_}")
@@ -265,6 +265,8 @@ def processAttribute(self, parent, element):
             localName = elem.xpath('local-name()')
             if localName == "simpleType":
                 XsdEnumLst = processSimpleType(self, parent, elem)
+            elif localName == "documentation":
+                print(f"Attribute - documentatton {elem.text}")
             else:
                 print(f"Not  Handled - Process Attribute {localName}")
                 break
@@ -322,6 +324,7 @@ def processComplexType(self, element, parent, decend=False):
             print(f" Not handled ComplexType {localName}")
 
 def processElementByName(self, parent, elemName, decend=False):
+    print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
     processElement(self, parent, element, decend)
 
@@ -329,23 +332,33 @@ def addElementProperty(self, parent, name, type_):
     # Maybe call processXsdType direct
     processXsdType(self, parent, name, type_)
 
+def checkName(self, name):
+    # FC names cannot contain -
+    probChars = "-"
+
+    good = ""
+    for i in name:
+        if i not in probChars:
+            good += i
+        else:
+            good += ('_')
+    return good
+    
 def processElement(self, parent, element, decend=False):
     #from freecad.openStudio.baseObject import ViewProvider 
     parentType = type(parent)
     name = element.get('name')
-    print(f"Process Element : {name} parent {parent.Label}")
+    chkName = checkName(self, name)
+    print(f"Process Element : {chkName} parent {parent.Label}")
     type_ = element.get('type')
     if type_ is not None:
-        addElementProperty(self, parent, name, type_)
+        addElementProperty(self, parent, chkName, type_)
         return
     else:   # Create as Group Object    
         #parent = parent.newObject("App::DocumentObjectGroupPython", name)
-        #parent = parent.newObject("App::DocumentObjectGroup", name)
-        #
-        # for gbXML - Object Group alreadt created
-        #
+        parent = parent.newObject("App::DocumentObjectGroup", chkName)
         # FC creates unique name so make sure Label reflects name
-        # setattr(parent,"Label", name)
+        setattr(parent,"Label", name)
         for elem in element:
             localName  = elem.xpath('local-name()')
             print(f"localName {localName}")

@@ -45,15 +45,15 @@ class BMIclass():
 
 	def __init__(self):
 		super().__init__()
-		self.Label = "BMIinfo"
+		self.Prefix = "BMI_"
 		self.GroupLabel = "GBxml"
 		self.Group = None
 		self.Campus = None
 		self.initBMI()
 
 	def initBMI(self):
-		print(f"Create Group")
-		self.Group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.Label)
+		#print(f"Create Group")
+		#self.Group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.Prefix)
 		self.initLXML()
 		self.parse_xsd()
 
@@ -106,21 +106,22 @@ class BMIclass():
 		print(f"Label {obj.Label} Type {objType}")
 		while switch (objType):
 			if case("Site"):
-				createIfcSite(obj)
+				self.createIfcSite(obj)
 				break
 
-			if case("Space"):
-				createIfcSpace(obj)
+			if case("Space"):		# ?????
+				self.getFCTypecreateIfcSpace(obj)
 				break
 
 	def createIfcSite(self, srcObj):
-		from freecad.openStudio.processSite import processSite
+		from freecad.openStudio.processSite import processIfcSite
 
 		print(f"Process IFC Site ")
-		processSite(self, srcObj)
+		self.checkCampus(srcObj)
+		processIfcSite(self, srcObj)
 
-	def createIfcSpace(self, srcObj):
-		from freecad.openStudio.processSpace import processSpace
+	def processSimpleTypeIfcSpace(self, srcObj):
+		from freecad.openStudio.processSpace import processIfcSpace
 
 		print(f"Process IFC Space ")
 		processSpace(self, srcObj)
@@ -152,20 +153,17 @@ class BMIclass():
 	def checkCampus(self, srcObj):
 		print(f"Check Campus {self.Campus}")
 		if self.Campus is None:
-			self.createCampus(srcObj.Label, srcObj)
-
-
-	
+			self.createCampus(self.Prefix+srcObj.Label, srcObj)
 
 	def createCampus(self, name, sObj):
-		from .Campus_Feature import CampusFeatureClass
+		from freecad.openStudio.Campus_Feature import CampusFeatureClass
 		import FreeCAD
 		doc = FreeCAD.ActiveDocument
 		# Part::Feature or App::Feature or App::Group ?
 		#self.Campus = doc.addObject("App::FeaturePython", "Campus")
-		self.Campus = doc.addObject("App::DocumentObjectGroup", "Campus") 
+		self.Campus = doc.addObject("App::DocumentObjectGroup", self.Prefix+"Campus") 
 		CampusFeatureClass(self.Campus, sObj)
-		self.add2group(self.Campus)
+		#self.add2group(self.Campus)
 		self.updateView()
 
 	def getFCType(self, obj):

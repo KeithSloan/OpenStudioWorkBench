@@ -44,10 +44,65 @@ class switch(object):
 def case(*args):
 	return any((arg == switch.value for arg in args))
 
+#def initIfc2gbxml(self):
+#	self.ifc2gbxmlDict = {
+#		"Site: Campus",
+#		"Terrain: xxxxx"
+#		"Building: Building",
+#		"Building Part: yyyyy ",
+#		"Walls: wwwww",
+#		"Slabs: ssss",
+#		"Beams: bbbbb",
+#		"Stairs: sssss",
+#		"2D Plan View: zzzz",
+#		"Surface: sssss",
+#		"Layer: lllll",
+#		}
+
+def processAreas(grp):
+	print(f"Process Areas")
+
+def processAxes(grp):
+	print(f"Process Axes")
+
+def processBuilding(obj):
+	for obj in obj.Group:
+		processBuildingPart(obj)
+
+def processBuildingPart(obj):
+	print(f"{obj.Label} {obj}")
+
+def processTerrain(grp):
+	print(f"Process Terrain")	
+
+def processIfcGroup(self, ifcObj):
+	for obj in ifcObj.Group:
+		if hasattr(obj,"IfcType"):
+			print(f"Process {obj.Label} IfcType {obj.IfcType}")
+			if obj.IfcType == "Building":
+				processBuilding(obj)
+
+		elif hasattr(obj, "Group"):
+			# Better to use some type?
+			if obj.Label == "Axes":
+				processAxes(obj.Group)
+
+			elif obj.Label == "Terrain":
+				processTerrain(obj.Group)
+
+			elif obj.Label == "Areas":
+				processAreas(obj.Group)
+
+			else:
+				print(f"{obj.Label} Not Handled - processIfcGroup")
+
+			
 
 #	processSite(BMIclass, CampusObj, siteObj)
-def processSite(self, siteObj):
+def processIfcSite(self, siteObj):
 	self.checkCampus(siteObj)
 	print(f"Process Site {self}  {siteObj}")
+	if hasattr(siteObj,"Group"):
+		processIfcGroup(self, siteObj)
 	print(dir(self.Campus.LinkedObj))
-	self.copyParametersSameName(siteObj,self.Campus)
+	#self.copyParametersSameName(siteObj,self.Campus)

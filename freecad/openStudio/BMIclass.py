@@ -65,6 +65,22 @@ class BMIclass():
 			"OpenStudioWorkBench","freecad", "openStudio","Resources")
 		self.xsd_file = os.path.join(self.Resources,"GBxml.xsd")
 
+	def initIfc2gbxml(self):
+		self.ifc2gbxmlDict = {
+			"Site: Campus",
+			"Terrain: xxxxx"
+			"Building: Building",
+			"Building Part: yyyyy ",
+			"Walls: wwwww",
+			"Slabs: ssss",
+			"Beams: bbbbb",
+			"Stairs: sssss",
+			"2D Plan View: zzzz",
+
+			"Surface: sssss",
+			"Layer: lllll",
+		}
+
 	def parse_xsd(self):
 		print("Parse GBxml xsd")
     	# Define a function to parse the XSD schema and extract the elements and their properties
@@ -82,26 +98,32 @@ class BMIclass():
 
 	def createGBxmlStructure(self):
 		from freecad.openStudio.createStructure import createStructure
-
-		self.checkGroup()
+		#self.checkGroup()
 		createStructure(self)
 
 	def createGBxmlObject(self, obj):
-		from freecad.openStudio.processSite import processSite
-		from freecad.openStudio.processSpace import processSpace
-
 		objType = self.getFCType(obj)
 		print(f"Label {obj.Label} Type {objType}")
 		while switch (objType):
 			if case("Site"):
-				print(f"Obj Type Site")
-				processSite(self, obj)
+				createIfcSite(obj)
 				break
 
 			if case("Space"):
-				print(f"Space")
-				processSpace(obj)
+				createIfcSpace(obj)
 				break
+
+	def createIfcSite(self, srcObj):
+		from freecad.openStudio.processSite import processSite
+
+		print(f"Process IFC Site ")
+		processSite(self, srcObj)
+
+	def createIfcSpace(self, srcObj):
+		from freecad.openStudio.processSpace import processSpace
+
+		print(f"Process IFC Space ")
+		processSpace(self, srcObj)
 
 	def copyParametersSameName(self, srcObj, trtObj):
 		"""
@@ -131,6 +153,9 @@ class BMIclass():
 		print(f"Check Campus {self.Campus}")
 		if self.Campus is None:
 			self.createCampus(srcObj.Label, srcObj)
+
+
+	
 
 	def createCampus(self, name, sObj):
 		from .Campus_Feature import CampusFeatureClass

@@ -70,7 +70,7 @@ def processBuilding(obj):
 		processBuildingPart(obj)
 
 def processBuildingPart(obj):
-	print(f"{obj.Label} {obj}")
+	print(f"Process Building Part {obj.Label} {obj}")
 
 def processTerrain(grp):
 	print(f"Process Terrain")	
@@ -78,7 +78,7 @@ def processTerrain(grp):
 def processIfcGroup(self, ifcObj):
 	for obj in ifcObj.Group:
 		if hasattr(obj,"IfcType"):
-			print(f"Process {obj.Label} IfcType {obj.IfcType}")
+			print(f"Process IfcType  {obj.IfcType} Label {obj.Label}")
 			if obj.IfcType == "Building":
 				processBuilding(obj)
 

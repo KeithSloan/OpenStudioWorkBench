@@ -69,8 +69,54 @@ def processBuilding(obj):
 	for obj in obj.Group:
 		processBuildingPart(obj)
 
-def processBuildingPart(obj):
-	print(f"Process Building Part {obj.Label} {obj}")
+def processBeams(obj):
+	print(f"Process Beams")
+
+def processDoors(obj):
+	print(f"Process Doors")
+
+def processEntranceStairs(obj):
+	print(f"Process Entrance Stairs")
+
+def processGardenStairs(obj):
+	print(f"Process Garden Stairs")
+
+def processSlabs(obj):
+	print(f"Process Slabs")
+
+def processStairs(obj):
+	print(f"Process Stairs")
+
+def processWalls(obj):
+	print(f"Process Walls")
+
+def processWindows(obj):
+	print(f"Process Windows")
+
+def processBuildingPart(Obj):
+	# Not Good to rely on label as Labels can be edited
+	# Label should at least be set to Read Only
+	print(f"Process Building Part {Obj.Label} {Obj}")
+	if hasattr(Obj,"Group"):
+		for obj in Obj.Group:
+			if obj.Label == "Beams":
+				processBeams(obj)
+			elif obj.Label == "Doors":
+				processDoors(obj)
+			elif obj.Label == "Entrance stairs":
+				processEntranceStairs(obj)
+			elif obj.Label == "Garden stairs":
+				processGardenStairs(obj)
+			elif obj.Label == "Slabs":
+				processSlabs(obj)
+			elif obj.Label == "Stairs":
+				processStairs(obj)
+			elif obj.Label == "Walls":
+				processWalls(obj)
+			elif obj.Label == "Windows":
+				processWindows(obj)
+			else:
+				print(f"BuildPart Group {obj.Label} Item Not Handled")
 
 def processTerrain(grp):
 	print(f"Process Terrain")	
@@ -83,7 +129,8 @@ def processIfcGroup(self, ifcObj):
 				processBuilding(obj)
 
 		elif hasattr(obj, "Group"):
-			# Better to use some type?
+			# Not Good to rely on Labels as Label Names can be edited?
+			# Label should at least be set to Read Only
 			if obj.Label == "Axes":
 				processAxes(obj.Group)
 

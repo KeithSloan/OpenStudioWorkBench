@@ -130,6 +130,7 @@ class BMIclass():
 		"""
 		Properties of Target Obj are created from parsing GBxml.xsd
 		"""
+		
 		print(f"Copy Properties with same Name {srcObj.Label} {trtObj.Label}/n")
 		print(f"Source Prop {srcObj.PropertiesList}/n/n")
 		commonList = []

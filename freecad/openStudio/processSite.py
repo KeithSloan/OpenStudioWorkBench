@@ -59,93 +59,154 @@ def case(*args):
 #		"Layer: lllll",
 #		}
 
-def processAreas(grp):
+def processAreas(self, grp):
 	print(f"Process Areas")
 
-def processAxes(grp):
+def processAxes(self, grp):
 	print(f"Process Axes")
 
-def processBuilding(obj):
-	for obj in obj.Group:
-		processBuildingPart(obj)
-
-def processBeams(obj):
-	print(f"Process Beams")
-
-def processDoors(obj):
-	print(f"Process Doors")
-
-def processEntranceStairs(obj):
-	print(f"Process Entrance Stairs")
-
-def processGardenStairs(obj):
-	print(f"Process Garden Stairs")
-
-def processSlabs(obj):
-	print(f"Process Slabs")
-
-def processStairs(obj):
-	print(f"Process Stairs")
-
-def processWalls(obj):
-	print(f"Process Walls")
-
-def processWindows(obj):
-	print(f"Process Windows")
-
-def processBuildingPart(Obj):
-	# Not Good to rely on label as Labels can be edited
-	# Label should at least be set to Read Only
-	print(f"Process Building Part {Obj.Label} {Obj}")
-	if hasattr(Obj,"Group"):
-		for obj in Obj.Group:
-			if obj.Label == "Beams":
-				processBeams(obj)
-			elif obj.Label == "Doors":
-				processDoors(obj)
-			elif obj.Label == "Entrance stairs":
-				processEntranceStairs(obj)
-			elif obj.Label == "Garden stairs":
-				processGardenStairs(obj)
-			elif obj.Label == "Slabs":
-				processSlabs(obj)
-			elif obj.Label == "Stairs":
-				processStairs(obj)
-			elif obj.Label == "Walls":
-				processWalls(obj)
-			elif obj.Label == "Windows":
-				processWindows(obj)
-			else:
-				print(f"BuildPart Group {obj.Label} Item Not Handled")
-
-def processTerrain(grp):
+def processTerrain(self, grp):
 	print(f"Process Terrain")	
 
+def processBuilding(self, obj):
+	print(f"Process Building {obj.Label}")
+	#processIfcGroup(self, obj)
+	for obj in obj.Group:
+		#processBuildingPart(obj)
+		print(f"{obj.Label}")
+		processIfcType(self, obj)
+
+def processBuildingElement(self, obj):
+	print(f"Process Building Element")
+
+def processBeams(self, obj):
+	print(f"Process Beams")
+
+def processCurtainWall(self, obj):
+	print(f"Process Curtain Wall")
+
+def processDoor(self, obj):
+	print(f"Process Door")
+
+#def processEntranceStairs(obj):
+#	print(f"Process Entrance Stairs")
+
+#def processGardenStairs(obj):
+#	print(f"Process Garden Stairs")
+
+def processSlab(self, obj):
+	print(f"Process Slab")
+
+def processStair(self, obj):
+	print(f"Process Stair")
+
+def processWall(self, obj):
+	print(f"Process Wall")
+
+def processWindow(self, obj):
+	print(f"Process Window")
+
+
+#def processPartGroup(Obj):
+#	print(f"Process Part Group {Obj.Label} {Obj}")
+#	for obj in Obj.Group:
+#		print(f"{obj.Label} {type(obj)}")
+		
+
+#def OldprocessBuildingPart(Obj):
+#	# Not Good to rely on label as Labels can be edited
+#	# Label should at least be set to Read Only
+#	print(f"Process Building Part {Obj.Label} {Obj}")
+#	if hasattr(Obj,"Group"):
+#		processPartGroup(Obj)
+#		for obj in Obj.Group:
+#			if obj.Label == "Beams":
+#				processBeams(obj)
+#			elif obj.Label == "Doors":
+#				processDoors(obj)
+#			elif obj.Label == "Entrance stairs":
+#				processEntranceStairs(obj)
+#			elif obj.Label == "Garden stairs":
+#				processGardenStairs(obj)
+#			elif obj.Label == "Slabs":
+#				processSlabs(obj)
+#			elif obj.Label == "Stairs":
+#				processStairs(obj)
+#			elif obj.Label == "Walls":
+#				processWalls(obj)
+#			elif obj.Label == "Windows":
+#				processWindows(obj)
+#			else:
+#				print(f"BuildPart Group {obj.Label} Item Not Handled")
+
+#def processBuildingPart(Obj):
+#	# Not Good to rely on label as Labels can be edited
+#	# Label should at least be set to Read Only
+#	print(f"Process Building Part {Obj.Label} {Obj}")
+#	if hasattr(Obj, "IfcType"):
+#		if Obj.IfcType == "Building Storey":
+#			processBuildingStorey(Obj)
+#		else:
+#			print(f"Building Part IfcType {Obj.IfcType} Not Handled")
+#	else:
+#		print(f"BuildPart Part {Obj.Label} Item Not Handled")
+
 def processIfcGroup(self, ifcObj):
-	for obj in ifcObj.Group:
-		if hasattr(obj,"IfcType"):
-			print(f"Process IfcType  {obj.IfcType} Label {obj.Label}")
-			if obj.IfcType == "Building":
-				processBuilding(obj)
+	if hasattr(ifcObj, "Group"):
+		print(f"Process Ifc Group")
+		for obj in ifcObj.Group:
+			if hasattr(obj,"IfcType"):
+				processIfcType(self, obj)
 
-		elif hasattr(obj, "Group"):
-			# Not Good to rely on Labels as Label Names can be edited?
-			# Label should at least be set to Read Only
-			if obj.Label == "Axes":
-				processAxes(obj.Group)
+			elif hasattr(obj, "Group"):
+				# Not Good to rely on Labels as Label Names can be edited?
+				# Label should at least be set to Read Only
+				if obj.Label == "Axes":
+					processAxes(self, obj.Group)
 
-			elif obj.Label == "Terrain":
-				processTerrain(obj.Group)
+				elif obj.Label == "Terrain":
+					processTerrain(self, obj.Group)
 
-			elif obj.Label == "Areas":
-				processAreas(obj.Group)
+				elif obj.Label == "Areas":
+					processAreas(self, obj.Group)
 
-			else:
-				print(f"{obj.Label} Not Handled - processIfcGroup")
+				else:
+					print(f"{obj.Label} Not Handled - processIfcGroup")
 
-			
+def processIfcType(self,obj):
+	print(f"Process IfcType  {obj.IfcType} Label {obj.Label}")
+	if obj.IfcType == "Building":
+		processBuilding(self, obj)
+	elif obj.IfcType == "Building Storey":
+		processBuildingStorey(self, obj)
+	elif obj.IfcType == "Building Element Proxy":
+		processBuildingElement(self, obj)
+	elif obj.IfcType == "Beams":
+		processBeams(self, obj)
+	elif obj.IfcType == "Curtain Wall":
+		processCurtainWall(self,obj)
+	elif obj.IfcType == "Door":
+		processDoor(self, obj)
+	elif obj.IfcType == "Slab":
+		processSlab(self, obj)
+	elif obj.IfcType == "Stair":
+		processStair(self, obj)
+	elif obj.IfcType == "Wall":
+		processWall(self, obj)
+	elif obj.IfcType == "Window":
+		processWindow(self, obj)
+		
+	else:
+		print(f"Process IfcType {obj.IfcType} Not Handled")			
 
-#	processSite(BMIclass, CampusObj, siteObj)
+def processBuildingStorey(self, Obj):
+	print(f"Process Building Storey {Obj.Label} {Obj}")
+	if hasattr(Obj,"Group"):
+		for obj in Obj.Group:
+			processIfcGroup(self, obj)
+
+
+# 	processSite(BMIclass, CampusObj, siteObj)
 def processIfcSite(self, siteObj):
 	self.checkCampus(siteObj)
 	print(f"Process Site {self}  {siteObj}")

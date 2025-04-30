@@ -37,7 +37,14 @@ and gbxml.
              * MinFlow
 
     * Add GBxml - Properties ( under development )
-      - Select FC object, create GBxml structure and set property values
+      - Select FC object, create GBxml structure and set some property values
+
+      - Currently Implemented
+          * Select BMI Site
+              - Creates GbXML structure
+                   - Campus
+                   - Buiklding
+                   - Building  Storey
 
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure

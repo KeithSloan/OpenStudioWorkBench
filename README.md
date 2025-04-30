@@ -38,7 +38,6 @@ and gbxml.
 
     * Add GBxml - Properties ( under development )
       - Select FC object, create GBxml structure and set some property values
-
       - Currently Implemented
           * Select BMI Site
               - Creates GbXML structure

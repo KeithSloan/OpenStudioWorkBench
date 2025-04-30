@@ -326,7 +326,7 @@ def processComplexType(self, element, parent, decend=False):
 def processElementByName(self, parent, elemName, decend=False):
     print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-    processElement(self, parent, element, decend)
+    return processElement(self, parent, element, decend)
 
 def addElementProperty(self, parent, name, type_):
     # Maybe call processXsdType direct
@@ -397,7 +397,7 @@ def processElement(self, parent, element, decend=False):
                 # annotation - just print
                 print(localName)
 
-        return 
+        return parent
         #parentType = type(parent)
         #print(f"Process Element : {name} parent type {parentType}")
         #if isinstance(parent, FreeCAD.Document):

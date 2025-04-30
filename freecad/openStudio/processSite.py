@@ -69,6 +69,7 @@ def processTerrain(self, grp):
 	print(f"Process Terrain")	
 
 def findAddObject(self, parent, baseName, Label):
+	from freecad.openStudio.createStructure import processElementByName
 	print(f"Find Add Object : Parent {parent.Label} baseName {baseName} Label {Label}")
 	# If baseName object already exists change label and use
 	# Else create new object
@@ -77,9 +78,11 @@ def findAddObject(self, parent, baseName, Label):
 	fullLabel = baseName + ' : ' + Label
 	print(f"Full Name {fullLabel}")
 	if len(Objs) == 0:
-		gbObj = parent.newObject("App::DocumentObjectGroup", fullLabel)
+		#gbObj = parent.newObject("App::DocumentObjectGroup", fullLabel)
+		gbObj = processElementByName(self, parent, baseName, decend=False)
 	else:
 		gbObj = Objs[0] 
+	#setattr(gbObj, "Label", fullLabel)
 	gbObj.Label = fullLabel
 	return gbObj
 

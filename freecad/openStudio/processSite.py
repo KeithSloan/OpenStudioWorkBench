@@ -94,6 +94,8 @@ def processBuilding(self, parent, obj):
 		#processBuildingPart(obj)
 		print(f"{obj.Label}")
 		processIfcType(self, parent, obj)
+	parent.Name = obj.Label
+	parent.id = obj.GlobalId
 
 def processBuildingStorey(self, parent, Obj):
 	print(f"Process Building Storey {parent} {Obj.Label}")
@@ -101,37 +103,43 @@ def processBuildingStorey(self, parent, Obj):
 	if hasattr(Obj,"Group"):
 		for obj in Obj.Group:
 			processIfcGroup(self, parent, obj)
+		parent.Name = Obj.Label
+		parent.id = Obj.GlobalId
 
 def processBuildingElement(self, obj):
-	print(f"Process Building Element")
+	print(f"Process Building Element {obj.Label}")
 
 def processBeams(self, obj):
-	print(f"Process Beams")
+	print(f"Process Beams {obj.Label}")
 
 def processCurtainWall(self, obj):
-	print(f"Process Curtain Wall")
+	print(f"Process Curtain Wall {obj.Label}")
 
 def processDoor(self, obj):
-	print(f"Process Door")
+	print(f"Process Door {obj.Label}")
 
 def processSlab(self, obj):
-	print(f"Process Slab")
+	print(f"Process Slab {obj.Label}")
 
 def processStair(self, obj):
 	print(f"Process Stair")
 
 def processWall(self, obj):
-	print(f"Process Wall")
+	print(f"Process Wall {obj.Label}")
 
 def processWindow(self, obj):
-	print(f"Process Window")
+	print(f"Process Window {obj.Label}")
 
 def processIfcGroup(self, gbObj, ifcObj):
 	if hasattr(ifcObj, "Group"):
-		print(f"Process Ifc Group")
+		print(f"Process Ifc Group {ifcObj.Label}")
 		for obj in ifcObj.Group:
 			if hasattr(obj,"IfcType"):
 				processIfcType(self, gbObj, obj)
+
+			elif obj.TypeId == "Part::FeaturePython":
+				if hasattr(obj, "ArrayType"):
+					print(f"ArrayType : {obj.ArrayType}")
 
 			elif hasattr(obj, "Group"):
 				# Not Good to rely on Labels as Label Names can be edited?

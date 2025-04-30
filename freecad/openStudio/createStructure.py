@@ -343,20 +343,28 @@ def checkName(self, name):
         else:
             good += ('_')
     return good
+
+def createObjectGroup(self, parent, chkName):
+    if parent is not None:
+        return parent.newObject("App::DocumentObjectGroup", chkName)
+    else:
+        return FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", chkName)
+
     
 def processElement(self, parent, element, decend=False):
     #from freecad.openStudio.baseObject import ViewProvider 
     parentType = type(parent)
     name = element.get('name')
     chkName = checkName(self, name)
-    print(f"Process Element : {chkName} parent {parent.Label}")
+    print(f"Process Element : {chkName}")
     type_ = element.get('type')
     if type_ is not None:
         addElementProperty(self, parent, chkName, type_)
         return
-    else:   # Create as Group Object    
+    else:   # Create as Group Object  
+        parent = createObjectGroup(self, parent, chkName)  
         #parent = parent.newObject("App::DocumentObjectGroupPython", name)
-        parent = parent.newObject("App::DocumentObjectGroup", chkName)
+        #parent = parent.newObject("App::DocumentObjectGroup", chkName)
         #
         # for gbXML - Object Group alreadt created
         #

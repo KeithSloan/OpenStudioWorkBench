@@ -208,6 +208,7 @@ def processBuildingStorey(self, Obj):
 
 # 	processSite(BMIclass, CampusObj, siteObj)
 def processIfcSite(self, siteObj):
+	self.checkGBxml()
 	self.checkCampus(siteObj)
 	print(f"Process Site {self}  {siteObj}")
 	if hasattr(siteObj,"Group"):

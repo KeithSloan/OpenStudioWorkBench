@@ -46,9 +46,10 @@ class BMIclass():
 	def __init__(self):
 		super().__init__()
 		self.Prefix = "BMI_"
-		self.GroupLabel = "GBxml"
-		self.Group = None
-		self.Campus = None
+		#self.GroupLabel = "GBxml
+		self.gbObj = None		# gbXML object
+		self.gbXML = None		# gbXML Element
+		self.Campus = None		# Campus one per BMI
 		self.initBMI()
 
 	def initBMI(self):
@@ -65,6 +66,17 @@ class BMIclass():
 			"OpenStudioWorkBench","freecad", "openStudio","Resources")
 		self.xsd_file = os.path.join(self.Resources,"GBxml.xsd")
 
+	def checkGBxml(self):
+		if self.gbXML is None:
+			self.createGBxml()
+
+	def createGBxml(self):
+		from freecad.openStudio.createStructure import processElement
+		import FreeCAD
+		#self.gbObj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
+		self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
+		processElement(self, None, self.gbXML, decend=False)
+		
 	def initIfc2gbxml(self):
 		self.ifc2gbxmlDict = {
 			"Site: Campus",
@@ -143,7 +155,7 @@ class BMIclass():
 					pass
 
 		print(f"Common List {commonList}")
-	
+
 	def checkGroup(self):
 		import FreeCAD
 		doc = FreeCAD.ActiveDocument
@@ -158,14 +170,18 @@ class BMIclass():
 
 	def createCampus(self, name, sObj):
 		from freecad.openStudio.Campus_Feature import CampusFeatureClass
-		import FreeCAD
-		doc = FreeCAD.ActiveDocument
+		#import FreeCAD
+		self.checkGBxml()
+		#doc = FreeCAD.ActiveDocument
 		# Part::Feature or App::Feature or App::Group ?
 		#self.Campus = doc.addObject("App::FeaturePython", "Campus")
-		self.Campus = doc.addObject("App::DocumentObjectGroup", self.Prefix+"Campus") 
+		self.Campus = self.gbXML("App::DocumentObjectGroup", self.Prefix+"Campus") 
 		CampusFeatureClass(self.Campus, sObj)
 		#self.add2group(self.Campus)
 		self.updateView()
+
+
+
 
 	def getFCType(self, obj):
 		if obj.TypeId == "Part::FeaturePython":

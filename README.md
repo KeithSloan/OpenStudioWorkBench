@@ -42,8 +42,8 @@ and gbxml.
           * Select BMI Site
               - Creates GbXML structure
                    - Campus
-                   - Buiklding
-                   - Building  Storey
+                   - Building
+                   - Building Storey
 
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure

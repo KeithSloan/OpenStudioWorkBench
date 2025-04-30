@@ -129,7 +129,7 @@ class BMIclass():
 		from freecad.openStudio.processSite import processIfcSite
 
 		print(f"Process IFC Site ")
-		self.checkCampus(srcObj)
+		#self.checkCampus(srcObj)
 		processIfcSite(self, srcObj)
 
 	def processSimpleTypeIfcSpace(self, srcObj):
@@ -163,22 +163,22 @@ class BMIclass():
 		if len(grps) == 0 or self.Group is None:
 			self.Group = doc.addObject("App::DocumentObjectGroup", self.GroupLabel)
 
-	def checkCampus(self, srcObj):
-		print(f"Check Campus {self.Campus}")
-		if self.Campus is None:
-			self.createCampus(self.Prefix+srcObj.Label, srcObj)
+	#def checkCampus(self, srcObj):
+	#	print(f"Check Campus {self.Campus}")
+	#	if self.Campus is None:
+	#		self.createCampus(self.Prefix+srcObj.Label, srcObj)
 
-	def createCampus(self, name, sObj):
-		from freecad.openStudio.Campus_Feature import CampusFeatureClass
-		#import FreeCAD
-		self.checkGBxml()
-		#doc = FreeCAD.ActiveDocument
-		# Part::Feature or App::Feature or App::Group ?
-		#self.Campus = doc.addObject("App::FeaturePython", "Campus")
-		self.Campus = self.gbXML("App::DocumentObjectGroup", self.Prefix+"Campus") 
-		CampusFeatureClass(self.Campus, sObj)
-		#self.add2group(self.Campus)
-		self.updateView()
+	#def createCampus(self, name, sObj):
+	#	from freecad.openStudio.Campus_Feature import CampusFeatureClass
+	#	#import FreeCAD
+	#	self.checkGBxml()
+	#	#doc = FreeCAD.ActiveDocument
+	#	# Part::Feature or App::Feature or App::Group ?
+	#	#self.Campus = doc.addObject("App::FeaturePython", "Campus")
+	#	self.Campus = self.gbXML("App::DocumentObjectGroup", self.Prefix+"Campus") 
+	#	CampusFeatureClass(self.Campus, sObj)
+	#	#self.add2group(self.Campus)
+	#	self.updateView()
 
 
 

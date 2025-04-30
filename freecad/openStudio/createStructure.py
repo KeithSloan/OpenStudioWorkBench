@@ -360,9 +360,9 @@ def processElement(self, parent, element, decend=False):
     type_ = element.get('type')
     if type_ is not None:
         addElementProperty(self, parent, chkName, type_)
-        return
     else:   # Create as Group Object  
         parent = createObjectGroup(self, parent, chkName)  
+
         #parent = parent.newObject("App::DocumentObjectGroupPython", name)
         #parent = parent.newObject("App::DocumentObjectGroup", chkName)
         #

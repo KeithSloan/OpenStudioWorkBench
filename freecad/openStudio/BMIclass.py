@@ -48,23 +48,23 @@ class BMIclass():
 		self.Prefix = "BMI_"
 		#self.GroupLabel = "GBxml
 		self.gbObj = None		# gbXML object
-		self.gbXML = None		# gbXML Element
-		self.Campus = None		# Campus one per BMI
+		self.gbXML = None
 		self.initBMI()
 
 	def initBMI(self):
 		#print(f"Create Group")
 		#self.Group = App.ActiveDocument.addObject('App::DocumentObjectGroup', self.Prefix)
-		self.initLXML()
-		self.parse_xsd()
-
-	def initLXML(self):
+		self.initLxsd()
+		
+	def initLxsd(self):
 		import os
-		print(f"Init lxml Class")
+		print(f"Init lxsd Class")
+		self.Campus = None		# Campus one per BMI
 		self.ns = {'xsd': 'http://www.w3.org/2001/XMLSchema'}
 		self.Resources = os.path.join(App.getUserAppDataDir(), "Mod", \
 			"OpenStudioWorkBench","freecad", "openStudio","Resources")
 		self.xsd_file = os.path.join(self.Resources,"GBxml.xsd")
+		self.parse_xsd()
 
 	def checkGBxml(self):
 		if self.gbXML is None:

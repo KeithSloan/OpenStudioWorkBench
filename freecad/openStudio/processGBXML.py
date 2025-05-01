@@ -29,15 +29,13 @@
 # *                                                                         *
 ############################################################################*
 
-#from.openStudio.gblxml import gbxml_lxml
+from freecad.openStudio import BMIclass
 
-#def GGMLfile():
-#    def __init__(self, filename):
-#        self.gbxml = gbxml_lxml()
-#        self.gbxml.setFileDetails(filename)
-#        
-#    def processGBXML(self):
-#        print(f"Process GBXML file {self.docName} path {self.filename}")
-#        self.gbxml.parse()
-#
+def processGbXml(docName, importFlag, fileName):
+	print(f"Process GbXml file {docName} path {fileName}")
+	GbXml = BMIclass()
+	GbXml.initBMI()
+	GbXml.initLXML()
+
+
 

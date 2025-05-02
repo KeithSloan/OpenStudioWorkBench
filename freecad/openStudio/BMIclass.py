@@ -180,9 +180,6 @@ class BMIclass():
 	#	#self.add2group(self.Campus)
 	#	self.updateView()
 
-
-
-
 	def getFCType(self, obj):
 		if obj.TypeId == "Part::FeaturePython":
 			if hasattr(obj, "Proxy"):

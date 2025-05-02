@@ -124,8 +124,25 @@ def processSlab(self, obj):
 def processStair(self, obj):
 	print(f"Process Stair")
 
-def processWall(self, obj):
+def processWall(self, gbObj, obj):
 	print(f"Process Wall {obj.Label}")
+	exit
+	if hasattr(obj, "Base"):
+		print(f"Base Type {type(obj.Base)}")
+	if hasattr(obj, "Width") and hasattr(obj, "Length"):
+		print(f"Wall gbObj {gbObj} {obj.Length} x {obj.Width}")
+		exit
+	else:
+		if hasattr(obj,"Subtractions"):
+			print(f"Subtractions Type {type(object.Subtractions)}")
+		if hasattr(obj,"Additions"):
+			print(f"Additions Type {type(obj.Additions)}")
+		if hasattr(obj,"ArchSketchData"):
+			print(f"Arch Sketch Edges {obj.ArchSketchEdges}")
+		
+
+	
+
 
 def processWindow(self, obj):
 	print(f"Process Window {obj.Label}")
@@ -175,7 +192,7 @@ def processIfcType(self, gbObj, ifcObj):
 	elif ifcObj.IfcType == "Stair":
 		processStair(self, ifcObj)
 	elif ifcObj.IfcType == "Wall":
-		processWall(self, ifcObj)
+		processWall(self, gbObj, ifcObj)
 	elif ifcObj.IfcType == "Window":
 		processWindow(self, ifcObj)
 		

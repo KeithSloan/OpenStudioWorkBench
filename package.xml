@@ -17,7 +17,7 @@
 
   <url type="readme">https://github.com/KeithSloan/OpenStudioWorkBench/blob/main/README.md</url>
 
-  <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
+  <icon>freecad/openStudioWorkBench/Resources/icons/openStudiologo.svg</icon>
 
   <content>
     <workbench>

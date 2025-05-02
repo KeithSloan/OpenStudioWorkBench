@@ -28,68 +28,23 @@
 # *                                                                         *
 # *                                                                         *
 ############################################################################*
-__title__ = "FreeCAD - GBXML importer"
-__author__ = "Keith Sloan <ipad2@sloan-home.co.uk>"
-__url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
-import FreeCAD, FreeCADGui
-import sys, os
+from freecad.openStudio.BMIclass import BMIclass
+from freecad.openStudio.LXMLclass import LXMLclass
 
-#import copy
-
-if open.__module__ in ['__builtin__', 'io']:
-    pythonopen = open # to distinguish python built-in open function from the one declared here
-
-def case(*args):
-    return any((arg == switch.value for arg in args))
-
-def open(filename):
-    "called when freecad opens a file."
-    global doc
-    print(f"Open : {filename}")
-    docName = os.path.splitext(os.path.basename(filename))[0]
-    if filename.lower().endswith(".gbXml") or filename.lower().endswith(".xml"):
-        # import cProfile, pstats
-        # profiler = cProfile.Profile()
-        # profiler.enable()
-        doc = FreeCAD.newDocument(docName)
-        processGbXmlFile(doc, True, filename)
-        # profiler.disable()
-        # stats = pstats.Stats(profiler).sort_stats('cumtime')
-        # stats.print_stats()
-
-    #elif filename.lower().endswith(".xml"):
-    #    try:
-    #        doc = FreeCAD.ActiveDocument()
-    #        print("Active Doc")
-
-    #   except:
-    #        print("New Doc")
-    #        doc = FreeCAD.newDocument(docName)
-
-     #   processXML(doc, filename)
-
-def insert(filename, docName):
-    "called when freecad imports a file"
-    print("Insert filename : " + filename + " docname : " + docName)
-    try:
-        doc = FreeCAD.getDocument(docName)
-    except NameError:
-        doc = FreeCAD.newDocument(docName)
-    if filename.lower().endswith(".gbXml"):
-        # False flag indicates import
-        processGbXmlFile(doc, False, filename)
-
-    #elif filename.lower().endswith(".xml"):
-    #    processXML(doc, filename)
 
 def processGbXmlFile(docName, importFlag, fileName):
-    from freecad.openStudio.BMIclass import BMIclass
-    from freecad.openStudio.LXMLclass import LXMLclass
-	
-    print(f"Process GbXml file {docName} path {fileName}")
-    gbXmlStruct = BMIclass()
-    gbXmlStruct.checkGBxml()
-    gbXmlxml = LXMLclass(gbXmlStruct)
-    gbXmlxml.parseGbXmlFile(fileName)
-    gbXmlxml.processGbXml()
+	print(f"Process GbXml file {docName} path {fileName}")
+	gbXmlStruct = BMIclass()
+	gbXmlStruct.checkGBxml()
+	gbXmlxml = LXMLclass(gbXmlStruct)
+	gbXmlxml.parseFile(fileName)
+	gbXmlxml.processGbXml()
+
+
+
+
+
+
+
+

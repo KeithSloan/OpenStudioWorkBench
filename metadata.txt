@@ -1,1 +1,1 @@
-pylibs= xgbxml, shapely, lxml, matplotlib, triangle
+pylibs=lxml

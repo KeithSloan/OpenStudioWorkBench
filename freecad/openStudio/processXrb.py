@@ -326,7 +326,7 @@ def processComplexType(self, element, parent, decend=False):
 def processXrbElementByName(self, parent, elemName, decend=False):
     print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-    return processElement(self, parent, element, decend)
+    return processXrbElement(self, parent, element, decend)
 
 def addElementProperty(self, parent, name, type_):
     # Maybe call processXsdType direct
@@ -351,7 +351,7 @@ def createObjectGroup(self, parent, chkName):
         return FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", chkName)
 
     
-def processElement(self, parent, element, decend=False):
+def processXrbElement(self, parent, element, decend=False):
     #from freecad.openStudio.baseObject import ViewProvider 
     parentType = type(parent)
     name = element.get('name')

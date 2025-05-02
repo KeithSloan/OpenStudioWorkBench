@@ -34,7 +34,7 @@ __url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
 import FreeCAD, FreeCADGui
 import sys, os
-from freecad.openStudio.ProcessGbXml import processGbXml
+from freecad.openStudio.processGbXml import processGbXml
 #import copy
 
 if open.__module__ in ['__builtin__', 'io']:

@@ -27,8 +27,7 @@
       <depend>lxml</depend>
       <depend>matplotlib</depend>
       <depend>triangle</depend>
-      <tag>openStudio</tag>
-      <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
+      <icon>freecad/openStudioWorkBench/Resources/icons/openStudiologo.svg</icon>
       <classname>OpenStudio_Workbench</classname>
       <subdirectory>./</subdirectory>
     </workbench>

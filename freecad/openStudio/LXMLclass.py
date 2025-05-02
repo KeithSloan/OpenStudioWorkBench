@@ -48,9 +48,29 @@ class LXMLclass():
 		self.gbXML = None		# gbXML Element
 
 	def initLXML(self, fileName):
-		from lxml import etree as ET
-		
 		print(f"Init lxml Class")
 		self.fileName = fileName
-		self.etree = ET.parse(self.fileName)
-		self.xmlRoot = self.etree.getroot()
+		try:
+			from lxml import etree
+			#from xml import etree
+
+			print(f"Running with etree.ElementTree (import limitations)\n")
+
+			self.parser = etree.XMLParser(ns_clean=True)
+			self.tree = etree.parse(fileName, self.parser)
+			self.root = self.tree.getroot()
+        
+		except ImportError:
+			try:
+				import xml.etree.ElementTree as etree
+				print("Rnning with etree.ElementTree (import limitations)\n")
+	
+				self.tree = etree.parse(filename)
+				self.root = self.tree.getroot()
+			except:
+				print('No lxml or xml')
+		
+	def processGbXml(self):
+		from freecad.openStudio.processXrb import processXrbElement, processXrbElementByName
+		print(f"Process GbXml {self.fileName}")
+		self.gbXML = processXrbElementByName(self, "gbXML") 

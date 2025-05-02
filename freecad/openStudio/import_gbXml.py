@@ -34,7 +34,7 @@ __url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
 import FreeCAD, FreeCADGui
 import sys, os
-from freecad.openStudio import processGbXml
+from freecad.openStudio.ProcessGbXml import processGbXml
 #import copy
 
 if open.__module__ in ['__builtin__', 'io']:
@@ -48,7 +48,7 @@ def open(filename):
     global doc
     print(f"Open : {filename}")
     docName = os.path.splitext(os.path.basename(filename))[0]
-    if filename.lower().endswith(".gbXml"):
+    if filename.lower().endswith(".gbXml") or filename.lower().endswith(".xml"):
         # import cProfile, pstats
         # profiler = cProfile.Profile()
         # profiler.enable()

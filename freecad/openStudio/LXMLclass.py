@@ -150,7 +150,13 @@ class LXMLclass():
 		if hasattr(obj, key):
 			prop = obj.getPropertyByName(key)
 			print(f"Property {key} type {type(prop)}")
-		setattr(obj, prop, element.get(prop))
+			if isinstance(prop, bool):
+				print("Boolean")
+				if prop == "True":
+					prop = True
+				else:
+					prop = False
+			setattr(obj, key, prop)
 
 	def setElementValues(self, name, parameters, element):
 		obj = self.findObject(name)

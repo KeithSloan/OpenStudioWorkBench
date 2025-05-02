@@ -34,7 +34,7 @@ __url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
 import FreeCAD, FreeCADGui
 import sys, os
-from freecad.openStudio.processGbXml import processGbXml
+
 #import copy
 
 if open.__module__ in ['__builtin__', 'io']:
@@ -53,7 +53,7 @@ def open(filename):
         # profiler = cProfile.Profile()
         # profiler.enable()
         doc = FreeCAD.newDocument(docName)
-        processGbXml(doc, True, filename)
+        processGbXmlFile(doc, True, filename)
         # profiler.disable()
         # stats = pstats.Stats(profiler).sort_stats('cumtime')
         # stats.print_stats()
@@ -78,7 +78,22 @@ def insert(filename, docName):
         doc = FreeCAD.newDocument(docName)
     if filename.lower().endswith(".gbXml"):
         # False flag indicates import
-        processGbXml(doc, False, filename)
+        processGbXmlFile(doc, False, filename)
 
     #elif filename.lower().endswith(".xml"):
     #    processXML(doc, filename)
+
+    from freecad.openStudio.BMIclass import BMIclass
+from freecad.openStudio.LXMLclass import LXMLclass
+
+
+def processGbXmlFile(docName, importFlag, fileName):
+    from freecad.openStudio.BMIclass import BMIclass
+    from freecad.openStudio.LXMLclass import LXMLclass
+	
+    print(f"Process GbXml file {docName} path {fileName}")
+    gbXmlStruct = BMIclass()
+    gbXmlStruct.checkGBxml()
+    gbXmlxml = LXMLclass(gbXmlStruct)
+    gbXmlxml.parseGbXmlFile(fileName)
+    gbXmlxml.processGbXml()

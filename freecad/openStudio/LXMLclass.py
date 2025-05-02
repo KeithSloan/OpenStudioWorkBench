@@ -42,21 +42,24 @@ def case(*args):
     return any((arg == switch.value for arg in args))
 
 class LXMLclass():
+	#from BMIclass import BMIclass
 
-	def __init__(self):
+	def __init__(self, gbXrb):
 		super().__init__()
+		self.gbXrb = gbXrb
 		self.gbXML = None		# gbXML Element
 
-	def initLXML(self, fileName):
+	def parseLXML(self, fileName):
 		print(f"Init lxml Class")
+		
 		self.fileName = fileName
 		try:
 			from lxml import etree
 			#from xml import etree
 
-			print(f"Running with etree.ElementTree (import limitations)\n")
+			print(f"Running with lxml etree\n")
 
-			self.parser = etree.XMLParser(ns_clean=True)
+			self.parser = etree.XMLParser(ns_clean=True, encoding="utf-8")
 			self.tree = etree.parse(fileName, self.parser)
 			self.root = self.tree.getroot()
         
@@ -66,11 +69,17 @@ class LXMLclass():
 				print("Rnning with etree.ElementTree (import limitations)\n")
 	
 				self.tree = etree.parse(filename)
-				self.root = self.tree.getroot()
+				self.XmlRoot = self.tree.getroot()
 			except:
 				print('No lxml or xml')
 		
+	def parseGbXmlFile(self, fileName): 
+
+		print(f"Process GbXml File {fileName}")
+		self.gbXrb.checkGBxml()
+		self.parseLXML(fileName)
+
 	def processGbXml(self):
-		from freecad.openStudio.processXrb import processXrbElement, processXrbElementByName
-		print(f"Process GbXml {self.fileName}")
-		self.gbXML = processXrbElementByName(self, "gbXML") 
+		print(f"Process Parsed GbXml")
+
+		

@@ -92,4 +92,4 @@ def processGbXmlFile(docName, importFlag, fileName):
     gbXmlStruct.checkGBxml()
     gbXmlxml = LXMLclass(gbXmlStruct)
     gbXmlxml.parseGbXmlFile(fileName)
-    gbXmlxml.processGbXml()
+    gbXmlxml.processGbXml(docName, gbXmlStruct.gbXMLobj)

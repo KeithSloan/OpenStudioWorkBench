@@ -68,14 +68,14 @@ class BMIclass():
 
 	def checkGBxml(self):
 		if self.gbXML is None:
-			self.createGBxml()
+			self.createGBxmlObj()
 
-	def createGBxml(self):
+	def createGBxmlObj(self):
 		from freecad.openStudio.processXrb import processXrbElement
 		import FreeCAD
 		#self.gbObj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
 		self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
-		processXrbElement(self, None, self.gbXML, decend=False)
+		self.gbXMLobj = processXrbElement(self, None, self.gbXML, decend=False)
 		
 	def initIfc2gbxml(self):
 		self.ifc2gbxmlDict = {
@@ -111,7 +111,7 @@ class BMIclass():
 	def createGBxmlStructure(self):
 		from freecad.openStudio.processXrb import createStructure
 		#self.checkGroup()
-		createStructure(self)
+		self.gbXMLobj = createStructure(self)
 
 	def createGBxmlObject(self, obj):
 		objType = self.getFCType(obj)

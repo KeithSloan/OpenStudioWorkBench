@@ -55,6 +55,7 @@ def createStructure(self):
     print(f"gbXML {self.gbXML} {name}")
     obj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
     processXrbElement(self, obj, self.gbXML, decend=False)
+    return obj
 
 def printInfo(self, element):
     print(f"values {element.values()}")

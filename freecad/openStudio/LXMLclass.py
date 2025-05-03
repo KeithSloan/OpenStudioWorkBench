@@ -117,7 +117,7 @@ class LXMLclass():
 			#print(f"Full Name {fullLabel}")
 			if len(Objs) == 0 :
 				# Add new and create properties
-				gbObj = self.createObjectGroup(parent, name)
+				gbObj = self.createObjectGroup(gbObj, name)
 				processXrbElementByName(self, gbObj, name)
 			else:
 				gbObj = Objs[0] 
@@ -172,7 +172,7 @@ class LXMLclass():
 		if elemName in singleElements:
 			return elemName, None
 		if 'id' in element.keys():
-			return elemName + ':' + element.get('id')
+			return elemName, element.get('id')
 		# FC names cannot contain -
 		probChars = "-"
 		good = ""
@@ -203,7 +203,8 @@ class LXMLclass():
 		chkName, id = self.checkName(element)
 		gbObj = self.findObject(parent, chkName, id)
 		self.processElement(gbObj, element)
-		gbObj.Label = chkName
+		if id is not None:
+			gbObj.Label = chkName + '__' + id
 	
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider

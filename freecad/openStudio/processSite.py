@@ -125,6 +125,8 @@ def processStair(self, obj):
 	print(f"Process Stair")
 
 def processWall(self, gbObj, obj):
+	import Part
+	from  FreeCAD import Vector
 	print(f"Process Wall {obj.Label} Name {obj.Name}")
 	print(f"Bounding Box {obj.Shape.BoundBox} ZMin {obj.Shape.BoundBox.ZMin} ")
 	print(f"GbObj {gbObj.Label} {gbObj.Group}")
@@ -141,13 +143,21 @@ def processWall(self, gbObj, obj):
 		setattr(Level,"unit","Meters")
 	#PlanarGeometry = gbObj.Group[gbObj.Group.index("PlanarGeometry")]
 	PlanarGeometry = gbObj.Group[1]
+	# PolyLoop is a Sketch
 	PolyLoop = PlanarGeometry.Group[0]
-	for e in obj.Shape.Edges:
-		for v in e.Vertexes:
-			if v.Z == wZ:
-				print(f"Add Coordinates {v.X} {v.Y} {v.Z}")
-				setattr(PolyLoop.CartesianPoint,"X",v.X)
-				setattr(PolyLoop.CartesianPoint,"Y",v.Y)
+	baseLevel =[]
+	for v in obj.Shape.Vertexes:
+		if v.Z == wZ:
+			print(f"Add Coordinates {v.X} {v.Y} {v.Z}")
+			baseLevel.append(Vector((v.X),(v.Y),(v.Z)))
+	for i in range(len(baseLevel)):
+		PolyLoop.addGeometry(Part.LineSegment(baseLevel[i-1],baseLevel[i]))
+
+	#			setattr(PolyLoop.CartesianPoint,"X",v.X)
+	#			setattr(PolyLoop.CartesianPoint,"Y",v.Y)
+	#			PolyLoop.addGeometry(Part.LineSegment(i))
+
+
 
 
 ###	###

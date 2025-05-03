@@ -145,10 +145,15 @@ def processChoice(self, parent, element, decend):
             #type_ = getElementTypeByName(self, elem.get('ref'))
             #print(f"Choice : {localName} : {elemName} <=== {type_} ===>")
             print(f"Choice : {localName} : {elemName}")
-            #parent = parent.newObject("App::DocumentObjectGroupPython", name)
-            #newParent = addProperty(self, parent, elemName, type_, decend)
-            processXrbElementByName(self, parent, elemName, decend)
-            #processXrbElementByName(self, parent, elemName, decend)
+             # Here or in processXrbElementByName ??
+            if elemName == "PolyLoop":
+                createPolyLoop(self, parent)
+                break
+            else:
+                #parent = parent.newObject("App::DocumentObjectGroupPython", name)
+                #newParent = addProperty(self, parent, elemName, type_, decend)
+                processXrbElementByName(self, parent, elemName, decend)
+                #processXrbElementByName(self, parent, elemName, decend)
         else:
             print(f"Not handled Choice {localName}")
 
@@ -323,10 +328,22 @@ def processComplexType(self, element, parent, decend=False):
         else:
             print(f" Not handled ComplexType {localName}")
 
+def createPolyLoop(self, parent):
+    # Treat PolyLoop as a FreeCAD sketch
+    import Sketcher
+    print(f"Create PolyLoop : Parent {parent.Label}")
+    sketch = parent.newObject("Sketcher::SketchObject", "PolyLoop")
+    sketch.Label = "PolyLoop"
+    return None
+
 def processXrbElementByName(self, parent, elemName, decend=False):
     print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
-    element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-    return processXrbElement(self, parent, element, decend)
+    # Here or in Choice
+    if elemName == "PolyLoop":
+        return createPolyLoop(self, parent)
+    else:
+        element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
+        return processXrbElement(self, parent, element, decend)
 
 def addElementProperty(self, parent, name, type_):
     # Maybe call processXsdType direct
@@ -430,7 +447,7 @@ def processXrbElement(self, parent, element, decend=False):
 
 def findAndProcessSubElement(self, parent, elemName):
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-    return processElement(self, parent, element, decend=False)
+    return processXrbElement(self, parent, element, decend=False)
 
 def createFCObject(self, element):
     print(f"create FC Object")

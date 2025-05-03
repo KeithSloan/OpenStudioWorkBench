@@ -125,8 +125,32 @@ def processStair(self, obj):
 	print(f"Process Stair")
 
 def processWall(self, gbObj, obj):
-	print(f"Process Wall {obj.Label}")
-	exit
+	print(f"Process Wall {obj.Label} Name {obj.Name}")
+	print(f"Bounding Box {obj.Shape.BoundBox} ZMin {obj.Shape.BoundBox.ZMin} ")
+	print(f"GbObj {gbObj.Label} {gbObj.Group}")
+	#print(dir(gbObj))
+	# Use Name as Labels not unique
+	#gbObj = findAddObject(self, gbObj, "Wall", obj.Name)
+	# number of ways Walls can be created so try using Shape
+	# All edges where Z component is same as MinZ from BoundingBoc
+	wZ = obj.Shape.BoundBox.ZMin
+	#Level = gbObj.Group[gbObj.Group.index("Level")]
+	Level = gbObj.Group[0]
+	if hasattr(Level,"Level"):
+		setattr(Level,"Level",wZ)
+		setattr(Level,"unit","Meters")
+	#PlanarGeometry = gbObj.Group[gbObj.Group.index("PlanarGeometry")]
+	PlanarGeometry = gbObj.Group[1]
+	PolyLoop = PlanarGeometry.Group[0]
+	for e in obj.Shape.Edges:
+		for v in e.Vertexes:
+			if v.Z == wZ:
+				print(f"Add Coordinates {v.X} {v.Y} {v.Z}")
+				setattr(PolyLoop.CartesianPoint,"X",v.X)
+				setattr(PolyLoop.CartesianPoint,"Y",v.Y)
+
+
+###	###
 	if hasattr(obj, "Base"):
 		print(f"Base Type {type(obj.Base)}")
 	if hasattr(obj, "Width") and hasattr(obj, "Length"):
@@ -139,9 +163,8 @@ def processWall(self, gbObj, obj):
 			print(f"Additions Type {type(obj.Additions)}")
 		if hasattr(obj,"ArchSketchData"):
 			print(f"Arch Sketch Edges {obj.ArchSketchEdges}")
-		
+###	###	
 
-	
 
 
 def processWindow(self, obj):

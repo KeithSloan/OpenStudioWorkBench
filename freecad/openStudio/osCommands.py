@@ -33,21 +33,23 @@ import FreeCAD, FreeCADGui
 
 class AddGBxmlFeature:
 	def Activated(self):
-		from freecad.openStudio.BMIclass import BMIclass
-		self.bmiClass = BMIclass()
+		from freecad.openStudio.XrbClass import XrbClass
+		self.XrbClass = XrbClass()
 		#for obj in FreeCADGui.Selection.getSelection():
 		print("Add gbxml properties")
 		selectEx = FreeCADGui.Selection.getSelectionEx()
 		if len(selectEx) > 0:
 			sel = selectEx[0]
-			self.bmiClass.createGBxmlObject(sel.Object)
+			#self.XrbClass.createGBxmlObject(sel.Object)
+			self.XrbClass.processBIMobject(sel.Object)
+
 		#for sel in selectEx:
 		#	print("Add gbxml properties")
 		#	self.bmiClass.createGBxmlObject(sel.Object)
 		return
 
-	def addBMIclass(self, obj):
-		self.bmiClass.addClass(obj)
+	def addXrbClass(self, obj):
+		self.XrbClass.addClass(obj)
 
 
 	def IsActive(self):
@@ -69,11 +71,11 @@ class AddGBxmlFeature:
 
 class BuildGBxmlFeature:
 	def Activated(self):
-		from freecad.openStudio.BMIclass import BMIclass
-		self.bmiClass = BMIclass()
+		from freecad.openStudio.XrbClass import XrbClass
+		self.XrbClass = XrbClass()
 		#for obj in FreeCADGui.Selection.getSelection():
 		print("Build gbxml Group Structure")
-		self.bmiClass.createGBxmlStructure()
+		self.XrbClass.createGBxmlStructure()
 		return
 
 	def IsActive(self):

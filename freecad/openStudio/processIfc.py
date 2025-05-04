@@ -29,7 +29,7 @@
 
 import FreeCAD, FreeCADGui
 
-from freecad.openStudio.BMIclass import BMIclass
+#from freecad.openStudio.BMIclass import BMIclass
 
 #if open.__module__ in ['__builtin__', 'io']:
 #    pythonopen = open # to distinguish python built-in open function from the one declared here
@@ -68,27 +68,9 @@ def processAxes(self, grp):
 def processTerrain(self, grp):
 	print(f"Process Terrain")	
 
-def findAddObject(self, parent, baseName, Label):
-	from freecad.openStudio.processXrb import processXrbElementByName
-	print(f"Find Add Object : Parent {parent.Label} baseName {baseName} Label {Label}")
-	# If baseName object already exists change label and use
-	# Else create new object
-	Objs = FreeCAD.ActiveDocument.getObjectsByLabel(baseName)
-	print(f"Objs {Objs}")
-	fullLabel = baseName + ' : ' + Label
-	print(f"Full Name {fullLabel}")
-	if len(Objs) == 0:
-		#gbObj = parent.newObject("App::DocumentObjectGroup", fullLabel)
-		gbObj = processXrbElementByName(self, parent, baseName, decend=False)
-	else:
-		gbObj = Objs[0] 
-	#setattr(gbObj, "Label", fullLabel)
-	gbObj.Label = fullLabel
-	return gbObj
-
 def processBuilding(self, parent, obj):
 	print(f"Process Building {parent.Label} {obj.Label}")
-	parent = findAddObject(self, parent, "Building", obj.Label)
+	parent = self.findAddObject(parent, "Building", obj.Label)
 	#processIfcGroup(self, obj)
 	for obj in obj.Group:
 		#processBuildingPart(obj)
@@ -99,7 +81,7 @@ def processBuilding(self, parent, obj):
 
 def processBuildingStorey(self, parent, Obj):
 	print(f"Process Building Storey {parent} {Obj.Label}")
-	parent = findAddObject(self, parent, "BuildingStorey", Obj.Label)
+	parent = self.findAddObject(parent, "BuildingStorey", Obj.Label)
 	if hasattr(Obj,"Group"):
 		for obj in Obj.Group:
 			processIfcGroup(self, parent, obj)
@@ -130,6 +112,8 @@ def processWall(self, gbObj, obj):
 	print(f"Process Wall {obj.Label} Name {obj.Name}")
 	print(f"Bounding Box {obj.Shape.BoundBox} ZMin {obj.Shape.BoundBox.ZMin} ")
 	print(f"GbObj {gbObj.Label} {gbObj.Group}")
+	print(f"To Do")
+	exit
 	#print(dir(gbObj))
 	# Use Name as Labels not unique
 	#gbObj = findAddObject(self, gbObj, "Wall", obj.Name)
@@ -173,19 +157,18 @@ def processWall(self, gbObj, obj):
 			print(f"Additions Type {type(obj.Additions)}")
 		if hasattr(obj,"ArchSketchData"):
 			print(f"Arch Sketch Edges {obj.ArchSketchEdges}")
-###	###	
-
-
 
 def processWindow(self, obj):
 	print(f"Process Window {obj.Label}")
 
 def processIfcGroup(self, gbObj, ifcObj):
 	if hasattr(ifcObj, "Group"):
-		print(f"Process Ifc Group {ifcObj.Label}")
+		print(f"Process IfcGroup {ifcObj.Label}")
 		for obj in ifcObj.Group:
 			if hasattr(obj,"IfcType"):
-				processIfcType(self, gbObj, obj)
+				#processIfcType(self, gbObj, obj)
+				processIfcType(self, ifcObj, obj)
+
 
 			elif obj.TypeId == "Part::FeaturePython":
 				if hasattr(obj, "ArrayType"):
@@ -239,6 +222,7 @@ def get_FC_Object(self, name):
 # 	processSite(BMIclass, CampusObj, siteObj)
 def processIfcSite(self, siteObj):
 	self.checkGBxml()
+	exit
 	CampusObj = get_FC_Object(self, "Campus")
 	print(f"Process Site {self}  {siteObj}")
 	if hasattr(siteObj,"Group"):

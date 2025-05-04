@@ -40,9 +40,6 @@ import sys, os
 if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
-def case(*args):
-    return any((arg == switch.value for arg in args))
-
 def open(filename):
     "called when freecad opens a file."
     global doc
@@ -84,12 +81,12 @@ def insert(filename, docName):
     #    processXML(doc, filename)
 
 def processGbXmlFile(docName, importFlag, fileName):
-    from freecad.openStudio.BMIclass import BMIclass
+    #from freecad.openStudio.BMIclass import BMIclass
+    from freecad.openStudio.XrbClass import XrbClass
     from freecad.openStudio.LXMLclass import LXMLclass
 	
     print(f"Process GbXml file {docName} path {fileName}")
-    gbXmlStruct = BMIclass()
-    gbXmlStruct.checkGBxml()
-    gbXmlxml = LXMLclass(gbXmlStruct)
-    gbXmlxml.parseGbXmlFile(fileName)
-    gbXmlxml.processGbXml(docName, gbXmlStruct.gbXMLobj)
+    gbXmlXrb = XrbClass()
+    gbXmlXrb.checkGBxml()
+    gbXmlxml = LXMLclass(gbXmlXrb)
+    gbXmlxml.processGbXml(docName, fileName)

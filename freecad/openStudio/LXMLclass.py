@@ -44,6 +44,7 @@ def case(*args):
 class LXMLclass():
 	#from BMIclass import BMIclass
 	# xmlns="http://www.gbxml.org/schema"
+	#from freecad.openStudio.processSite import processSite
 
 	def __init__(self, gbXrb):
 		super().__init__()
@@ -73,7 +74,7 @@ class LXMLclass():
 				import xml.etree.ElementTree as etree
 				print("Rnning with etree.ElementTree (import limitations)\n")
 	
-				self.tree = etree.parse(filename)
+				self.tree = etree.parse(fileName)
 				self.XmlRoot = self.tree.getroot()
 			except:
 				print('No lxml or xml')
@@ -86,8 +87,10 @@ class LXMLclass():
 		# Parse the file
 		self.parseLXML(fileName)
 
-	def processGbXml(self, docName, gbXmlObj):
-		print(f"Process Parsed gbXML")
+	def processGbXml(self, docName, fileName):
+		print(f"Parsed {fileName}")
+		self.parseGbXmlFile(fileName)
+		return
 		# Structure is created so now process
 		#self.processGbXmlElement()
 		#for tags in self.gbXML.iter():
@@ -99,12 +102,15 @@ class LXMLclass():
 		#self.processElement(gbXmlObj, self.gbXML)
 		#for elem in self.gbXML.iter:
 		#	self.processElement(gbXmlObj,"gbXML", self.gbXML)
-		for element in self.gbXML.iter():
-			self.findCheckProcessElement(docName, element)
+		#
+		#for element in self.gbXML.iter():
+		#	self.findCheckProcessElement(docName, element)
+		self.findCheckProcessElement(docName, self.gbXML)
 
 	def findObject(self, gbObj, name, id):
 		import FreeCAD
-		from freecad.openStudio.processXrb import processXrbElementByName
+		#from freecad.openStudio.processXrb import processXrbElementByName
+		# Need to access via self.gbXrb
 		print(f"Find Object : Name {name} id {id}")
 		# If baseName object already exists change label and use
 		# Else create new object
@@ -118,7 +124,7 @@ class LXMLclass():
 			if len(Objs) == 0 :
 				# Add new and create properties
 				gbObj = self.createObjectGroup(gbObj, name)
-				processXrbElementByName(self, gbObj, name)
+				self.gbXrb.processXrbElementByName(self, gbObj, name)
 			else:
 				gbObj = Objs[0] 
 		#setattr(gbObj, "Label", fullLabel)
@@ -184,6 +190,7 @@ class LXMLclass():
 		return good, None
 	
 	def createObjectGroup(self, parent, chkName):
+		import FreeCAD
 		if parent is not None:
 			return parent.newObject("App::DocumentObjectGroup", chkName)
 		else:
@@ -194,7 +201,6 @@ class LXMLclass():
 		element = self.xmlRoot.find('element[@name="'+elemName+'"]')
 		return self.processElement(parent, element)
 
-	
 	def findCheckProcessElement(self, parent, element):
 		label = parent
 		if hasattr(parent, "Label"):
@@ -205,6 +211,11 @@ class LXMLclass():
 		self.processElement(gbObj, element)
 		if id is not None:
 			gbObj.Label = chkName + '__' + id
+		#print(dir(element))
+		for elem in element.iterchildren():
+			print(f'{elem} parent{elem.getparent()}')
+			self.findCheckProcessElement(gbObj, elem)
+		exit
 	
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider

@@ -41,8 +41,10 @@ class switch(object):
 def case(*args):
     return any((arg == switch.value for arg in args))
 
+
+
 def createStructure(self):
-    import FreeCAD
+    import FreeCADpr
     print(f"Create GBxml Structure {self}")
     #doc = FreeCAD.ActiveDocument
     #self.checkGroup()
@@ -136,6 +138,10 @@ def addProperty(self, obj, elemName, type_, decend):
         print(f"Element {elemName} type {type_} Not yet handled ")
         return
 
+def addElementProperty(self, parent, name, type_):
+    # Maybe call processXsdType direct
+    self.processXsdType(parent, name, type_)
+
 def processChoice(self, parent, element, decend):
     print(f"Process Choice <=== choice ===> ")
     #for subElem in element.findall('./xsd:element', namespaces):
@@ -148,12 +154,12 @@ def processChoice(self, parent, element, decend):
             print(f"Choice : {localName} : {elemName}")
              # Here or in processXrbElementByName ??
             if elemName == "PolyLoop":
-                createPolyLoop(self, parent)
+                self.createPolyLoop(parent)
                 break
             else:
                 #parent = parent.newObject("App::DocumentObjectGroupPython", name)
                 #newParent = addProperty(self, parent, elemName, type_, decend)
-                processXrbElementByName(self, parent, elemName, decend)
+                self.processXrbElementByName(parent, elemName, decend)
                 #processXrbElementByName(self, parent, elemName, decend)
         else:
             print(f"Not handled Choice {localName}")
@@ -173,42 +179,11 @@ def processRestriction(self, parent, element):
 
     return eNumLst
 
-def processXsdType(self, obj, name, type_):
-    print(f"Process XsdType {type_} {type(type_)}")
-    XSD_TO_FC_MAP = {
-        "xsd:string": "App::PropertyString",
-        "xsd:int": "App::PropertyInteger",
-        "xsd:integer": "App::PropertyInteger",
-        "xsd:float": "App::PropertyFloat",
-        "xsd:double": "App::PropertyFloat",
-        "xsd:decimal": "App::PropertyFloat",
-        "xsd:boolean": "App::PropertyBool",
-        "xsd:dateTime": "App::PropertyTime",
-        "xsd:duration": "App::PropertyTime",
-        "xsd:ID" : "App::PropertyString",
-        "xsd:IDREF" : "App::PropertyString",
-        }
-    FC_Type = XSD_TO_FC_MAP.get(type_)
-    if FC_Type is not None:
-    #    print(f" Not Mapped must be Enumerate")
-    #    FC_Type = "App::PropertyEnumration"
-    #    element = self.xmlRoot.find('./xsd:element[@name="'+name+'"]', namespaces=self.ns)
-    #    eNumLst = processRestriction(self, obj, element)
-    #    obj.addProperty("App::PropertyEnumeration", name, "GBxml", "Description")
-    #    setattr(obj, name, eNumLst)
-        chkName = checkName(self, name)
-        print(f"Add property {chkName} to {obj.Label} type {type_}")
-        obj.addProperty(FC_Type, chkName, "GBxml")
-        return True
-    else:
-        print("Not Single processXsdType {type_}")
-        return False
-        # Could be Enum
 
 def processExtension(self, parent, element):
     varType = element.get('base')
     print(f"Process Extension - Type {varType} Parent {parent.Label}")
-    processXsdType(self, parent, parent.Label, varType)
+    self.processXsdType(parent, parent.Label, varType)
     #processRestriction(self, parent, elem)
     for elem in element:
         localName = elem.xpath('local-name()')
@@ -225,7 +200,7 @@ def processUnion(self, parent, element):
         # Use set for unique values
         XsdEnumLst = []
         for member in memberTypes.split(' '):
-            XsdEnumLst.extend(processSimpleTypeByName(self, parent, member))
+            XsdEnumLst.extend(processSimpleTypeByName(parent, member))
         print(XsdEnumLst)
         return set(XsdEnumLst)
     else:
@@ -237,11 +212,11 @@ def processSimpleType(self, parent, element):
     for elem in element:
         localName = elem.xpath('local-name()')
         if localName == "extension":
-            processExtension(self, parent, elem)
+            processExtension(parent, elem)
         elif localName == "restriction":
-            return processRestriction(self, parent, elem)
+            return processRestriction(parent, elem)
         elif localName == "union":
-            return list(processUnion(self, parent, elem))
+            return list(processUnion(parent, elem))
         else:
             print(f"Not handled - simpleType {localName}")
 
@@ -249,7 +224,7 @@ def processSimpleTypeByName(self, parent, elemName):
     print(f"Process SingleType By Name {elemName}")
     element = self.xmlRoot.find('./xsd:simpleType[@name="'+elemName+'"]', namespaces=self.ns)
     print(f"Process SingleType By Name - Found {element}")
-    return processSimpleType(self, parent, element)
+    return processSimpleType(parent, element)
 
 def processAnnotation(self, parent, element):
     print(f"Process <=== Annotation ===> Parent Name {parent.Label}")
@@ -277,14 +252,13 @@ def processAttribute(self, parent, element):
                 print(f"Not  Handled - Process Attribute {localName}")
                 break
             print(f"Add Enumertion Property to {parent.Label} name {elemName} length {len(XsdEnumLst)}")
-            print(f"XsdEnumLst {XsdEnumLst}"
-            )
+            print(f"XsdEnumLst {XsdEnumLst}")
             eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxml", elemName+"Desctription")
             setattr(eNumObj, elemName, XsdEnumLst) 
 
     # Check for eNum types are enumerations in restricted in simplType
     #eNumList = processSimpleTypeByName(self, parent, typeName)
-    elif not processXsdType(self, parent, elemName, typeName):
+    elif not self.processXsdType(parent, elemName, typeName):
         element = self.xmlRoot.find('./xsd:simpleType[@name="'+typeName+'"]', namespaces=self.ns)
         print(f"Process XsdType - Found {element}")
         XsdEnumLst = processSimpleType(parent, parent, element)
@@ -311,17 +285,17 @@ def processComplexType(self, element, parent, decend=False):
             else:
                 parent.ThePropertyName = findAndProcessSubElement(self, parent, elemName)
         elif localName == "choice":
-            processChoice(self, parent, elem, decend)
+            self.processChoice(parent, elem, decend)
         elif localName == "attribute":
-            processAttribute(self, parent, elem)
+            self.processAttribute(parent, elem)
         elif localName == "simpleContent":
-            processSimpleType(self, parent, elem)
+            self.processSimpleType(parent, elem)
         #
         # Following ??
         #
         elif localName == "restriction":
             print(f"{localName} : {elem.get('base')}")
-            processRestriction(self, elem, obj)
+            self.processRestriction(elem, obj)
         elif localName == "enumeration":
              print(f"{localName} : {elem.get('value')}")
         elif localName == "documentation":
@@ -329,28 +303,11 @@ def processComplexType(self, element, parent, decend=False):
         else:
             print(f" Not handled ComplexType {localName}")
 
-def createPolyLoop(self, parent):
-    # Treat PolyLoop as a FreeCAD sketch
-    import Sketcher
-    print(f"Create PolyLoop : Parent {parent.Label}")
-    sketch = parent.newObject("Sketcher::SketchObject", "PolyLoop")
-    sketch.Label = "PolyLoop"
-    return None
-
-def processXrbElementByName(self, parent, elemName, decend=False):
-    print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
-    # Here or in Choice
-    if elemName == "PolyLoop":
-        return createPolyLoop(self, parent)
-    else:
-        element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-        return processXrbElement(self, parent, element, decend)
-
 def addElementProperty(self, parent, name, type_):
     # Maybe call processXsdType direct
-    processXsdType(self, parent, name, type_)
+    self.processXsdType(parent, name, type_)
 
-def checkName(self, name):
+def checkName(name):
     # FC names cannot contain -
     probChars = "-"
 
@@ -368,87 +325,9 @@ def createObjectGroup(self, parent, chkName):
     else:
         return FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", chkName)
 
-    
-def processXrbElement(self, parent, element, decend=False):
-    #from freecad.openStudio.baseObject import ViewProvider 
-    parentType = type(parent)
-    name = element.get('name')
-    chkName = checkName(self, name)
-    print(f"Process Element : {chkName}")
-    type_ = element.get('type')
-    if type_ is not None:
-        addElementProperty(self, parent, chkName, type_)
-    else:   # Create as Group Object  
-        parent = createObjectGroup(self, parent, chkName)  
-
-        #parent = parent.newObject("App::DocumentObjectGroupPython", name)
-        #parent = parent.newObject("App::DocumentObjectGroup", chkName)
-        #
-        # for gbXML - Object Group alreadt created
-        #
-        # FC creates unique name so make sure Label reflects name
-        setattr(parent,"Label", name)
-        for elem in element:
-            localName  = elem.xpath('local-name()')
-            print(f"localName {localName}")
-            if localName == "element":
-                continue
-            elif localName == "complexType":
-                #state = localName
-                processComplexType(self, elem, parent, decend)
-                break
-
-            # Following ????
-            #
-            elif localName == "simpleContent":
-                #state = localName
-                continue
-            elif localName == "extension":
-                if 'base' in elem.keys:
-                    return elem.get('base')
-            elif localName == "choice":
-                processChoice(self, elem)
-                break
-            elif localName == "annotation":
-                print(f"{localName} : {elem.text}")
-            else:
-                # annotation - just print
-                print(localName)
-
-        return parent
-        #parentType = type(parent)
-        #print(f"Process Element : {name} parent type {parentType}")
-        #if isinstance(parent, FreeCAD.Document):
-            #obj  = parent.addObject("App::DocumentObjectGroup", name)
-        #    obj = parent.addObject("App::DocumentObjectGroupPython", name)
-        #else:
-            #obj  = parent.Group.addObject("App::DocumentObjectGroup", name)
-        #    obj  = parent.newObject("App::DocumentObjectGroup", name)
-        #ViewProvider(obj.ViewObject)
-        #for elem in element:
-        #    localName = elem.xpath('local-name()')
-        #    if localName == "element":
-        #        print(f"{localName} : {elem.get('ref')}")
-        #    elif localName == "complexType":
-        #        print("Deal with Complex Type")
-        #        return processComplexType(self, elem, obj, decend)
-        #    elif localName == "choice":
-        #        processChoice(self, elem)
-        #    elif localName =="simpleType":
-        #        processSimpleType(self, elem, obj)
-        #    elif localName == "restriction":
-        #        print(f"{localName} : {elem.get('base')}")
-        #    elif localName == "attribute":
-        #        print(f"{localName} : {elem.get('name')} type {elem.get('type')} use {elem.get('use')}")
-        #    elif localName == "enumeration":
-        #        print(f"{localName} : {elem.get('value')}")
-        #    else:
-        #        print(localName)
-        #    return None
-
 def findAndProcessSubElement(self, parent, elemName):
     element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)
-    return processXrbElement(self, parent, element, decend=False)
+    return self.processXrbElement(parent, element, decend=False)
 
 def createFCObject(self, element):
     print(f"create FC Object")

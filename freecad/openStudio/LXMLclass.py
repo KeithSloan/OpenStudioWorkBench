@@ -88,30 +88,29 @@ class LXMLclass():
 		self.parseLXML(fileName)
 
 	def processGbXml(self, docName, fileName):
+		# Structure created from xsd
+		# Assume more info than gbXml
+		# Structure is created so now parse and process file
+		#
 		print(f"Parsed {fileName}")
 		self.parseGbXmlFile(fileName)
-		return
-		# Structure is created so now process
-		#self.processGbXmlElement()
-		#for tags in self.gbXML.iter():
-		#	print(f"Print tag {tags}")
-		#processElementByName(self, parent, "gbXML")
-		#self.setElementValues(gbXmlObj, self.gbXML)
-		#self.processElementByName(gbXmlObj,"gbXML")
-		#print(dir(self.gbXML))
-		#self.processElement(gbXmlObj, self.gbXML)
-		#for elem in self.gbXML.iter:
-		#	self.processElement(gbXmlObj,"gbXML", self.gbXML)
-		#
-		#for element in self.gbXML.iter():
-		#	self.findCheckProcessElement(docName, element)
-		self.findCheckProcessElement(docName, self.gbXML)
+		self.rootGbXML = self.gbXmlGroup()
+		self.processElementAndChildren(self.rootGbXML, self.gbXML)
 
-	def findObject(self, gbObj, name, id):
+	def gbXmlGroup(self):
+		import FreeCAD
+		doc = FreeCAD.ActiveDocument
+		print(f"Root Objects {doc.RootObjects}")
+		for obj in doc.RootObjects:
+			print(obj.Label)
+			if obj.Label == "gbXML":
+				return obj	
+
+	def findObjectInDoc(self, gbObj, name, id):
 		import FreeCAD
 		#from freecad.openStudio.processXrb import processXrbElementByName
 		# Need to access via self.gbXrb
-		print(f"Find Object : Name {name} id {id}")
+		print(f"Find Object In Doc : Name {name} id {id}")
 		# If baseName object already exists change label and use
 		# Else create new object
 		if id is not None:
@@ -201,28 +200,112 @@ class LXMLclass():
 		element = self.xmlRoot.find('element[@name="'+elemName+'"]')
 		return self.processElement(parent, element)
 
+	def printGroup(self, grpObj):
+		if hasattr(grpObj, "Group"):
+			for obj in grpObj.Group:
+				print(obj.Label)
+
+	def groupLabels(self, grpObj):
+		if hasattr(grpObj, "Group"):
+			lst = []
+			for obj in grpObj.Group:
+				lst.append(obj.Label)
+			return lst
+
+	def objectInGroup(self, grpObj, name):
+		if hasattr(grpObj, "Group"):
+			for obj in grpObj.Group:
+				if name == obj.Label:
+					print(f"Found {name} {obj}")
+					return obj
+		print(f"{name} Not Found")
+		return None
+
+	def addObject2Group(self, parent, name):
+		print(f"addObject2Group parent {parent.Label} Name {name}")
+		if hasattr(parent, "Group"):
+			gbObj = parent.newObject("App::DocumentObjectGroup", name)
+			parent.Group.append(gbObj)
+			return gbObj
+		else:
+			print(f"Failed to add to group {parent.Label}")
+
+	def findObject(self, parent, name, id):
+		#
+		# A name cleaned from element.tag is either
+		#
+		#	An initialise but not popluated Group Object
+		# 	A property of the parent
+		# 
+		import FreeCAD
+		print(f"Find Object : Parent {parent.Label} Name {name} id {id}")
+		print(f"Parent Group {self.groupLabels(parent)}")
+		gbObj = self.objectInGroup(parent, name) 
+		if gbObj is not None:
+			if id is not None:
+				# If baseName object already exists change label and use
+				gbObj.Label = name + '__' + id
+		else:
+			gbObj = self.addObject2Group(parent, name)
+			# Else create a New Group and initialise structue
+			#gbObj = self.createObjectGroup(parent, name)
+			# Need to access via self.gbXrb
+			#from freecad.openStudio.processXrb import processXrbElementByName
+			self.gbXrb.processXrbElementByName(self, gbObj, name)
+		return gbObj
+		# If baseName object already exists change label and use
+		# Else create new object
+		#if id is not None:
+		#	doc = FreeCAD.ActiveDocument
+		#	Objs = doc.getObjectsByLabel(name)
+		#	print(f"Objs {Objs}")
+		#	#fullLabel = baseName + ' : ' + Label
+		#	#ullLabel = name
+		#	#print(f"Full Name {fullLabel}")
+		#	if len(Objs) == 0 :
+		#		# Add new and create properties
+		#		gbObj = self.createObjectGroup(gbObj, name)
+		#		self.gbXrb.processXrbElementByName(self, gbObj, name)
+		#	else:
+		#		gbObj = Objs[0] 
+		#setattr(gbObj, "Label", fullLabel)
+		#gbObj.Label = fullLabel
+			
 	def findCheckProcessElement(self, parent, element):
+		#
+		# A name cleaned from element.tag is either
+		#
+		#	An initialise but not popluated Group Object
+		# 	A property of the parent
+		#  
 		label = parent
 		if hasattr(parent, "Label"):
 			label = parent.Label
 		print(f"Find Check Process Element :  parent {label} Element {element}")
 		chkName, id = self.checkName(element)
-		gbObj = self.findObject(parent, chkName, id)
-		self.processElement(gbObj, element)
+		# If id is None Property
 		if id is not None:
+			gbObj = self.findObject(parent, chkName, id)
 			gbObj.Label = chkName + '__' + id
-		#print(dir(element))
+			self.processElement(gbObj, element)
+			#print(dir(element))
+			for elem in element.iterchildren():
+				print(f'{elem} parent{elem.getparent()}')
+				self.findCheckProcessElement(gbObj, elem)
+	
+	def processElementAndChildren(self, parent, element, decend=False):
+		self.processElement(parent, element, decend)
 		for elem in element.iterchildren():
 			print(f'{elem} parent{elem.getparent()}')
-			self.findCheckProcessElement(gbObj, elem)
-		exit
-	
+			self.findCheckProcessElement(parent, elem)
+
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider
 		print(f"Process Element :  parent {parent} Element {element}")
 		parentType = type(parent)
 		# chkName = name
 		print(f"Process Element : Parent {parent.Label} {element.tag}")
+		self.setElementValues(parent, element)
 		#type_ = element.get('type')
 		#if type_ is not None:
 		#	self.addElementProperty(parent, chkName, type_)

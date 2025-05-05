@@ -265,8 +265,8 @@ class XrbClass():
             else:
                 # annotation - just print
                 print(localName)
-        #return parent
-        return
+        return parent
+        #return
 
     def processComplexType(self, element, parent, decend=False):
         name = element.get('name')
@@ -279,11 +279,16 @@ class XrbClass():
                 elemName = elem.get('ref')
                 parent.addProperty("App::PropertyLink", elemName, "GBxml", "Description - "+elemName)
                 print(f"Add property {elemName} to {parent.Label}")
+                #
                 # Should handling of decend be im processXrbElement
-                if not decend:
-                    parent.ThePropertyName = None
-                else:
-                    parent.ThePropertyName = self.findAndProcessSubElement(self, parent, elemName)
+                #
+                # Following Code ??
+                #    "TheProperty" introduced by VSCodium???
+                #if not decend:
+                #    parent.ThePropertyName = None
+                #else:
+                #    parent.ThePropertyName = self.findAndProcessSubElement(self, parent, elemName)
+                #
             elif localName == "choice":
                 #self.processChoice(parent, elem, decend)
                 self.processChoice(parent, elem, decend=False)
@@ -340,12 +345,11 @@ class XrbClass():
                     break
                 else:
                     #parent = parent.newObject("App::DocumentObjectGroupPython", name)
-                    #newParent = addProperty(self, parent, elemName, type_, decend)
-                    #pass
+                    #newParent = addProperty(self, parent, elemName, type_, decend
                     #
-                    print(f"Parent Before {parent} {parent.Label}")
+                    #print(f"Parent Before {parent} {parent.Label}")
                     self.processXrbElementByName(parent, elemName, decend)
-                    print(f"Parent After {parent} {parent.Label}")
+                    #print(f"Parent After {parent} {parent.Label}")
                     #self.processXrbElementByName(parent, elemName)
             else:
                 print(f"Not handled Choice {localName}")

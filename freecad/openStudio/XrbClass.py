@@ -229,15 +229,15 @@ class XrbClass():
         if type_ is not None:
             self.addElementProperty(parent, chkName, type_)
         else:   # Create as Group Object  
-            parent = self.createObjectGroup(parent, chkName)  
-
+            parent = self.createObjectGroup(parent, chkName)
+            # FC creates unique name so make sure Label reflects name
+            #setattr(parent,"Label", name)  
+            setattr(parent,"Label", name)
         #parent = parent.newObject("App::DocumentObjectGroupPython", name)
         #parent = parent.newObject("App::DocumentObjectGroup", chkName)
         #
-        # for gbXML - Object Group alreadt created
+        # for gbXML - Object Group already created
         #
-        # FC creates unique name so make sure Label reflects name
-        setattr(parent,"Label", name)
         for elem in element:
             localName  = elem.xpath('local-name()')
             print(f"localName {localName}")
@@ -265,7 +265,8 @@ class XrbClass():
             else:
                 # annotation - just print
                 print(localName)
-        return parent
+        #return parent
+        return
 
     def processComplexType(self, element, parent, decend=False):
         name = element.get('name')
@@ -282,9 +283,10 @@ class XrbClass():
                 if not decend:
                     parent.ThePropertyName = None
                 else:
-                    parent.ThePropertyName = findAndProcessSubElement(self, parent, elemName)
+                    parent.ThePropertyName = self.findAndProcessSubElement(self, parent, elemName)
             elif localName == "choice":
-                self.processChoice(parent, elem, decend)
+                #self.processChoice(parent, elem, decend)
+                self.processChoice(parent, elem, decend=False)
             elif localName == "attribute":
                 self.processAttribute(parent, elem)
             elif localName == "simpleContent":
@@ -323,7 +325,7 @@ class XrbClass():
                 print(f"Not handled - simpleType {localName}")
 
     def processChoice(self, parent, element, decend):
-        print(f"Process Choice <=== choice ===> ")
+        print(f"Process Choice <=== choice ===> Parent {parent.Label}")
         #for subElem in element.findall('./xsd:element', namespaces):
         for elem in element.xpath('./xsd:*', namespaces=self.ns):
             localName = elem.xpath('local-name()')
@@ -331,7 +333,7 @@ class XrbClass():
                 elemName = elem.get('ref')
                 #type_ = getElementTypeByName(self, elem.get('ref'))
                 #print(f"Choice : {localName} : {elemName} <=== {type_} ===>")
-                print(f"Choice : {localName} : {elemName}")
+                print(f"Choice : {localName} : {elemName} Parent {parent.Label}")
                 # Here or in processXrbElementByName ??
                 if elemName == "PolyLoop":
                     self.createPolyLoop(parent)
@@ -339,10 +341,15 @@ class XrbClass():
                 else:
                     #parent = parent.newObject("App::DocumentObjectGroupPython", name)
                     #newParent = addProperty(self, parent, elemName, type_, decend)
+                    #pass
+                    #
+                    print(f"Parent Before {parent} {parent.Label}")
                     self.processXrbElementByName(parent, elemName, decend)
-                    #processXrbElementByName(self, parent, elemName, decend)
+                    print(f"Parent After {parent} {parent.Label}")
+                    #self.processXrbElementByName(parent, elemName)
             else:
                 print(f"Not handled Choice {localName}")
+        print(f"End Process Choice <=== choice ===> Parent {parent.Label}")
 
     def processUnion(self, parent, element):
         # return set for unique values

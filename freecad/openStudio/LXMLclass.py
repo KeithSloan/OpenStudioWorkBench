@@ -169,11 +169,12 @@ class LXMLclass():
 
 	def checkName(self, element):
 		singleElements = ["Campus"]
-		print(f"CheckName tag {element.tag} {element}")
+		#print(f"CheckName tag {element.tag} {element}")
 		elemName = element.tag
 		idx = elemName.find('}')
 		if idx > 0:
 			elemName = elemName[idx+1:]
+		print(f"CheckName  {elemName}")
 		if elemName in singleElements:
 			return elemName, None
 		if 'id' in element.keys():
@@ -200,7 +201,9 @@ class LXMLclass():
 		element = self.xmlRoot.find('element[@name="'+elemName+'"]')
 		return self.processElement(parent, element)
 
-	def printGroup(self, grpObj):
+	def printGroup(self, grpObj, msg=None):
+		if msg is not None:
+			print(f"======= {msg} ======")
 		if hasattr(grpObj, "Group"):
 			for obj in grpObj.Group:
 				print(obj.Label)
@@ -221,11 +224,38 @@ class LXMLclass():
 		print(f"{name} Not Found")
 		return None
 
+	def locateInGroup(self, grpObj, name):
+		if hasattr(grpObj, "Group"):
+			for i, obj in enumerate(grpObj.Group):
+				if obj.Label.startswith(name):
+					print(f"Found {name} {obj} at {i}")
+					return i
+		print(f"{name} Not Found")
+		return None
+
 	def addObject2Group(self, parent, name):
 		print(f"addObject2Group parent {parent.Label} Name {name}")
 		if hasattr(parent, "Group"):
 			gbObj = parent.newObject("App::DocumentObjectGroup", name)
 			parent.Group.append(gbObj)
+			return gbObj
+		else:
+			print(f"Failed to add to group {parent.Label}")
+
+	def insertObject2Group(self, parent, name):
+		import FreeCAD
+		print(f"inserObject2Group parent {parent.Label} Name {name}")
+		if hasattr(parent, "Group"):
+			idx = self.locateInGroup(parent, name)
+			self.printGroup(parent, "Before create")
+			gbObj = parent.newObject("App::DocumentObjectGroup", name)
+			#gbObj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", name)
+			gbObj.Group.sort(key='Label')
+			print(f"Insert at {idx}")
+			self.printGroup(parent, "After Create")
+			parent.Group.insert(idx, gbObj)
+			self.printGroup(parent, "After Insert")
+			print(dir(parent.Group))
 			return gbObj
 		else:
 			print(f"Failed to add to group {parent.Label}")
@@ -246,7 +276,9 @@ class LXMLclass():
 				# If baseName object already exists change label and use
 				gbObj.Label = name + '__' + id
 		else:
-			gbObj = self.addObject2Group(parent, name)
+			print(f"Not found create new Group")
+			gbObj = self.insertObject2Group(parent, name)
+			#
 			# Else create a New Group and initialise structue
 			#gbObj = self.createObjectGroup(parent, name)
 			# Need to access via self.gbXrb
@@ -281,7 +313,8 @@ class LXMLclass():
 		label = parent
 		if hasattr(parent, "Label"):
 			label = parent.Label
-		print(f"Find Check Process Element :  parent {label} Element {element}")
+		#print(f"Find Check Process Element :  parent {label} Element {element}")
+		print(f"Find Check Process Element :  parent {label}")
 		chkName, id = self.checkName(element)
 		# If id is None Property
 		if id is not None:
@@ -289,6 +322,7 @@ class LXMLclass():
 			gbObj.Label = chkName + '__' + id
 			self.processElement(gbObj, element)
 			#print(dir(element))
+			exit
 			for elem in element.iterchildren():
 				print(f'{elem} parent{elem.getparent()}')
 				self.findCheckProcessElement(gbObj, elem)
@@ -301,7 +335,8 @@ class LXMLclass():
 
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider
-		print(f"Process Element :  parent {parent} Element {element}")
+		#print(f"Process Element :  parent {parent} Element {element}")
+		print(f"Process Element :  parent {parent}")
 		parentType = type(parent)
 		# chkName = name
 		print(f"Process Element : Parent {parent.Label} {element.tag}")

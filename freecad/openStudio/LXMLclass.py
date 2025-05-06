@@ -224,14 +224,32 @@ class LXMLclass():
 		print(f"{name} Not Found")
 		return None
 
-	def locateInGroup(self, grpObj, name):
+	def locateLastInGroup(self, grpObj, name):
 		if hasattr(grpObj, "Group"):
-			for i, obj in enumerate(grpObj.Group):
-				if obj.Label.startswith(name):
-					print(f"Found {name} {obj} at {i}")
+			print(f"Range {range(len(grpObj.Group) - 2, 0, -1)}")
+			for i in range(len(grpObj.Group) - 2, 0, -1):
+				objName = grpObj.Group[i].Label  
+				if objName.startswith(name):
+					print(f"Found {objName} at {i}")
 					return i
 		print(f"{name} Not Found")
 		return None
+
+	def reorderGroup(self, grpObj, name):
+		import FreeCAD
+		doc = FreeCAD.ActiveDocument
+		if hasattr(grpObj, "Group"):
+			if len(grpObj.Group) > 1:
+				num = self.locateLastInGroup(grpObj, name)
+				for i in range(len(grpObj.Group) - num - 2):
+					# Access last but one member of Group
+					obj = grpObj.Group[num+1]
+					print(f"Move {i} {obj.Label}")
+					# Removed from Group
+					grpObj.removeObject(obj)
+					# Add to tail of Group
+					grpObj.addObject(obj)
+						
 
 	def addObject2Group(self, parent, name):
 		print(f"addObject2Group parent {parent.Label} Name {name}")
@@ -246,19 +264,10 @@ class LXMLclass():
 		import FreeCAD
 		print(f"inserObject2Group parent {parent.Label} Name {name}")
 		if hasattr(parent, "Group"):
-			idx = self.locateInGroup(parent, name)
-			self.printGroup(parent, "Before create")
+	#		#idx = self.locateInGroup(parent, name)
+	#		self.printGroup(parent, "Before create")
 			gbObj = parent.newObject("App::DocumentObjectGroup", name)
-			#gbObj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", name)
-			gbObj.Group.sort(key='Label')
-			print(f"Insert at {idx}")
-			self.printGroup(parent, "After Create")
-			parent.Group.insert(idx, gbObj)
-			self.printGroup(parent, "After Insert")
-			print(dir(parent.Group))
-			return gbObj
-		else:
-			print(f"Failed to add to group {parent.Label}")
+			self.reorderGroup(parent, name)
 
 	def findObject(self, parent, name, id):
 		#
@@ -271,19 +280,26 @@ class LXMLclass():
 		print(f"Find Object : Parent {parent.Label} Name {name} id {id}")
 		print(f"Parent Group {self.groupLabels(parent)}")
 		gbObj = self.objectInGroup(parent, name) 
-		if gbObj is not None:
-			if id is not None:
-				# If baseName object already exists change label and use
-				gbObj.Label = name + '__' + id
-		else:
-			print(f"Not found create new Group")
-			gbObj = self.insertObject2Group(parent, name)
-			#
+		#if gbObj is not None:
+		#	if id is not None:
+		#		# If baseName object already exists change label and use
+		#		gbObj.Label = name + '__' + id
+		#else:
+		if gbObj is None:
 			# Else create a New Group and initialise structue
-			#gbObj = self.createObjectGroup(parent, name)
+			print(f"Not found create new Group")
+			#
+			#gbObj = self.insertObject2Group(parent, name)
+			#
+			parent.newObject("App::DocumentObjectGroup", name)
+			self.reorderGroup(parent, name)
 			# Need to access via self.gbXrb
 			#from freecad.openStudio.processXrb import processXrbElementByName
 			self.gbXrb.processXrbElementByName(self, gbObj, name)
+		if id is not None:
+			# If baseName object already exists change label and use
+			gbObj.Label = name + '__' + id
+
 		return gbObj
 		# If baseName object already exists change label and use
 		# Else create new object

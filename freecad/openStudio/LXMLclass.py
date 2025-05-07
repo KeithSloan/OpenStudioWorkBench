@@ -175,6 +175,10 @@ class LXMLclass():
 	#	return processElement(self, parent, element, decend=False)
 
 	def checkName(self, element):
+		# Return
+		# 	True 		: if Sub Elemnts
+		#	elemName 	: Elenent Name
+		#	id			: id or None
 		singleElements = ["Campus"]
 		#print(f"CheckName tag {element.tag} {element}")
 		elemName = element.tag
@@ -183,9 +187,9 @@ class LXMLclass():
 			elemName = elemName[idx+1:]
 		print(f"CheckName  {elemName}")
 		if elemName in singleElements:
-			return elemName, None
+			return True, elemName, None
 		if 'id' in element.keys():
-			return elemName, element.get('id')
+			return True, elemName, element.get('id')
 		# FC names cannot contain -
 		probChars = "-"
 		good = ""
@@ -194,7 +198,7 @@ class LXMLclass():
 				good += i
 			else:
 				good += ('_')
-		return good, None
+		return False, good, None
 	
 	def createObjectGroup(self, parent, chkName):
 		import FreeCAD
@@ -316,18 +320,28 @@ class LXMLclass():
 			label = parent.Label
 		#print(f"Find Check Process Element :  parent {label} Element {element}")
 		print(f"Find Check Process Element :  parent {label}")
-		chkName, id = self.checkName(element)
+		subFlag, chkName, id = self.checkName(element)
 		# If id is None Property
-		if id is not None:
+		if subFlag:
 			gbObj = self.findObject(parent, chkName, id)
-			gbObj.Label = chkName + '__' + id
+
 			self.processElement(gbObj, element)
+			if id is not None:
+				gbObj.Label = chkName + '__' + id
+			for elem in element.iterchildren():
+				print(f'{elem} parent{elem.getparent()}')
+				self.setElementValues(parent, element)
+
+			#	self.findCheckProcessElement(gbObj, elem)
 			#processElementAndChildren(gbObj, element)
 			#print(dir(element))
 			#exit
-			for elem in element.iterchildren():
-				print(f'{elem} parent{elem.getparent()}')
-				self.findCheckProcessElement(gbObj, elem)
+			#for elem in element.iterchildren():
+			#	print(f'{elem} parent{elem.getparent()}')
+			#	self.findCheckProcessElement(gbObj, elem)
+		else:
+			gbObj = parent
+			self.processElement(gbObj, element)
 	
 	def processElementAndChildren(self, parent, element, decend=False):
 		self.processElement(parent, element, decend)

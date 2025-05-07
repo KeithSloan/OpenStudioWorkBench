@@ -301,7 +301,7 @@ class XrbClass():
             #
             elif localName == "restriction":
                 print(f"{localName} : {elem.get('base')}")
-                self.processRestriction(elem, obj)
+                self.processRestriction(parent, elem)
             elif localName == "enumeration":
                 print(f"{localName} : {elem.get('value')}")
             elif localName == "documentation":

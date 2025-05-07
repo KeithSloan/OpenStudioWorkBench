@@ -92,7 +92,11 @@ class LXMLclass():
 		# Assume more info than gbXml
 		# Structure is created so now parse and process file
 		#
+		print("================================================")
+		print("================================================")
 		print(f"Parsed {fileName}")
+		print("================================================")
+		print("================================================")
 		self.parseGbXmlFile(fileName)
 		self.rootGbXML = self.gbXmlGroup()
 		self.processElementAndChildren(self.rootGbXML, self.gbXML)
@@ -133,14 +137,16 @@ class LXMLclass():
 	def getSet(self, obj, element, key):
 		if hasattr(obj, key):
 			prop = obj.getPropertyByName(key)
+			value = element.get(key)
 			print(f"Property {key} type {type(prop)}")
 			if isinstance(prop, bool):
 				print("Boolean")
-				if prop == "True":
-					prop = True
+				if value == "True":
+					value = True
 				else:
-					prop = False
-			setattr(obj, key, prop)
+					value = False
+			print(f"Set {obj.Label} Value {key} property {prop} Value {value}")
+			setattr(obj, key, value)
 
 	def setElementValues(self, obj, element):
 		print(f"Set Element Values {obj.Label}")
@@ -316,8 +322,9 @@ class LXMLclass():
 			gbObj = self.findObject(parent, chkName, id)
 			gbObj.Label = chkName + '__' + id
 			self.processElement(gbObj, element)
+			#processElementAndChildren(gbObj, element)
 			#print(dir(element))
-			exit
+			#exit
 			for elem in element.iterchildren():
 				print(f'{elem} parent{elem.getparent()}')
 				self.findCheckProcessElement(gbObj, elem)
@@ -327,6 +334,7 @@ class LXMLclass():
 		for elem in element.iterchildren():
 			print(f'{elem} parent{elem.getparent()}')
 			self.findCheckProcessElement(parent, elem)
+			#self.processElement(parent, elem)
 
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider

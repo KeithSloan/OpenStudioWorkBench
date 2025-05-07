@@ -45,6 +45,13 @@ and gbxml.
                    - Building
                    - Building Storey
 
+    * Import gbXML file
+      - Currently 
+          * need to eemove first xml line ( Need to fix )
+          * Just processes top level
+          * Need to fix setvaklues
+          * Look at Grouping items
+
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure
 

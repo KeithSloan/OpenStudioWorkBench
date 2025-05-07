@@ -143,6 +143,7 @@ class LXMLclass():
 			setattr(obj, key, prop)
 
 	def setElementValues(self, obj, element):
+		print(f"Set Element Values {obj.Label}")
 		for key in element.keys():
 			self.getSet(obj, element, key)
 
@@ -273,51 +274,29 @@ class LXMLclass():
 		#
 		# A name cleaned from element.tag is either
 		#
-		#	An initialise but not popluated Group Object
+		#	An initialise but not populated Group Object
 		# 	A property of the parent
 		# 
 		import FreeCAD
 		print(f"Find Object : Parent {parent.Label} Name {name} id {id}")
 		print(f"Parent Group {self.groupLabels(parent)}")
 		gbObj = self.objectInGroup(parent, name) 
-		#if gbObj is not None:
-		#	if id is not None:
-		#		# If baseName object already exists change label and use
-		#		gbObj.Label = name + '__' + id
-		#else:
+		# if gbObj is None:	# That means structure name used before
+		#   so create new Obj and use
 		if gbObj is None:
-			# Else create a New Group and initialise structue
-			print(f"Not found create new Group")
-			#
-			#gbObj = self.insertObject2Group(parent, name)
-			#
-			parent.newObject("App::DocumentObjectGroup", name)
-			self.reorderGroup(parent, name)
+			# Else create a New Group and initialise structure
+			print(f"Not found create new gbObj")
 			# Need to access via self.gbXrb
 			#from freecad.openStudio.processXrb import processXrbElementByName
-			self.gbXrb.processXrbElementByName(self, gbObj, name)
+			gbObj  = self.gbXrb.processXrbElementByName(parent, name)
+			# Reorder group to keep togther
+			self.reorderGroup(parent, name)
+		#	if id is not None:
+		#		baseName object already exists change label and use
+		#		gbObj.Label = name + '__' + id
 		if id is not None:
-			# If baseName object already exists change label and use
 			gbObj.Label = name + '__' + id
-
 		return gbObj
-		# If baseName object already exists change label and use
-		# Else create new object
-		#if id is not None:
-		#	doc = FreeCAD.ActiveDocument
-		#	Objs = doc.getObjectsByLabel(name)
-		#	print(f"Objs {Objs}")
-		#	#fullLabel = baseName + ' : ' + Label
-		#	#ullLabel = name
-		#	#print(f"Full Name {fullLabel}")
-		#	if len(Objs) == 0 :
-		#		# Add new and create properties
-		#		gbObj = self.createObjectGroup(gbObj, name)
-		#		self.gbXrb.processXrbElementByName(self, gbObj, name)
-		#	else:
-		#		gbObj = Objs[0] 
-		#setattr(gbObj, "Label", fullLabel)
-		#gbObj.Label = fullLabel
 			
 	def findCheckProcessElement(self, parent, element):
 		#

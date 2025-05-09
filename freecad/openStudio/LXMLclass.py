@@ -135,6 +135,7 @@ class LXMLclass():
 		return gbObj
 
 	def getSet(self, obj, element, key):
+		print(f"getSet {obj.Label} element {element} key {key}")
 		if hasattr(obj, key):
 			prop = obj.getPropertyByName(key)
 			value = element.get(key)
@@ -152,6 +153,25 @@ class LXMLclass():
 		print(f"Set Element Values {obj.Label}")
 		for key in element.keys():
 			self.getSet(obj, element, key)
+
+	def getSetValue(self, obj, elemName, value):
+		print(f"getSet {obj.Label} element {elemName} value {value}")
+		if hasattr(obj, elemName):
+			prop = obj.getPropertyByName(elemName)
+			if isinstance(prop, bool):
+				print("Boolean")
+				if value == "True":
+					value = True
+				else:
+					value = False
+			elif isinstance(prop, float):
+				value = float(value)
+			print(f"Set {obj.Label} Value {elemName} property {prop} Value {value}")
+			setattr(obj, elemName, value)
+	
+	def setValue(self, obj, element):
+		elemName = self.cleanTag(element)
+		print(f"Set Value obj {obj.Label} ElemName {elemName}")
 
 	#def processGbXmlElement(self):
 	#	parameters = [
@@ -174,31 +194,33 @@ class LXMLclass():
 	#def	processSubElements(self, parent, elemName):
 	#	return processElement(self, parent, element, decend=False)
 
-	def checkName(self, element):
-		# Return
-		# 	True 		: if Sub Elemnts
-		#	elemName 	: Elenent Name
-		#	id			: id or None
-		singleElements = ["Campus"]
-		#print(f"CheckName tag {element.tag} {element}")
+
+	def cleanTag(self, element):
 		elemName = element.tag
 		idx = elemName.find('}')
 		if idx > 0:
 			elemName = elemName[idx+1:]
-		print(f"CheckName  {elemName}")
-		if elemName in singleElements:
-			return True, elemName, None
+		print(f"Cleaned Tag {elemName}")
+		return elemName
+
+	def checkName(self, element):
+		# Return
+		#	elemName 	: Elenent Name
+		#	id			: id or False
+		elemName = self.cleanTag(element)
+		print(f"elemName {elemName}")
 		if 'id' in element.keys():
-			return True, elemName, element.get('id')
-		# FC names cannot contain -
-		probChars = "-"
-		good = ""
-		for i in elemName:
-			if i not in probChars:
-				good += i
-			else:
-				good += ('_')
-		return False, good, None
+			return elemName, element.get('id')
+		else:
+			# FC names cannot contain -
+			probChars = "-"
+			good = ""
+			for i in elemName:
+				if i not in probChars:
+					good += i
+				else:
+					good += ('_')
+			return good, False
 	
 	def createObjectGroup(self, parent, chkName):
 		import FreeCAD
@@ -280,32 +302,39 @@ class LXMLclass():
 			gbObj = parent.newObject("App::DocumentObjectGroup", name)
 			self.reorderGroup(parent, name)
 
-	def findObject(self, parent, name, id):
+	def findObjectInGroup(self, parent, elemName, id):
 		#
 		# A name cleaned from element.tag is either
 		#
 		#	An initialise but not populated Group Object
 		# 	A property of the parent
 		# 
-		import FreeCAD
-		print(f"Find Object : Parent {parent.Label} Name {name} id {id}")
+		print(f"Find Object : Parent {parent.Label} Name {elemName} id {id}")
 		print(f"Parent Group {self.groupLabels(parent)}")
-		gbObj = self.objectInGroup(parent, name) 
+		gbObj = self.objectInGroup(parent, elemName) 
+		# Check attribute or in Group First?
+		#
 		# if gbObj is None:	# That means structure name used before
 		#   so create new Obj and use
 		if gbObj is None:
+			print(f"{elemName} Not found in parent group {parent.Label}")
+			#print(f"Is it an Attribute ?")
+			# Check if Attrribute
+			#if hasattr(parent, name):
+			#	print(f"Is an attribute")
+			#	return parent
 			# Else create a New Group and initialise structure
-			print(f"Not found create new gbObj")
 			# Need to access via self.gbXrb
 			#from freecad.openStudio.processXrb import processXrbElementByName
-			gbObj  = self.gbXrb.processXrbElementByName(parent, name)
+			gbObj  = self.gbXrb.processXrbElementByName(parent, elemName)
 			# Reorder group to keep togther
-			self.reorderGroup(parent, name)
+			self.reorderGroup(parent, elemName)
 		#	if id is not None:
 		#		baseName object already exists change label and use
 		#		gbObj.Label = name + '__' + id
-		if id is not None:
-			gbObj.Label = name + '__' + id
+		#if id is not None and elemName not in ["Campus"]:
+		if id and elemName != "Campus":
+			gbObj.Label = elemName + '__' + id
 		return gbObj
 			
 	def findCheckProcessElement(self, parent, element):
@@ -318,19 +347,30 @@ class LXMLclass():
 		label = parent
 		if hasattr(parent, "Label"):
 			label = parent.Label
+		elemName, id = self.checkName(element)
 		#print(f"Find Check Process Element :  parent {label} Element {element}")
-		print(f"Find Check Process Element :  parent {label}")
-		subFlag, chkName, id = self.checkName(element)
-		# If id is None Property
-		if subFlag:
-			gbObj = self.findObject(parent, chkName, id)
-
+		print(f"Find Check Process Element :  parent {label} element {elemName}")
+		treatDiff = ["PlanarGeometry",
+					"PolyLoop",
+					"CartesianPoint",
+					"Coordinate",
+					"Space",
+					"SpaceBoundary"
+		]
+		if elemName in treatDiff:
+			return
+		# If subFlag then has id so find and use or create new and use.
+		if id:
+			gbObj = self.findObjectInGroup(parent, elemName, id)
+			# process element and children
 			self.processElement(gbObj, element)
-			if id is not None:
-				gbObj.Label = chkName + '__' + id
+			#if id is not None:
+			#	gbObj.Label = chkName + '__' + id
 			for elem in element.iterchildren():
 				print(f'{elem} parent{elem.getparent()}')
-				self.setElementValues(parent, element)
+				#self.processElement(gbObj, elem)
+				#self.setElementValues(parent, element)
+				self.findCheckProcessElement(gbObj, elem)
 
 			#	self.findCheckProcessElement(gbObj, elem)
 			#processElementAndChildren(gbObj, element)
@@ -340,8 +380,29 @@ class LXMLclass():
 			#	print(f'{elem} parent{elem.getparent()}')
 			#	self.findCheckProcessElement(gbObj, elem)
 		else:
-			gbObj = parent
-			self.processElement(gbObj, element)
+			#self.processSiblings(parent, element)
+			#self.processElement(gbObj, element)
+			#gbObj = parent
+			print(f"Element {elemName} with no Id")
+			#self.processElement(gbObj, element)
+			gbObj = self.objectInGroup(parent, elemName) 
+			#gbObj = self.findObjectInGroup(parent, elemName, id)
+			if gbObj is not None:
+				print(f"Object {elemName} in Group {parent.Label}")
+				for elem in element.iterchildren():
+					#self.processElement(gbObj, elem)
+					self.setElementValues(gbObj, elem)
+					self.findCheckProcessElement(gbObj, elem)
+			else:
+				print(f"parent {parent.Label} elemName {elemName} element {element}")
+				print(f"Is elemName an attribute of parent")
+				if hasattr(parent, elemName):
+					print(f"{elemName} is an attribute of {parent.Label} Value {element.text}")
+					#type_ = type(parent.elemName)
+					#print(f"Type {type_}")
+					#setattr(parent, elemName, (type_) element.text)
+					self.getSetValue(parent, elemName, element.text)
+			
 	
 	def processElementAndChildren(self, parent, element, decend=False):
 		self.processElement(parent, element, decend)
@@ -354,12 +415,15 @@ class LXMLclass():
     	#from freecad.openStudio.baseObject import ViewProvider
 		#print(f"Process Element :  parent {parent} Element {element}")
 		print(f"Process Element :  parent {parent}")
-		parentType = type(parent)
-		# chkName = name
-		print(f"Process Element : Parent {parent.Label} {element.tag}")
+		elemName = self.cleanTag(element)
+		print(f"Process Element : Parent {parent.Label} {elemName}")
 		self.setElementValues(parent, element)
-		#type_ = element.get('type')
-		#if type_ is not None:
-		#	self.addElementProperty(parent, chkName, type_)
-		#else:   # Create as Group Object
-	
+		if len(element.text) > 0:
+			print(f"Parent {parent.Label} ElemName {elemName} len {len(element.text)} text {element.text}")
+			if hasattr(parent, elemName):
+				setattr(parent, elemName, element.text)
+
+	def processSiblings(self, parent, element):
+		print(f"process Siblings - parent {parent.Label} element {self.cleanTag(element)}")
+		for elem in element.itersiblings():
+			self.processElement(parent, elem)

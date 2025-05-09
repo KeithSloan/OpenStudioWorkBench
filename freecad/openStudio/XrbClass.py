@@ -210,6 +210,14 @@ class XrbClass():
         sketch.Label = "PolyLoop"
         return None
 
+    def processXrbElementByRef(self, parent, element, decend=False):
+        if 'ref' in element.keys():
+            elemName = element.get('ref')
+            print(f"Process Element By Ref - Parent {parent.Label} Element Name {elemName}")
+            self.processXrbElementByName(parent, elemName)
+        else:
+            print(f"Process by Ref : But no Ref")
+
     def processXrbElementByName(self, parent, elemName, decend=False):
         print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
         # Here or in Choice
@@ -242,7 +250,10 @@ class XrbClass():
             localName  = elem.xpath('local-name()')
             print(f"localName {localName}")
             if localName == "element":
-                continue
+                pass
+                #if 'ref' in elem.keys:
+                #    prop = elem.get('ref')
+                #    setattr(parent,prop,"")
             elif localName == "complexType":
                 #state = localName
                 self.processComplexType(elem, parent, decend)
@@ -289,6 +300,8 @@ class XrbClass():
                 #else:
                 #    parent.ThePropertyName = self.findAndProcessSubElement(self, parent, elemName)
                 #
+            elif localName == "all":
+                self.processAll(parent, elem)
             elif localName == "choice":
                 #self.processChoice(parent, elem, decend)
                 self.processChoice(parent, elem, decend=False)
@@ -329,6 +342,18 @@ class XrbClass():
             else:
                 print(f"Not handled - simpleType {localName}")
 
+    def processAll(self, parent, element):
+        print(f"Process xsd:All Parent {parent.Label}")
+        for elem in element.xpath('./xsd:*', namespaces=self.ns):
+            localName = elem.xpath('local-name()')
+            print(f"localName {localName}")
+            if localName == "element":
+                print(f"Process by Ref {elem.get('ref')}")
+                self.processXrbElementByRef(parent, elem)
+            else:
+                print(f"Process All {localName} Not Handled")
+        print(f"End Process All")
+                
     def processChoice(self, parent, element, decend):
         print(f"Process Choice <=== choice ===> Parent {parent.Label}")
         #for subElem in element.findall('./xsd:element', namespaces):

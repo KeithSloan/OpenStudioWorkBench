@@ -28,39 +28,44 @@
 # *                                                                         *
 # *                                                                         *
 ############################################################################*
-
-class baseObjectClass:
-    def __init__(self, obj, srcObj):
+class dateClass():
+    def __init__(self, obj):
+        super().__init__(obj, "dateClass")
+        self.obj = obj
         """Init"""
-        import FreeCAD as App
-
-        self.possibleProp = []
-        self.currentProp = []
-        print(f"Set LinkedObj {srcObj}")
-        obj.addProperty("App::PropertyLink", "LinkedObj", "Base", "Initial Source Object" \
-            ).LinkedObj = srcObj
-        # No Proxy for App::Group ?
-        #obj.Proxy = self
-    
-    def addPossibleProp(self, prop):
-        if prop not in self.possibleProp:
-            self.possibleProp.append(prop)
+        
+    def initDateClass(self, name, day, month, year, description = None):
+        # name - name of date variable
+        # day, month, year
+        if description is None: 
+            description = name
+            self.obj.addProperty("App::PropertyEnumeration", month, "Date", "Month")
+            self.obj.month = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sept","Oct","Nov","Dec"]
+            self.obj.addProperty("App::PropertyEnumeration", day, "Date", "Day")
+            if month == "Feb":
+                enumList = self.days(28)
+            elif month in ["Sept","Apr","June","Nov"]:
+                enumList = self.days(30)
+            else:
+                enumList = self.days(31)
+            self.obj.day = enumList
+            self.obj.addProperty("App::PropertyInteger", year, "Date", "Day")
+            self.obj.year = year
+        
+    def days(self, num):
+                lst = []
+                r = range(1, num)
+                for i in r:
+                    lst.append(str(i))
+                return lst
             
-    def addCurrentProp(self, prop):
-        if prop not in self.possibleProp:
-            raise ValueError("Invalid Prop")
-        self.currentProp.append(prop)
-
-    def updateLinkedProperties(self):
-        if self.linkedObject is not None:
-            for p in self.linkedObject.PropertiesList:
-                print(f"Check and Update {p}")
-                try:
-                    self.p = self.linkedObject.p
-                except:
-                    # Check p in AlternateNameDict
-                    pass
-
+class baseObjectClass:
+    def __init__(self, obj, objType):
+        """Init"""
+        self.Type = objType
+        obj.Proxy = self
+        obj.Proxy.Type = objType
+    
     def __getstate__(self):
         """
         When saving the document this object gets stored using Python's

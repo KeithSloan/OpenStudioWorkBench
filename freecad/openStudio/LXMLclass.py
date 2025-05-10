@@ -336,8 +336,7 @@ class LXMLclass():
 		elemName, id = self.checkName(element)
 		#print(f"Find Check Process Element :  parent {label} Element {element}")
 		print(f"Find Check Process Element :  parent {label} element {elemName}")
-		treatDiff = ["PlanarGeometry",
-					"PolyLoop",
+		treatDiff = ["PolyLoop",
 					"CartesianPoint",
 					"Coordinate",
 					"Space",

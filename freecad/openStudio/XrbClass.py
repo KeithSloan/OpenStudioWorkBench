@@ -179,7 +179,7 @@ class XrbClass():
             "xsd:double": "App::PropertyFloat",
             "xsd:decimal": "App::PropertyFloat",
             "xsd:boolean": "App::PropertyBool",
-            "xsd:date": "App::PropertyTime",
+            "xsd:date": "App::PropertyString",      # Appears no App::PropertyDate in FreeCAD
             "xsd:dateTime": "App::PropertyTime",
             "xsd:duration": "App::PropertyTime",
             "xsd:ID" : "App::PropertyString",
@@ -203,12 +203,12 @@ class XrbClass():
             # Could be Enum
             # 
     def createPolyLoop(self, parent):
-        import Sketcher
-        # Treat PolyLoop as a FreeCAD sketch
+        from freecad.openStudio.gbObjects import PolyLoopClass
+        # Treat PolyLoop Custom Object
         
         print(f"Create PolyLoop : Parent {parent.Label}")
-        sketch = parent.newObject("Sketcher::SketchObject", "PolyLoop")
-        sketch.Label = "PolyLoop"
+        obj = parent.newObject("App::FeaturePython", "PolyLoop")
+        PolyLoopClass(obj)
         return None
 
     def processXrbElementByRef(self, parent, element, decend=False):
@@ -367,6 +367,7 @@ class XrbClass():
                 print(f"Choice : {localName} : {elemName} Parent {parent.Label}")
                 # Here or in processXrbElementByName ??
                 if elemName == "PolyLoop":
+                    print(f"process PolyLoop")
                     self.createPolyLoop(parent)
                     break
                 else:

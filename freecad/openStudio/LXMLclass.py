@@ -152,18 +152,23 @@ class LXMLclass():
 	def setElementValues(self, obj, element):
 		elemName = self.cleanTag(element)
 		print(f"Set Element Values {obj.Label} elemName {elemName}")
+		print(f"process keys")
 		for key in element.keys():
-			self.getSet(obj, element, key)
-		if obj.Label == elemName:		# Example StationId
+			#self.getSetValue(obj, elemName, key)
+			self.getSetValue(obj, key, element.get(key))
+		print(f"set any text value?")
+		if obj.Label.startswith(elemName):
+		#if obj.Label == elemName:		# Example StationId
 			self.getSetValue(obj, elemName, element.text)
 			#if hasattr(obj, elemName):
 			#	#print(f"Set {elemName} to {element.text}")
 			#	self.getSetValues(obj, elemName, element.text)
 
 	def getSetValue(self, obj, elemName, value):
-		print(f"getSet {obj.Label} element {elemName} value {value}")
+		print(f"getSetValue {obj.Label} element {elemName} value {value}")
 		if hasattr(obj, elemName):
 			prop = obj.getPropertyByName(elemName)
+			print(f"Property Type of {elemName} {type(prop)}")
 			if isinstance(prop, bool):
 				print("Boolean")
 				if value == "True":

@@ -179,6 +179,7 @@ class XrbClass():
             "xsd:double": "App::PropertyFloat",
             "xsd:decimal": "App::PropertyFloat",
             "xsd:boolean": "App::PropertyBool",
+            "xsd:date": "App::PropertyTime",
             "xsd:dateTime": "App::PropertyTime",
             "xsd:duration": "App::PropertyTime",
             "xsd:ID" : "App::PropertyString",

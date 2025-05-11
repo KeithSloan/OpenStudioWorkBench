@@ -48,13 +48,14 @@ class PolyLoopClass(BaseClass):
 
 	def addPolyLoopObject(self, parent):
 		# Add new FC object to parent
+		print(f"Add PolyLoop Object")
 		self.obj = parent.newObject("App::PythonFeature","PolyLoop")
 
 	def addCartesianPoint(self, x, y, z=0.0):
 		import FreeCAD
 		self.PointsList.append(FreeCAD.Vector(x, y, z))
 
-	def processCartesanPointElement(self,elem):
+	def processCartesanPointElement(self, elem):
 		# ToDo
 		pass
 

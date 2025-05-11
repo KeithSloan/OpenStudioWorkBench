@@ -242,7 +242,7 @@ class LXMLclass():
 	def objectInGroup(self, grpObj, name):
 		if hasattr(grpObj, "Group"):
 			for obj in grpObj.Group:
-				if name == obj.Label:
+				if obj.Label.startswith(name):
 					print(f"Found {name} {obj}")
 					return obj
 		print(f"{name} Not Found")
@@ -336,14 +336,19 @@ class LXMLclass():
 		elemName, id = self.checkName(element)
 		#print(f"Find Check Process Element :  parent {label} Element {element}")
 		print(f"Find Check Process Element :  parent {label} element {elemName}")
-		treatDiff = ["PolyLoop",
-					"CartesianPoint",
-					"Coordinate",
-					"Space",
-					"SpaceBoundary"
-		]
-		if elemName in treatDiff:
-			return
+		#treatDiff = ["PolyLoop",
+		#			"CartesianPoint",
+		#			"Coordinate",
+		#treatDiff = ["Coordinate",
+		#			"CartesianPoint",
+		#]
+		# ,
+		#			"SpaceBoundary"
+		#]
+		#if elemName in treatDiff:
+		#	return
+		#
+		#
 		# If subFlag then has id so find and use or create new and use.
 		if id:
 			gbObj = self.findObjectInGroup(parent, elemName, id)
@@ -364,6 +369,11 @@ class LXMLclass():
 			#gbObj = self.findObjectInGroup(parent, elemName, id)
 			if gbObj is not None:
 				print(f"Object {elemName} in Group {parent.Label}")
+				if elemName == "PolyLoop":
+					self.processPolyLoop(parent, element)
+				elif elemName == "CartesianPoint":
+					self.processCartesianPoint(parent, element)
+
 				self.setElementValues(gbObj, element)
 				for elem in element.iterchildren():
 					#self.processElement(gbObj, elem)
@@ -387,13 +397,34 @@ class LXMLclass():
 			self.findCheckProcessElement(parent, elem)
 			#self.processElement(parent, elem)
 
+	def processPolyLoop(self, parent, element):
+		print(f"Process PolyLoop - parent {parent.Label}")
+
+	def processCartesianPoint(self, parent, element):
+		import FreeCAD
+		print(f"Process Cartesian Point - parent {parent.Label}")
+		# check PolyLoop
+		vector = []
+		for i in range(3):
+			for elem in element.iterchildren():
+				vector.append(float(elem.text))
+		parent.addCordinateVector(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+
+	def processCordinate(self, parent, element):
+		print(f"Process Cordinate Point - parent {parent.Label} - {element.text}")
+		# check PolyLoop
+
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider
 		#print(f"Process Element :  parent {parent} Element {element}")
 		print(f"Process Element :  parent {parent}")
 		elemName = self.cleanTag(element)
 		print(f"Process Element : Parent {parent.Label} {elemName}")
-		self.setElementValues(parent, element)
+		#if elemName == "CartesianPoint":
+		#	self.processCartesianPoint(parent)
+		#elif elemName == "Cordinate":
+		#	self.processCordinate(parent)
+		#self.setElementValues(parent, element)
 		#if len(element.text) > 0:
 		#	print(f"Parent {parent.Label} ElemName {elemName} len {len(element.text)} text {element.text}")
 		#	if hasattr(parent, elemName):

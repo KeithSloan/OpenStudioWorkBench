@@ -149,14 +149,16 @@ class LXMLclass():
 			print(f"Set {obj.Label} Value {key} property {prop} Value {value}")
 			setattr(obj, key, value)
 
-	def setElementValues(self, obj, element):
-		elemName = self.cleanTag(element)
-		print(f"Set Element Values {obj.Label} elemName {elemName}")
-		print(f"process keys")
+	def processKeys(self, obj, element, elemName):
+		print(f"Set Keys {obj.Label} elemName {elemName}")
 		for key in element.keys():
 			#self.getSetValue(obj, elemName, key)
 			self.getSetValue(obj, key, element.get(key))
-		print(f"set any text value?")
+	
+	def setElementValues(self, obj, element):
+		elemName = self.cleanTag(element)
+		print(f"Set Element Values {obj.Label} elemName {elemName}")
+		print("set any text value?")
 		if obj.Label.startswith(elemName):
 		#if obj.Label == elemName:		# Example StationId
 			self.getSetValue(obj, elemName, element.text)
@@ -185,6 +187,20 @@ class LXMLclass():
 	def setValue(self, obj, element):
 		elemName = self.cleanTag(element)
 		print(f"Set Value obj {obj.Label} ElemName {elemName}")
+
+	def checkIfElementAttribute(self, parent, element, elemName):
+		print(f"Is elemName {elemName} an attribute of parent {parent.Label} ?")
+		if hasattr(parent, elemName):
+			print(f"{elemName} === Yes === is an attribute of {parent.Label} Value {element.text}")
+			#type_ = type(parent.elemName)
+			#print(f"Type {type_}")
+			#setattr(parent, elemName, (type_) element.text)
+			self.getSetValue(parent, elemName, element.text)
+
+	def checkIfElementInParentGroup(self, parent, element, elemName):		# Example Area in Building
+		obj = self.objectInGroup(parent, elemName)
+		if obj is not None:
+			self.checkIfElementAttribute(obj, element, elemName)
 
 	def cleanTag(self, element):
 		elemName = element.tag
@@ -368,26 +384,15 @@ class LXMLclass():
 			gbObj = self.objectInGroup(parent, elemName) 
 			#gbObj = self.findObjectInGroup(parent, elemName, id)
 			if gbObj is not None:
-				print(f"Object {elemName} in Group {parent.Label}")
-				if elemName == "PolyLoop":
-					self.processPolyLoop(parent, element)
-				elif elemName == "CartesianPoint":
-					self.processCartesianPoint(parent, element)
-
-				self.setElementValues(gbObj, element)
-				for elem in element.iterchildren():
-					#self.processElement(gbObj, elem)
-					self.setElementValues(gbObj, elem)
-					self.findCheckProcessElement(gbObj, elem)
-			else:
+				self.processElement(parent, element)
+				#self.setElementValues(gbObj, element)
+				#for elem in element.iterchildren():
+				#	#self.processElement(gbObj, elem)
+				#	self.setElementValues(gbObj, elem)
+				#	self.findCheckProcessElement(gbObj, elem)
+			else:	# ???? following
 				print(f"parent {parent.Label} elemName {elemName} element {element}")
-				print(f"Is elemName an attribute of parent ?")
-				if hasattr(parent, elemName):
-					print(f"{elemName} is an attribute of {parent.Label} Value {element.text}")
-					#type_ = type(parent.elemName)
-					#print(f"Type {type_}")
-					#setattr(parent, elemName, (type_) element.text)
-					self.getSetValue(parent, elemName, element.text)
+				print(f"Is elemName {elemName} an attribute of parent {parent.Label} ?")
 			
 	
 	def processElementAndChildren(self, parent, element, decend=False):
@@ -398,7 +403,7 @@ class LXMLclass():
 			#self.processElement(parent, elem)
 
 	def processPolyLoop(self, parent, element):
-		print(f"Process PolyLoop - parent {parent.Label}")
+		print(f"Process PolyLoop: - parent {parent.Label}")
 
 	def processCartesianPoint(self, parent, element):
 		import FreeCAD
@@ -416,19 +421,18 @@ class LXMLclass():
 
 	def processElement(self, parent, element, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider
-		#print(f"Process Element :  parent {parent} Element {element}")
-		print(f"Process Element :  parent {parent}")
+		#print(f"Process Element :  parent {parent}")
 		elemName = self.cleanTag(element)
-		print(f"Process Element : Parent {parent.Label} {elemName}")
-		#if elemName == "CartesianPoint":
-		#	self.processCartesianPoint(parent)
-		#elif elemName == "Cordinate":
-		#	self.processCordinate(parent)
-		#self.setElementValues(parent, element)
-		#if len(element.text) > 0:
-		#	print(f"Parent {parent.Label} ElemName {elemName} len {len(element.text)} text {element.text}")
-		#	if hasattr(parent, elemName):
-		#		setattr(parent, elemName, element.text)
+		print(f"Process Element : Parent {parent.Label} Element {elemName}")
+		self.processKeys(parent, element, elemName)
+		self.checkIfElementAttribute(parent, element, elemName)
+		self.checkIfElementInParentGroup(parent, element, elemName)		# Example Area in Building
+		if elemName == "PolyLoop":
+			self.processPolyLoop(parent, element)
+		elif elemName == "CartesianPoint":
+			self.processCartesianPoint(parent, element)
+		print(f"End Process Element {elemName}")
+		
 
 	def processSiblings(self, parent, element):
 		print(f"process Siblings - parent {parent.Label} element {self.cleanTag(element)}")

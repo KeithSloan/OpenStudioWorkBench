@@ -29,22 +29,4 @@
 # *                                                                         *
 ############################################################################*
 
-from freecad.openStudio.baseObject import baseObjectClass
-
-class PolyLoopClass(baseObjectClass):
-
-    def __init__(self, obj):
-        super().__init__(obj, "PolyLoopClass")
-        """Init"""
-        self.obj = obj
-
-    def initPoly(self):
-        self.obj.addProperty("App::PropertyVectorList", "Coordinates","GbXml","Coordinate Points")
-
-    def addCordinateVector(self, v):
-        self.Cordinates.append(v)
-
-    def addCordinates(self, X, Y, Z=0.0):
-        import FreeCAD
-        v = FreeCAD.Vector(X, Y, Z)
-        self.Cordinates.append(v)
+from freecad.openStudio.polyLoopClass import polyLoopClass

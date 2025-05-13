@@ -32,58 +32,73 @@
 import FreeCAD as App
 
 class BaseClass():
-	def __init__(self):
+	def __init__(self, obj, type_):
 		super().__init__()
+		self.obj = obj
+		obj.Proxy = self
+		obj.Proxy.Type = type_
 
 class PolyLoopClass(BaseClass):
-    
-	def __init__(self):
-		super().__init__()
+	def __init__(self, obj):
+		super().__init__(obj, "PolyLoop")
 		self.initPolyLoop()
-		self.PointsList = []
 		self.sketch = None
-		
+				
 	def initPolyLoop(self):
 		print(f"Init PolyLoop Class")
+		self.PointsCount = self.obj.addProperty("App::PropertyInteger","PointsCount","gbXml","Points Count")
+		self.PointsList = self.obj.addProperty("App::PropertyVectorList","PointsList","gbXml","Cartesian Points")
+		self.PointsList = []
 
-	def addPolyLoopObject(self, parent):
-		# Add new FC object to parent
-		print(f"Add PolyLoop Object")
-		self.obj = parent.newObject("App::PythonFeature","PolyLoop")
+	#def addPolyLoopObject(self, parent):
+	#	# Add new FC object to parent
+	#	print(f"Add PolyLoop Object")
+	#	self.obj = parent.newObject("App::PythonFeature","PolyLoop")
 
-	def addCartesianPoint(self, x, y, z=0.0):
+	def addCartesianPoint(self, polyLoop, vector):
+		# Need to be passed polyLoop !!! ??
+		# self will be definition - polyLoop will be instance
 		import FreeCAD
-		self.PointsList.append(FreeCAD.Vector(x, y, z))
+		#print(dir(self))
+		#print(f"add Cartesian - self {self} polyLoop {polyLoop}")
+		print(f"addCartesian - Vector passed {vector}")
+		#print(f"Before Points List {polyLoop.PointsList}")
+		#print(type(polyLoop.PointsList))
+		vecList = polyLoop.PointsList
+		vecList.append(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+		polyLoop.PointsList = vecList
+		#polyLoop.PointsList = [FreeCAD.Vector(4,5,6)]
+		#print(f"After Points List {polyLoop.PointsList}")
 
-	def processCartesanPointElement(self, elem):
-		# ToDo
-		pass
+	def addCartesianPointCount(self, polyLoop, count):
+		print(f"Add points count {self.obj.Label} {count}")
+		polyLoop.PointsCount = count
 
 	def returnQtDialog(self):
 		# Or QtFrame ??
 		# ToDo
 		pass
 
-	def add2BIM(self):
-		# To Do ??
+	def pushBIM(self):
+		# ToDo ??
 		pass
 
-	def returnIfc(self):
-		# To Do ??
+	def pushIfc(self):
+		# ToDo ??
 		pass
 
 	def createNewSketch(self):
-		# To Do
+		# ToDo
 		pass
 
 	def add2Sketch(self):
 		if self.sketch is None:
 			self.sketch = self.createNewSketch()
-		# To Do
+		# ToDo
 		# Add to sketch Geometry
 		# Add to sketch Constraints
 		pass
 
 	def add2Draft(self):
-		# To Do ??
+		# ToDo ??
 		pass

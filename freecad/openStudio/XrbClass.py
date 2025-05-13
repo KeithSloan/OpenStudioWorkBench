@@ -203,7 +203,7 @@ class XrbClass():
             # Could be Enum
             # 
     def createPolyLoop(self, parent):
-        from freecad.openStudio.gbObjects import PolyLoopClass
+        from freecad.openStudio.polyLoopClass import BaseClass, PolyLoopClass
         # Treat PolyLoop Custom Object
         
         print(f"Create PolyLoop : Parent {parent.Label}")

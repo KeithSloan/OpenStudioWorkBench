@@ -288,7 +288,7 @@ class LXMLclass():
 		return None
 
 	def reorderGroup(self, grpObj, name):
-		import FreeCAD
+		#import FreeCAD
 		#doc = FreeCAD.ActiveDocument
 		if hasattr(grpObj, "Group"):
 			if len(grpObj.Group) > 1:
@@ -419,15 +419,14 @@ class LXMLclass():
 			#	print(f"parent {parent.Label} elemName {elemName} element {element}")
 			#	print(f"Is elemName {elemName} an attribute of parent {parent.Label} ?")
 			
-	def processChildren(self,parent, element):
-		print(f"Process Children II")
+	def processChildren(self, parent, element):
+		print(f"Process Children II {parent.Label}")
 		for elem in element.iterchildren():
 			elemName = self.cleanTag(element)
 			obj = self.objectInGroup(parent, elemName)
-			if obj:
-				self.processElement(obj, elem)
-			else:
-				self.process(parent, elem)
+			if obj is None:			# Not in parent Group - Cartesian Point, Coordinate
+				obj = parent		# value for PolyLoop in Parent Group, Also  various xxxxGeometry							
+			self.processElement(obj, elem)
 
 	def processElementAndChildren(self, parent, element, decend=False):
 		elemName = self.cleanTag(element)
@@ -439,21 +438,34 @@ class LXMLclass():
 			#self.processElement(parent, elem)
 
 	def processPolyLoop(self, parent, element):
-		print(f"Process PolyLoop: - parent {parent.Label}")
+		# Should check
+		polyLoop = parent.Group[0]
+		print(f"Process PolyLoop: - parent {parent.Label} Group {polyLoop.Label}")
+		for cn, elem in enumerate(element.iterchildren()):
+			self.processCartesianPoint(polyLoop, elem)
+		polyLoop.Proxy.addCartesianPointCount(polyLoop, cn+1)
 
-	def processCartesianPoint(self, parent, element):
-		import FreeCAD
-		print(f"Process Cartesian Point - parent {parent.Label}")
-		# check PolyLoop
+	def processCartesianPoint(self, polyLoop, element):
+
+		print(f"Process Cartesian Point  - polyLoop {polyLoop.Label}")
+		#print(dir(polyLoop))
+		#print(dir(polyLoop.Proxy))
+		#polyLoop.PointsCount = 5
 		vector = []
-		for i in range(3):
-			for elem in element.iterchildren():
-				vector.append(float(elem.text))
-		parent.addCordinateVector(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+		for cn, elem in enumerate(element.iterchildren()):
+			# Cartesian Points
+			vector.append(float(elem.text))
+		print(f"Add Cartesian {vector}")
+		# # polyLoop.Proxy.PointsList = [FreeCAD.Vector(11,12,13)]
+		# Feature Python Methods are in Proxy, Variables are Not.
+		polyLoop.Proxy.addCartesianPoint(polyLoop, vector)
+		#print(f"Points List {polyLoop.PointsList}")
 
 	def processCordinate(self, parent, element):
-		print(f"Process Cordinate Point - parent {parent.Label} - {element.text}")
+		print(f"Process Cordinate Point - parent {parent.Label}")
 		# check PolyLoop
+		for elem in element.iterchildren():
+			print(elem.text)
 
 	def processElement(self, parent, element, elemName = None, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider
@@ -461,16 +473,25 @@ class LXMLclass():
 		if elemName is None:
 			elemName = self.cleanTag(element)
 		print(f"Process Element : Parent {parent.Label} Element {elemName}")
+		if elemName == "Cordinate":		# Dealt with in CartesianPoint
+			#self.processCordinate(parent, element)
+			return
+		elif elemName == "PolyLoop":
+			# Set current PolyLoop
+			# Should check PolyGroup
+			self.processPolyLoop(parent, element)
+			return
+		elif elemName == "CartesianPoint":
+			#polyLoop = parent.Group[0]
+			#print(f"{polyLoop.Label} TypeId {polyLoop.TypeId}")
+			#self.processCartesianPoint(polyLoop, element)
+			self.processCartesianPoint(element)
+			return
 		self.processKeys(parent, element, elemName)
 		self.setElementValues(parent, element)
 		self.checkIfElementAttribute(parent, element, elemName)
 		#elf.checkIfElementInParentGroup(parent, element, elemName)		# Example Area in Building
-		if elemName == "PolyLoop":
-			self.processPolyLoop(parent, element)
-		elif elemName == "CartesianPoint":
-			self.processCartesianPoint(parent, element)
 		print(f"End Process Element {elemName}")
-		
 
 	def processSiblings(self, parent, element):
 		print(f"process Siblings - parent {parent.Label} element {self.cleanTag(element)}")

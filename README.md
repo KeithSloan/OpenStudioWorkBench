@@ -49,7 +49,7 @@ and gbxml.
       - Currently 
           * need to eemove first xml line ( Need to fix )
           * Just processes top level
-          * Need to fix setvaklues
+          * Need to fix setvalues
           * Look at Grouping items
 
     * Sync GBxml - Properties ( to be developed )

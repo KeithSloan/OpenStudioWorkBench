@@ -23,7 +23,7 @@
     <workbench>
       <freecadmin>0.19.0</freecadmin>
       <depend>lxml</depend>
-      <icon>freecad/openStudioWorkBench/Resources/icons/openStudiologo.svg</icon>
+      <icon>freecad/openStudio/Resources/icons/openStudiologo.svg</icon>
       <classname>OpenStudio_Workbench</classname>
       <subdirectory>./</subdirectory>
     </workbench>

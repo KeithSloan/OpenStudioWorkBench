@@ -420,7 +420,7 @@ class LXMLclass():
 			#	print(f"Is elemName {elemName} an attribute of parent {parent.Label} ?")
 			
 	def processChildren(self, parent, element):
-		print(f"Process Children II {parent.Label}")
+		print(f"Process Children II of parent {parent.Label}")
 		for elem in element.iterchildren():
 			elemName = self.cleanTag(element)
 			obj = self.objectInGroup(parent, elemName)
@@ -446,7 +446,6 @@ class LXMLclass():
 		polyLoop.Proxy.addCartesianPointCount(polyLoop, cn+1)
 
 	def processCartesianPoint(self, polyLoop, element):
-
 		print(f"Process Cartesian Point  - polyLoop {polyLoop.Label}")
 		#print(dir(polyLoop))
 		#print(dir(polyLoop.Proxy))
@@ -467,6 +466,26 @@ class LXMLclass():
 		for elem in element.iterchildren():
 			print(elem.text)
 
+	def processPlanar(self, parent, element, elemName):
+		print(f"Process Planer : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
+		geoParent = self.objectInGroup(parent, elemName)
+		print(geoParent.Label)
+		for cn, elem in enumerate(element.iterchildren()):
+			self.processPolyLoop(geoParent, elem)
+
+	def processShell(self, parent, element, elemName):
+		print(f"Process Shell : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
+		for cn, elem in enumerate(element.iterchildren()):
+			#elemName = self.cleanTag(elem)
+			#print(f"Process Shell Element {elemName}")
+			print(f"Process Shell Element {elem}")
+			#self.processPolyLoop(parent, elem)
+
+		#geoParent = self.objectInGroup(parent, elemName)
+		#print(f"GeoParent {geoParent.Label}")
+		#for cn, elem in enumerate(element.iterchildren()):
+		#	self.processPolyLoop(geoParent, elem)
+
 	def processElement(self, parent, element, elemName = None, decend=False):
     	#from freecad.openStudio.baseObject import ViewProvider
 		#print(f"Process Element :  parent {parent}")
@@ -476,16 +495,22 @@ class LXMLclass():
 		if elemName == "Cordinate":		# Dealt with in CartesianPoint
 			#self.processCordinate(parent, element)
 			return
+		elif elemName == "PlanarGeometry":
+			self.processPlanar(parent, element, elemName)
+			return
+		elif elemName == "ShellGeometry":
+			self.processShell(parent, element, elemName)
+			return
 		elif elemName == "PolyLoop":
 			# Set current PolyLoop
 			# Should check PolyGroup
-			self.processPolyLoop(parent, element)
+			#self.processPolyLoop(parent, element)
 			return
 		elif elemName == "CartesianPoint":
 			#polyLoop = parent.Group[0]
 			#print(f"{polyLoop.Label} TypeId {polyLoop.TypeId}")
 			#self.processCartesianPoint(polyLoop, element)
-			self.processCartesianPoint(element)
+			#self.processCartesianPoint(element)
 			return
 		self.processKeys(parent, element, elemName)
 		self.setElementValues(parent, element)

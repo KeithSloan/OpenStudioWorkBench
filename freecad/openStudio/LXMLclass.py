@@ -383,42 +383,22 @@ class LXMLclass():
 			# process element and children
 			#self.processElementAndChildren(parent, element)
 
-			self.processElement(gbObj, element)
+			if self.processElement(gbObj, element, elemName, id) == False:
 			#elf.checkIfElementAttribute(parent, element, elemName)
 			#	#if id is not None:
 			#	#gbObj.Label = chkName + '__' + id
-			print(f"Process Children")
-			for elem in element.iterchildren():
-				#print(f'{elem} parent{elem.getparent()}')
-				#self.processElement(gbObj, elem)
-				#self.setElementValues(parent, element)
-				self.findCheckProcessElement(gbObj, elem)
+				print(f"Process Children")
+				for elem in element.iterchildren():
+					#print(f'{elem} parent{elem.getparent()}')
+					#self.processElement(gbObj, elem)
+					#self.setElementValues(parent, element)
+					self.findCheckProcessElement(gbObj, elem)
 		else:
-			#  Example Location
 			print(f"Element {elemName} with no Id")
-			#self.processElement(gbObj, element)
-			#gbObj = self.objectInGroup(parent, elemName) 
-			#	gbObj = self.findObjectInGroup(parent, elemName, id)
-			#if gbObj is not None:
-			#	#self.processElementAndChildren(gbObj, element)
-			#
-			# 	self.setElementValues(gbObj, element)
-			#	for elem in element.iterchildren():
-			#		#self.processElement(gbObj, elem)
-			#		self.setElementValues(gbObj, elem)
-			#		self.findCheckProcessElement(gbObj, elem)
 			gbObj = parent
-			self.processElement(gbObj, element)
-			#self.setElementValues(gbObj, element)
-			self.processChildren(gbObj, element)
-			#for elem in element.iterchildren():
-			#	#self.processElement(gbObj, elem)
-			#	#self.setElementValues(gbObj, elem)
-			#	self.findCheckProcessElement(gbObj, elem)
-			#else:	# ???? following
-			#	print(f"parent {parent.Label} elemName {elemName} element {element}")
-			#	print(f"Is elemName {elemName} an attribute of parent {parent.Label} ?")
-			
+			if self.processElement(gbObj, element) == False:
+				self.processChildren(gbObj, element)
+		
 	def processChildren(self, parent, element):
 		print(f"Process Children II of parent {parent.Label}")
 		for elem in element.iterchildren():
@@ -427,6 +407,7 @@ class LXMLclass():
 			if obj is None:			# Not in parent Group - Cartesian Point, Coordinate
 				obj = parent		# value for PolyLoop in Parent Group, Also  various xxxxGeometry							
 			self.processElement(obj, elem)
+		return True
 
 	def processElementAndChildren(self, parent, element, decend=False):
 		elemName = self.cleanTag(element)
@@ -436,14 +417,22 @@ class LXMLclass():
 			print(f'{elem} parent{elem.getparent()}')
 			self.findCheckProcessElement(parent, elem)
 			#self.processElement(parent, elem)
+		return True
 
-	def processPolyLoop(self, parent, element):
+	def processPolyLoop(self, parent, element, elemName):
 		# Should check
-		polyLoop = parent.Group[0]
-		print(f"Process PolyLoop: - parent {parent.Label} Group {polyLoop.Label}")
+		print(f"Process PolyLoop: - parent {parent.Label} elemName {elemName} Group {parent.Label}")
+		polyLoopObj  = self.objectInGroup(parent, elemName)
+		return self.processPolyLoopObj(polyLoopObj, element, elemName)
+	
+	def processPolyLoopObj(self, polyLoopObj, element, elemName):
+		print(f"Process PolyLoopObj : {polyLoopObj.Label} elemName {elemName}")
 		for cn, elem in enumerate(element.iterchildren()):
-			self.processCartesianPoint(polyLoop, elem)
-		polyLoop.Proxy.addCartesianPointCount(polyLoop, cn+1)
+			#elemName = self.cleanTag(elem)
+			#print(f"{elemName}")
+			self.processCartesianPoint(polyLoopObj, elem)
+		polyLoopObj.Proxy.addCartesianPointCount(polyLoopObj, cn+1)
+		return True
 
 	def processCartesianPoint(self, polyLoop, element):
 		print(f"Process Cartesian Point  - polyLoop {polyLoop.Label}")
@@ -459,6 +448,7 @@ class LXMLclass():
 		# Feature Python Methods are in Proxy, Variables are Not.
 		polyLoop.Proxy.addCartesianPoint(polyLoop, vector)
 		#print(f"Points List {polyLoop.PointsList}")
+		return True
 
 	def processCordinate(self, parent, element):
 		print(f"Process Cordinate Point - parent {parent.Label}")
@@ -467,56 +457,70 @@ class LXMLclass():
 			print(elem.text)
 
 	def processPlanar(self, parent, element, elemName):
-		print(f"Process Planer : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
-		geoParent = self.objectInGroup(parent, elemName)
-		print(geoParent.Label)
+		print(f"Process Planer : Parent  {parent.Label} Group {self.groupLabels(parent)}")
+		# enumerate or always only one PolyLoop
+		planarObj  = self.objectInGroup(parent, elemName)
+		print(f"planarObj {planarObj.Label}")
 		for cn, elem in enumerate(element.iterchildren()):
-			self.processPolyLoop(geoParent, elem)
+			elemName = self.cleanTag(elem)
+			print(f"Plannar Element {elemName}")
+			if elemName == "PolyLoop":
+				polyLoopObj = self.gbXrb.createPolyLoop(planarObj)
+				#print(f"PolyLoop {planarObj}")
+				self.processPolyLoopObj(polyLoopObj, elem, elemName)
+			else:
+				print(f"Non PolyLoop")
+		return True
 
-	def processShell(self, parent, element, elemName):
-		print(f"Process Shell : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
+	def processShell(self, parent, element, elemName, id):
+		print(f"Process Shell : Parent  {parent.Label} Group {self.groupLabels(parent)}")
+		if id is not None:
+			self.Label = id
+		#shellObj  = self.objectInGroup(parent, elemName)
 		for cn, elem in enumerate(element.iterchildren()):
-			#elemName = self.cleanTag(elem)
-			#print(f"Process Shell Element {elemName}")
-			print(f"Process Shell Element {elem}")
-			#self.processPolyLoop(parent, elem)
+			elemName = self.cleanTag(elem)
+			print(f"Process Shell Element {elemName}")
+			if elemName == "ClosedShell":
+				print(f"Set Shell Closed")
+				parent.Proxy.setShellIsClosed()
+				self.processClosedShell(parent, elem, elemName)
+		#	print(f"Process Shell Element {elem}")
+		print(f"End Process Shell")
+		return True
 
-		#geoParent = self.objectInGroup(parent, elemName)
-		#print(f"GeoParent {geoParent.Label}")
-		#for cn, elem in enumerate(element.iterchildren()):
-		#	self.processPolyLoop(geoParent, elem)
+	def processClosedShell(self, parent, element, elemName):
+		print(f"Process Closed Shell : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
+		for cn, elem in enumerate(element.iterchildren()):
+			elemName = self.cleanTag(elem)
+			print(f"Process Shell Element {elemName}")
+			if elemName == "PolyLoop":
+				print(f"PolyLoop")
+				polyLoopObj = self.gbXrb.createPolyLoop(parent)
+				self.processPolyLoopObj(polyLoopObj, elem, elemName)
+		print(f"End Process Closed Shell")
+		return True
 
-	def processElement(self, parent, element, elemName = None, decend=False):
+	def processElement(self, parent, element, elemName = None, id=None, decend=False):
+		# Returns True if all children processed
     	#from freecad.openStudio.baseObject import ViewProvider
 		#print(f"Process Element :  parent {parent}")
 		if elemName is None:
 			elemName = self.cleanTag(element)
 		print(f"Process Element : Parent {parent.Label} Element {elemName}")
-		if elemName == "Cordinate":		# Dealt with in CartesianPoint
-			#self.processCordinate(parent, element)
-			return
+		if elemName in ["Cordinate", "ClosedShell", "PolyLoop", "CartesianPoint"]:		# Already dealt with
+			return True
 		elif elemName == "PlanarGeometry":
 			self.processPlanar(parent, element, elemName)
-			return
+			return True
 		elif elemName == "ShellGeometry":
-			self.processShell(parent, element, elemName)
-			return
-		elif elemName == "PolyLoop":
-			# Set current PolyLoop
-			# Should check PolyGroup
-			#self.processPolyLoop(parent, element)
-			return
-		elif elemName == "CartesianPoint":
-			#polyLoop = parent.Group[0]
-			#print(f"{polyLoop.Label} TypeId {polyLoop.TypeId}")
-			#self.processCartesianPoint(polyLoop, element)
-			#self.processCartesianPoint(element)
-			return
+			self.processShell(parent, element, elemName, id)
+			return True
 		self.processKeys(parent, element, elemName)
 		self.setElementValues(parent, element)
 		self.checkIfElementAttribute(parent, element, elemName)
 		#elf.checkIfElementInParentGroup(parent, element, elemName)		# Example Area in Building
 		print(f"End Process Element {elemName}")
+		return False
 
 	def processSiblings(self, parent, element):
 		print(f"process Siblings - parent {parent.Label} element {self.cleanTag(element)}")

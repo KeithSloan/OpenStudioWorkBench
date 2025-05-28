@@ -1,0 +1,102 @@
+# ***************************************************************************
+# *                                                                         *
+# *   Copyright (c) 2025 Keith Sloan <ipad2@sloan-home.co.uk>               *
+# *                                                                         *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU Lesser General Public License (LGPL)    *
+# *   as published by the Free Software Foundation; either version 2 of     *
+# *   the License, or (at your option) any later version.                   *
+# *   for detail see the LICENCE text file.                                 *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU Library General Public License for more details.                  *
+# *                                                                         *
+# *   You should have received a copy of the GNU Library General Public     *
+# *   License along with this program; if not, write to the Free Software   *
+# *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# *   USA                                                                   *
+# *                                                                         *
+# *   Acknowledgements :                                                    *
+# *                                                                         *
+# *   Takes as input a Volume Name, GDML file  and outputs                  *
+# *             a directory structure starting at the specified Volume Name *
+# *                                                                         *
+# *                                                                         *
+# *                                                                         *
+# *                                                                         *
+############################################################################*
+
+import FreeCAD as App
+
+class BaseClass():
+	def __init__(self, obj, type_):
+		super().__init__()
+		self.obj = obj
+		obj.Proxy = self
+		obj.Proxy.Type = type_
+
+class ShellGeometryClass(BaseClass):
+	def __init__(self, obj):
+		super().__init__(obj, "ShellGeometry")
+		self.initShellGeometry()
+		#self.sketch = None
+				
+	def initShellGeometry(self):
+		print(f"Init Shell Geometry Class")
+		self.ClosedShell = self.obj.addProperty("App::PropertyBool","ClosedShell","gbXml","Shell is Closed").ClosedShell=False
+		#self.PointsList = self.obj.addProperty("App::PropertyVectorList","PointsList","gbXml","Cartesian Points")
+		#self.PointsList = []
+
+	def setShellIsClosed(self):
+		self.ClosedShell = True
+
+	#def addCartesianPoint(self, polyLoop, vector):
+	#	# Need to be passed polyLoop !!! ??
+	#	# self will be definition - polyLoop will be instance
+	#	import FreeCAD
+	#	#print(dir(self))
+	#	#print(f"add Cartesian - self {self} polyLoop {polyLoop}")
+	#	print(f"addCartesian - Vector passed {vector}")
+	#	#print(f"Before Points List {polyLoop.PointsList}")
+	#	#print(type(polyLoop.PointsList))
+	#	vecList = polyLoop.PointsList
+	#	vecList.append(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+	#	polyLoop.PointsList = vecList
+	#	#polyLoop.PointsList = [FreeCAD.Vector(4,5,6)]
+	#	#print(f"After Points List {polyLoop.PointsList}")
+
+	#def addCartesianPointCount(self, polyLoop, count):
+	#	print(f"Add points count {self.obj.Label} {count}")
+	#	polyLoop.PointsCount = count
+
+	def returnQtDialog(self):
+		# Or QtFrame ??
+		# ToDo
+		pass
+
+	def pushBIM(self):
+		# ToDo ??
+		pass
+
+	def pushIfc(self):
+		# ToDo ??
+		pass
+
+	def createNewSketch(self):
+		# ToDo
+		pass
+
+	def add2Sketch(self):
+		if self.sketch is None:
+			self.sketch = self.createNewSketch()
+		# ToDo
+		# Add to sketch Geometry
+		# Add to sketch Constraints
+		pass
+
+	def add2Draft(self):
+		# ToDo ??
+		pass

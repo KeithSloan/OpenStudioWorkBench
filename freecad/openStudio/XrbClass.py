@@ -209,7 +209,34 @@ class XrbClass():
         print(f"Create PolyLoop : Parent {parent.Label}")
         obj = parent.newObject("App::FeaturePython", "PolyLoop")
         PolyLoopClass(obj)
-        return None
+        return obj
+
+    def createPlanarGeometry(self, parent):
+        from freecad.openStudio.planarGeometryClass import BaseClass, PlanarGeometryClass
+        # Treat PlanarGeometry as Custom Object
+        
+        print(f"Create PlanarGeometry : Parent {parent.Label}")
+        obj = parent.newObject("App::DocumentObjectGroupPython", "PlanarGeometry")
+        PlanarGeometryClass(obj)
+        return obj
+
+    def createShellGeometry(self, parent):
+        from freecad.openStudio.shellGeometryClass import BaseClass, ShellGeometryClass
+        # Treat ShellGeometry as Custom Object
+        
+        print(f"Create ShellGeometry : Parent {parent.Label}")
+        obj = parent.newObject("App::DocumentObjectGroupPython", "ShellGeometry")
+        ShellGeometryClass(obj)
+        return obj 
+
+    #def createClosedShellGeometry(self, parent):
+    #    from freecad.openStudio.closedShellGeometryClass import BaseClass, ClosedShellGeometryClass
+    #    # Treat ShellGeometry as Custom Object
+        
+    #    print(f"Create Closed ShellGeometry : Parent {parent.Label}")
+    #    obj = parent.newObject("App::FeaturePython", "ClosedShell")
+    #    ClosedShellGeometryClass(obj)
+    #    return None 
 
     def processXrbElementByRef(self, parent, element, decend=False):
         if 'ref' in element.keys():
@@ -370,6 +397,12 @@ class XrbClass():
                     print(f"process PolyLoop")
                     self.createPolyLoop(parent)
                     break
+                elif elemName == "PlanarGeometry":
+                    self.createPlanarGeometry(parent)
+                elif elemName == "ShellGeometry":
+                    self.createShellGeometry(parent)
+                elif elemName == "ClosedShell":
+                    print(f"Closed Shell")
                 else:
                     #parent = parent.newObject("App::DocumentObjectGroupPython", name)
                     #newParent = addProperty(self, parent, elemName, type_, decend
@@ -378,6 +411,8 @@ class XrbClass():
                     self.processXrbElementByName(parent, elemName, decend)
                     #print(f"Parent After {parent} {parent.Label}")
                     #self.processXrbElementByName(parent, elemName)
+            elif localName == "any":
+                print(f"Choice - any")
             else:
                 print(f"Not handled Choice {localName}")
         print(f"End Process Choice <=== choice ===> Parent {parent.Label}")

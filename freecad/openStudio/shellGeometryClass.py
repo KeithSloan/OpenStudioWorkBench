@@ -38,41 +38,39 @@ class BaseClass():
 		obj.Proxy = self
 		obj.Proxy.Type = type_
 
-class PolyLoopClass(BaseClass):
+class ShellGeometryClass(BaseClass):
 	def __init__(self, obj):
-		super().__init__(obj, "PolyLoop")
-		self.initPolyLoop()
-		self.sketch = None
+		super().__init__(obj, "ShellGeometry")
+		self.initShellGeometry()
+		#self.sketch = None
 				
-	def initPolyLoop(self):
-		print(f"Init PolyLoop Class")
-		self.PointsCount = self.obj.addProperty("App::PropertyInteger","PointsCount","gbXml","Points Count")
-		self.PointsList = self.obj.addProperty("App::PropertyVectorList","PointsList","gbXml","Cartesian Points")
-		self.PointsList = []
+	def initShellGeometry(self):
+		print(f"Init Shell Geometry Class")
+		self.ClosedShell = self.obj.addProperty("App::PropertyBool","ClosedShell","gbXml","Shell is Closed").ClosedShell=False
+		#self.PointsList = self.obj.addProperty("App::PropertyVectorList","PointsList","gbXml","Cartesian Points")
+		#self.PointsList = []
 
-	#def addPolyLoopObject(self, parent):
-	#	# Add new FC object to parent
-	#	print(f"Add PolyLoop Object")
-	#	self.obj = parent.newObject("App::PythonFeature","PolyLoop")
+	def setShellIsClosed(self):
+		self.ClosedShell = True
 
-	def addCartesianPoint(self, polyLoop, vector):
-		# Need to be passed polyLoop !!! ??
-		# self will be definition - polyLoop will be instance
-		import FreeCAD
-		#print(dir(self))
-		#print(f"add Cartesian - self {self} polyLoop {polyLoop}")
-		print(f"addCartesian - Vector passed {vector}")
-		#print(f"Before Points List {polyLoop.PointsList}")
-		#print(type(polyLoop.PointsList))
-		vecList = polyLoop.PointsList
-		vecList.append(FreeCAD.Vector(vector[0], vector[1], vector[2]))
-		polyLoop.PointsList = vecList
-		#polyLoop.PointsList = [FreeCAD.Vector(4,5,6)]
-		#print(f"After Points List {polyLoop.PointsList}")
+	#def addCartesianPoint(self, polyLoop, vector):
+	#	# Need to be passed polyLoop !!! ??
+	#	# self will be definition - polyLoop will be instance
+	#	import FreeCAD
+	#	#print(dir(self))
+	#	#print(f"add Cartesian - self {self} polyLoop {polyLoop}")
+	#	print(f"addCartesian - Vector passed {vector}")
+	#	#print(f"Before Points List {polyLoop.PointsList}")
+	#	#print(type(polyLoop.PointsList))
+	#	vecList = polyLoop.PointsList
+	#	vecList.append(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+	#	polyLoop.PointsList = vecList
+	#	#polyLoop.PointsList = [FreeCAD.Vector(4,5,6)]
+	#	#print(f"After Points List {polyLoop.PointsList}")
 
-	def addCartesianPointCount(self, polyLoop, count):
-		print(f"Add points count {self.obj.Label} {count}")
-		polyLoop.PointsCount = count
+	#def addCartesianPointCount(self, polyLoop, count):
+	#	print(f"Add points count {self.obj.Label} {count}")
+	#	polyLoop.PointsCount = count
 
 	def returnQtDialog(self):
 		# Or QtFrame ??

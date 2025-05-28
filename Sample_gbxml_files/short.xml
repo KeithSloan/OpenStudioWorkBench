@@ -1,0 +1,18 @@
+<gbXML useSIUnitsForResults="false" temperatureUnit="F" lengthUnit="Feet" areaUnit="SquareFeet" volumeUnit="CubicFeet" version="0.37" xmlns="http://www.gbxml.org/schema">
+  <Campus id="aim0002">
+    <Location>
+      <StationId IDType="WMO">53158_2004</StationId>
+      <ZipcodeOrPostalCode>00000</ZipcodeOrPostalCode>
+      <Longitude>-71.033</Longitude>
+      <Latitude>42.213</Latitude>
+      <Elevation>154</Elevation>
+      <CADModelAzimuth>0</CADModelAzimuth>
+      <Name>Boston, MA </Name>
+    </Location>
+    <Building buildingType="MultiFamily" id="aim0013">
+      <StreetAddress>Boston, MA </StreetAddress>
+      <Area>6664.153</Area>
+	</Building>
+  </Campus>
+</gbXML>
+

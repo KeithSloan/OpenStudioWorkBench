@@ -179,6 +179,7 @@ class XrbClass():
             "xsd:double": "App::PropertyFloat",
             "xsd:decimal": "App::PropertyFloat",
             "xsd:boolean": "App::PropertyBool",
+            "xsd:date": "App::PropertyString",      # Appears no App::PropertyDate in FreeCAD
             "xsd:dateTime": "App::PropertyTime",
             "xsd:duration": "App::PropertyTime",
             "xsd:ID" : "App::PropertyString",
@@ -202,13 +203,48 @@ class XrbClass():
             # Could be Enum
             # 
     def createPolyLoop(self, parent):
-        import Sketcher
-        # Treat PolyLoop as a FreeCAD sketch
+        from freecad.openStudio.polyLoopClass import BaseClass, PolyLoopClass
+        # Treat PolyLoop Custom Object
         
         print(f"Create PolyLoop : Parent {parent.Label}")
-        sketch = parent.newObject("Sketcher::SketchObject", "PolyLoop")
-        sketch.Label = "PolyLoop"
-        return None
+        obj = parent.newObject("App::FeaturePython", "PolyLoop")
+        PolyLoopClass(obj)
+        return obj
+
+    def createPlanarGeometry(self, parent):
+        from freecad.openStudio.planarGeometryClass import BaseClass, PlanarGeometryClass
+        # Treat PlanarGeometry as Custom Object
+        
+        print(f"Create PlanarGeometry : Parent {parent.Label}")
+        obj = parent.newObject("App::DocumentObjectGroupPython", "PlanarGeometry")
+        PlanarGeometryClass(obj)
+        return obj
+
+    def createShellGeometry(self, parent):
+        from freecad.openStudio.shellGeometryClass import BaseClass, ShellGeometryClass
+        # Treat ShellGeometry as Custom Object
+        
+        print(f"Create ShellGeometry : Parent {parent.Label}")
+        obj = parent.newObject("App::DocumentObjectGroupPython", "ShellGeometry")
+        ShellGeometryClass(obj)
+        return obj 
+
+    #def createClosedShellGeometry(self, parent):
+    #    from freecad.openStudio.closedShellGeometryClass import BaseClass, ClosedShellGeometryClass
+    #    # Treat ShellGeometry as Custom Object
+        
+    #    print(f"Create Closed ShellGeometry : Parent {parent.Label}")
+    #    obj = parent.newObject("App::FeaturePython", "ClosedShell")
+    #    ClosedShellGeometryClass(obj)
+    #    return None 
+
+    def processXrbElementByRef(self, parent, element, decend=False):
+        if 'ref' in element.keys():
+            elemName = element.get('ref')
+            print(f"Process Element By Ref - Parent {parent.Label} Element Name {elemName}")
+            self.processXrbElementByName(parent, elemName)
+        else:
+            print(f"Process by Ref : But no Ref")
 
     def processXrbElementByName(self, parent, elemName, decend=False):
         print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
@@ -242,7 +278,10 @@ class XrbClass():
             localName  = elem.xpath('local-name()')
             print(f"localName {localName}")
             if localName == "element":
-                continue
+                pass
+                #if 'ref' in elem.keys:
+                #    prop = elem.get('ref')
+                #    setattr(parent,prop,"")
             elif localName == "complexType":
                 #state = localName
                 self.processComplexType(elem, parent, decend)
@@ -289,6 +328,8 @@ class XrbClass():
                 #else:
                 #    parent.ThePropertyName = self.findAndProcessSubElement(self, parent, elemName)
                 #
+            elif localName == "all":
+                self.processAll(parent, elem)
             elif localName == "choice":
                 #self.processChoice(parent, elem, decend)
                 self.processChoice(parent, elem, decend=False)
@@ -301,7 +342,7 @@ class XrbClass():
             #
             elif localName == "restriction":
                 print(f"{localName} : {elem.get('base')}")
-                self.processRestriction(elem, obj)
+                self.processRestriction(parent, elem)
             elif localName == "enumeration":
                 print(f"{localName} : {elem.get('value')}")
             elif localName == "documentation":
@@ -329,6 +370,18 @@ class XrbClass():
             else:
                 print(f"Not handled - simpleType {localName}")
 
+    def processAll(self, parent, element):
+        print(f"Process xsd:All Parent {parent.Label}")
+        for elem in element.xpath('./xsd:*', namespaces=self.ns):
+            localName = elem.xpath('local-name()')
+            print(f"localName {localName}")
+            if localName == "element":
+                print(f"Process by Ref {elem.get('ref')}")
+                self.processXrbElementByRef(parent, elem)
+            else:
+                print(f"Process All {localName} Not Handled")
+        print(f"End Process All")
+                
     def processChoice(self, parent, element, decend):
         print(f"Process Choice <=== choice ===> Parent {parent.Label}")
         #for subElem in element.findall('./xsd:element', namespaces):
@@ -341,8 +394,15 @@ class XrbClass():
                 print(f"Choice : {localName} : {elemName} Parent {parent.Label}")
                 # Here or in processXrbElementByName ??
                 if elemName == "PolyLoop":
+                    print(f"process PolyLoop")
                     self.createPolyLoop(parent)
                     break
+                elif elemName == "PlanarGeometry":
+                    self.createPlanarGeometry(parent)
+                elif elemName == "ShellGeometry":
+                    self.createShellGeometry(parent)
+                elif elemName == "ClosedShell":
+                    print(f"Closed Shell")
                 else:
                     #parent = parent.newObject("App::DocumentObjectGroupPython", name)
                     #newParent = addProperty(self, parent, elemName, type_, decend
@@ -351,6 +411,8 @@ class XrbClass():
                     self.processXrbElementByName(parent, elemName, decend)
                     #print(f"Parent After {parent} {parent.Label}")
                     #self.processXrbElementByName(parent, elemName)
+            elif localName == "any":
+                print(f"Choice - any")
             else:
                 print(f"Not handled Choice {localName}")
         print(f"End Process Choice <=== choice ===> Parent {parent.Label}")

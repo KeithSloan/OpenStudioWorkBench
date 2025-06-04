@@ -150,7 +150,7 @@ class LXMLclass():
 			setattr(obj, key, value)
 
 	def processKeys(self, obj, element, elemName):
-		print(f"Set Keys {obj.Label} elemName {elemName}")
+		print(f"processKeys - Set Keys {obj.Label} elemName {elemName}")
 		for key in element.keys():
 			#self.getSetValue(obj, elemName, key)
 			self.getSetValue(obj, key, element.get(key))
@@ -162,19 +162,12 @@ class LXMLclass():
 		# Values maybe in Group
 		gbObj = self.objectInGroup(parent, elemName)
 		if gbObj is not None: # Try within Group
+			print(f"{elemName} in Group")
 			self.setElementValues(gbObj, element)
 		else:
 			self.processKeys(parent, element, elemName)
-			self.getSetValue(parent, elemName, element.text)
-		#
-		#
-		# print("set any text value?")
-		# if obj.Label.startswith(elemName):
-		#if obj.Label == elemName:		# Example StationId
-		#	self.getSetValue(obj, elemName, element.text)
-		#	#if hasattr(obj, elemName):
-		#	#	#print(f"Set {elemName} to {element.text}")
-		#	#	self.getSetValues(obj, elemName, element.text)
+			#self.getSetValue(parent, elemName, element.text)
+		
 
 	def getSetValue(self, obj, elemName, value):
 		print(f"getSetValue {obj.Label} element {elemName} value {value}")
@@ -192,7 +185,10 @@ class LXMLclass():
 			elif isinstance(prop, float):
 				value = float(value)
 			print(f"Set {obj.Label} Value {elemName} property {prop} Value {value}")
-			setattr(obj, elemName, value)
+			try:
+				setattr(obj, elemName, value)
+			except ValueError:
+				print(f"Invalid Value {value} for {elemName} property {prop}") 
 	
 	def setValue(self, obj, element):
 		elemName = self.cleanTag(element)
@@ -500,6 +496,15 @@ class LXMLclass():
 		print(f"End Process Closed Shell")
 		return True
 
+	def processSpaceBoundary(self, parent, element, elemName, id):
+		# setProperties(self, surfaceIdRef, isSecondaryLevelBoundary):
+		print(f"Process Space Boundary : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
+
+		print(f"End Process Closed Shell")
+		return False # Does not process children
+
+	
+
 	def processElement(self, parent, element, elemName = None, id=None, decend=False):
 		# Returns True if all children processed
     	#from freecad.openStudio.baseObject import ViewProvider
@@ -515,6 +520,9 @@ class LXMLclass():
 		elif elemName == "ShellGeometry":
 			self.processShell(parent, element, elemName, id)
 			return True
+		elif elemName == "SpaceBoundary":
+			self.processSpaceBoundary(parent, element, elemName, id)
+			return False
 		self.processKeys(parent, element, elemName)
 		self.setElementValues(parent, element)
 		self.checkIfElementAttribute(parent, element, elemName)

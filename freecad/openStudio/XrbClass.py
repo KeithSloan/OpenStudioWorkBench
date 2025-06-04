@@ -179,8 +179,8 @@ class XrbClass():
             "xsd:double": "App::PropertyFloat",
             "xsd:decimal": "App::PropertyFloat",
             "xsd:boolean": "App::PropertyBool",
-            "xsd:date": "App::PropertyString",      # Appears no App::PropertyDate in FreeCAD
-            "xsd:dateTime": "App::PropertyTime",
+            "xsd:date": "App::PropertyString",          # Appears no App::PropertyDate in FreeCAD
+            "xsd:dateTime": "App::PropertyString",      # Createdby no App::PropertyDateTime
             "xsd:duration": "App::PropertyTime",
             "xsd:ID" : "App::PropertyString",
             "xsd:IDREF" : "App::PropertyString",

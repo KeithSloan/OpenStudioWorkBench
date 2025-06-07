@@ -17,7 +17,7 @@ It can be installed via the [Addon Manager](https://github.com/FreeCAD/FreeCAD-a
 Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_more_workbenches
 
    * Change to FreeCAD Mod directory
-   * **git clone https://github.com/KeithSloan/OpenStudioWorkBench.git
+   * git clone https://github.com/KeithSloan/OpenStudioWorkBench.git
 
 * Start/Restart FreeCAD
 
@@ -47,7 +47,7 @@ and gbxml.
 
     * Import gbXML file
       - Currently 
-          * need to eemove first xml line ( Need to fix )
+          * need to remove first xml line ( Need to fix )
           * Just processes top level
           * Need to fix setvalues
           * Look at Grouping items

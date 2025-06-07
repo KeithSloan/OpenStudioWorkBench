@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<gbXML useSIUnitsForResults="false" temperatureUnit="C" lengthUnit="Feet" areaUnit="SquareFeet" volumeUnit="CubicFeet" version="0.37" xmlns="http://www.gbxml.org/schema">
+  <Material id="mat-266">
+    <Name>Conc HW 140lb 8in  (CC05)</Name>
+    <Description>20.3cm</Description>
+    <R-value unit="SquareMeterKPerW">0.154977052829564</R-value>
+    <Thickness unit="Feet">0.6667</Thickness>
+    <Conductivity unit="WPerMeterK">1.3112045965984</Conductivity>
+    <Density unit="KgPerCubicM">2242.58489305113</Density>
+    <SpecificHeat unit="JPerKgK">837.36</SpecificHeat>
+  </Material>
+  <Material id="mat-420">
+    <Name>Polystyrene 1.25in  (IN34)</Name>
+    <Description>3.2 cm</Description>
+    <R-value unit="SquareMeterKPerW">0.917534596865941</R-value>
+    <Thickness unit="Feet">0.1042</Thickness>
+    <Conductivity unit="WPerMeterK">0.03461469368</Conductivity>
+    <Density unit="KgPerCubicM">28.8332343392288</Density>
+    <SpecificHeat unit="JPerKgK">1214.172</SpecificHeat>
+  </Material>
+</gbXML>

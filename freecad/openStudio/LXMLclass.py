@@ -154,6 +154,7 @@ class LXMLclass():
 		for key in element.keys():
 			#self.getSetValue(obj, elemName, key)
 			self.getSetValue(obj, key, element.get(key))
+		print("keys all set")
 	
 	def setElementValues(self, parent, element):
 		# Values maybe in Group
@@ -161,16 +162,17 @@ class LXMLclass():
 		print(f"Set Element Values {parent.Label} elemName {elemName}")
 		# Values maybe in Group
 		gbObj = self.objectInGroup(parent, elemName)
-		if gbObj is not None: # Try within Group
-			print(f"{elemName} in Group")
-			self.setElementValues(gbObj, element)
+		if gbObj is not None: # set found object
+			print(f"Yes {elemName} is in Group")
+			#self.setElementValues(gbObj, element)
+			self.getSetValue(gbObj, self.cleanName(elemName), element.text)
 		else:
 			self.processKeys(parent, element, elemName)
 			#self.getSetValue(parent, elemName, element.text)
 		
 
 	def getSetValue(self, obj, elemName, value):
-		print(f"getSetValue {obj.Label} element {elemName} value {value}")
+		print(f'getSetValue {obj.Label} element "{elemName}" value "{value}"')
 		if hasattr(obj, elemName):
 			prop = obj.getPropertyByName(elemName)
 			print(f"Property Type of {elemName} {type(prop)}")
@@ -217,6 +219,18 @@ class LXMLclass():
 		print(f"Cleaned Tag {elemName}")
 		return elemName
 
+	def cleanName(self, name):
+		# If only one prob char recode
+		# FC names cannot contain -
+		probChars = "-"
+		good = ""
+		for i in name:
+			if i not in probChars:
+				good += i
+			else:
+				good += ('_')
+		return good
+
 	def checkName(self, element):
 		# Return Cleaned Name
 		#	elemName 	: Element Name
@@ -229,15 +243,7 @@ class LXMLclass():
 			if key in idTypes:
 				return elemName, element.get(key)
 		else:
-			# FC names cannot contain -
-			probChars = "-"
-			good = ""
-			for i in elemName:
-				if i not in probChars:
-					good += i
-				else:
-					good += ('_')
-			return good, False
+			return self.cleanName(elemName), False
 	
 	def createObjectGroup(self, parent, chkName):
 		import FreeCAD

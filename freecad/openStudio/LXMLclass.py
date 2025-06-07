@@ -218,13 +218,16 @@ class LXMLclass():
 		return elemName
 
 	def checkName(self, element):
-		# Return
-		#	elemName 	: Elenent Name
+		# Return Cleaned Name
+		#	elemName 	: Element Name
+		#   idType 		: [ "id", "zoneIdRef", "surfaceIdRef"]
 		#	id			: id or False
+		idTypes = ["id", "zoneIdRef", "surfaceIdRef"]
 		elemName = self.cleanTag(element)
 		print(f"elemName {elemName}")
-		if 'id' in element.keys():
-			return elemName, element.get('id')
+		for key in element.keys():
+			if key in idTypes:
+				return elemName, element.get(key)
 		else:
 			# FC names cannot contain -
 			probChars = "-"
@@ -264,11 +267,15 @@ class LXMLclass():
 
 	def objectInGroup(self, parent, name):
 		print(f"Is Object {name} in Group {parent.Label}")
+		#self.printGroup(parent)
 		if hasattr(parent, "Group"):
 			for obj in parent.Group:
-				if obj.Label.startswith(name):
-					print(f"Found {name} in {parent.Label}")
-					return obj
+				if '_' not in obj.Label:
+					if obj.Label.startswith(name):
+						print(f"Found {name} in {parent.Label}")
+						return obj
+			#if name in parent.Group:
+			#	return parent.Group.index(name)
 		print(f"{name} Not Found")
 		return None
 
@@ -296,8 +303,7 @@ class LXMLclass():
 					# Removed from Group
 					grpObj.removeObject(obj)
 					# Add to tail of Group
-					grpObj.addObject(obj)
-						
+					grpObj.addObject(obj)					
 
 	def addObject2Group(self, parent, name):
 		print(f"addObject2Group parent {parent.Label} Name {name}")
@@ -307,15 +313,6 @@ class LXMLclass():
 			return gbObj
 		else:
 			print(f"Failed to add to group {parent.Label}")
-
-	#def insertObject2Group(self, parent, name):
-	#	import FreeCAD
-	#	print(f"inserObject2Group parent {parent.Label} Name {name}")
-	#	if hasattr(parent, "Group"):
-	#		#idx = self.locateInGroup(parent, name)
-	#		self.printGroup(parent, "Before create")
-	#		gbObj = parent.newObject("App::DocumentObjectGroup", name)
-	#		self.reorderGroup(parent, name)
 
 	def findObjectInGroup(self, parent, elemName, id):
 		#
@@ -333,6 +330,7 @@ class LXMLclass():
 		#   so create new Obj and use
 		if gbObj is None:
 			print(f"{elemName} Not found in parent group {parent.Label}")
+			print("Create New Object from Xrb")
 			# Create a New Group and initialise structure
 			# Need to access via self.gbXrb
 			#from freecad.openStudio.processXrb import processXrbElementByName
@@ -344,6 +342,7 @@ class LXMLclass():
 		#		gbObj.Label = name + '__' + id
 		#if id is not None and elemName not in ["Campus"]:
 		if id and elemName != "Campus":
+			print(f"Change Label {id}")
 			gbObj.Label = elemName + '__' + id
 		return gbObj
 			
@@ -358,6 +357,9 @@ class LXMLclass():
 		if hasattr(parent, "Label"):
 			label = parent.Label
 		elemName, id = self.checkName(element)
+		if elemName == "AirLoop":
+			print(f"AirLoop id {id}")
+			#breakpoint()
 		#print(f"Find Check Process Element :  parent {label} Element {element}")
 		print(f"Find Check Process Element :  parent {label} element {elemName}")
 		#treatDiff = ["PolyLoop",
@@ -496,14 +498,12 @@ class LXMLclass():
 		print(f"End Process Closed Shell")
 		return True
 
-	def processSpaceBoundary(self, parent, element, elemName, id):
-		# setProperties(self, surfaceIdRef, isSecondaryLevelBoundary):
-		print(f"Process Space Boundary : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
-
-		print(f"End Process Closed Shell")
-		return False # Does not process children
-
-	
+	#def processSpaceBoundary(self, parent, element, elemName, id):
+	#	# setProperties(self, surfaceIdRef, isSecondaryLevelBoundary):
+	#	print(f"Process Space Boundary : Parent  {parent.Label} Grouo {self.groupLabels(parent)}")
+	#
+	#	print(f"End Process Closed Shell")
+	#	return False # Does not process children
 
 	def processElement(self, parent, element, elemName = None, id=None, decend=False):
 		# Returns True if all children processed
@@ -512,6 +512,9 @@ class LXMLclass():
 		if elemName is None:
 			elemName = self.cleanTag(element)
 		print(f"Process Element : Parent {parent.Label} Element {elemName}")
+		if elemName == "AirLoop":
+			print("AirLoop")
+			#breakpoint()
 		if elemName in ["Cordinate", "ClosedShell", "PolyLoop", "CartesianPoint"]:		# Already dealt with
 			return True
 		elif elemName == "PlanarGeometry":
@@ -520,9 +523,9 @@ class LXMLclass():
 		elif elemName == "ShellGeometry":
 			self.processShell(parent, element, elemName, id)
 			return True
-		elif elemName == "SpaceBoundary":
-			self.processSpaceBoundary(parent, element, elemName, id)
-			return False
+		#elif elemName == "SpaceBoundary":
+		#	self.processSpaceBoundary(parent, element, elemName, id)
+		#	return False
 		self.processKeys(parent, element, elemName)
 		self.setElementValues(parent, element)
 		self.checkIfElementAttribute(parent, element, elemName)

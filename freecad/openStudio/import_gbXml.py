@@ -81,7 +81,8 @@ def insert(filename, docName):
     #    processXML(doc, filename)
 
 def processGbXmlFile(docName, importFlag, fileName):
-    #from freecad.openStudio.BMIclass import BMIclass
+    # Debugging
+    # from sys import breakpointhook
     from freecad.openStudio.XrbClass import XrbClass
     from freecad.openStudio.LXMLclass import LXMLclass
 	

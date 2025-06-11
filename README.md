@@ -47,10 +47,14 @@ and gbxml.
 
     * Import gbXML file
       - Currently 
-          * need to remove first xml line ( Need to fix )
-          * Just processes top level
-          * Need to fix setvalues
-          * Look at Grouping items
+          Group GBxsd - Just parsed from GBxml.xsd
+          Group gbXML - Values have been set on import
+
+      - Look at creating dictionary from GBxml.xsd
+        or leave and goback to build FC Objects from preprocess.
+
+      -ToDo
+        Create FC Shapes for Geometry and check with imported data
 
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure

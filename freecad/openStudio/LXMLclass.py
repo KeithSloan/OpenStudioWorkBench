@@ -167,10 +167,10 @@ class LXMLclass():
 			#self.setElementValues(gbObj, element)
 			self.getSetValue(gbObj, self.cleanName(elemName), element.text)
 		else:
+			#pass
 			self.processKeys(parent, element, elemName)
 			#self.getSetValue(parent, elemName, element.text)
 		
-
 	def getSetValue(self, obj, elemName, value):
 		print(f'getSetValue {obj.Label} element "{elemName}" value "{value}"')
 		if hasattr(obj, elemName):
@@ -282,29 +282,33 @@ class LXMLclass():
 						return obj
 			#if name in parent.Group:
 			#	return parent.Group.index(name)
-		print(f"{name} Not Found")
+		print(f"{name} Not Found in {parent.Label} Group")
 		return None
 
 	def locateLastInGroup(self, grpObj, name):
+		# New item will be added as last
+		# Need to locate the previous last item starting with name
 		if hasattr(grpObj, "Group"):
-			print(f"Range {range(len(grpObj.Group) - 2, 0, -1)}")
-			for i in range(len(grpObj.Group) - 2, 0, -1):
-				objName = grpObj.Group[i].Label  
+			# Range needs to go to zero
+			# print(f"Range {range(len(grpObj.Group) - 2, -1, -1)}")
+			for i in range(len(grpObj.Group) - 2, -1, -1):
+				print(f"i {i}")
+				objName = grpObj.Group[i].Label
+				print(f"objName : {objName}")  
 				if objName.startswith(name):
 					print(f"Found {objName} at {i}")
 					return i
-		print(f"{name} Not Found")
+		print(f"locateLastinGroup : {name} Not Found in {grpObj.Label} Group")
 		return None
 
 	def reorderGroup(self, grpObj, name):
-		#import FreeCAD
-		#doc = FreeCAD.ActiveDocument
+		print(f"ReorderGroup {grpObj.Label} length {len(grpObj.Group)}")
 		if hasattr(grpObj, "Group"):
 			if len(grpObj.Group) > 1:
 				num = self.locateLastInGroup(grpObj, name)
 				for i in range(len(grpObj.Group) - num - 2):
-					# Access last but one member of Group
-					obj = grpObj.Group[num+1]
+					# Access last in Group
+					obj = grpObj.Group[num + 1]
 					print(f"Move {i} {obj.Label}")
 					# Removed from Group
 					grpObj.removeObject(obj)
@@ -511,7 +515,7 @@ class LXMLclass():
 	#	print(f"End Process Closed Shell")
 	#	return False # Does not process children
 
-	def processElement(self, parent, element, elemName = None, id=None, decend=False):
+	def processElement(self, parent, element, elemName = None, id=False, decend=False):
 		# Returns True if all children processed
     	#from freecad.openStudio.baseObject import ViewProvider
 		#print(f"Process Element :  parent {parent}")
@@ -532,8 +536,9 @@ class LXMLclass():
 		#elif elemName == "SpaceBoundary":
 		#	self.processSpaceBoundary(parent, element, elemName, id)
 		#	return False
-		self.processKeys(parent, element, elemName)
-		self.setElementValues(parent, element)
+		if id:
+			self.processKeys(parent, element, elemName)
+		self.setElementValues(parent, element)			# Issue with Standard test ExtEquipId
 		self.checkIfElementAttribute(parent, element, elemName)
 		#elf.checkIfElementInParentGroup(parent, element, elemName)		# Example Area in Building
 		print(f"End Process Element {elemName}")

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<gbXML useSIUnitsForResults="false" temperatureUnit="C" lengthUnit="Feet" areaUnit="SquareFeet" volumeUnit="CubicFeet" version="0.37" xmlns="http://www.gbxml.org/schema">
+<AirLoop id="North1" systemType="VariableAirVolume" controlZoneIdRef="aim3107">
+    <Name>Air loop</Name>
+    <Description>North exterior system using schedule 'FanSch-83' on the top floor on the bottom floor </Description>
+    <TemperatureControl>
+      <MinTemp unit="C">11.1</MinTemp>
+      <MaxTemp unit="C">48.9</MaxTemp>
+    </TemperatureControl>
+    <AirLoopEquipment id="North1-Equip-8" equipmentType="Duct">
+      <Name>3.5" wg static VAV duct system</Name>
+      <Description>3.5" wg static pressure duct system</Description>
+      <DeltaP unit="Pascals">-870.799987792969</DeltaP>
+      <Cost>4.1</Cost>
+    </AirLoopEquipment>
+    <AirLoopEquipment id="North1-Equip-2" equipmentType="Fan">
+      <Name>Std VAV Fan with variable speed drive (VSD)</Name>
+      <Description>Forward curved fan and premium efficiency motor typically used for larger packaged and AHU equipment.</Description>
+      <OperationSchedule scheduleIdRef="FanSch-83" />
+      <MinFlow unit="Fraction">0.3</MinFlow>
+      <DeltaP unit="Pascals">870.799987792969</DeltaP>
+      <Power powerType="Electricity" useType="Both" />
+      <Efficiency standardsType="NEMA" operationType="HeatingAndCooling" efficiencyType="MotorEff">0.93</Efficiency>
+      <Efficiency standardsType="No Defined" operationType="HeatingAndCooling" efficiencyType="MotorEff">0.75</Efficiency>
+      <Control controlType="Fan" stages="Variable " />
+      <Cost>0.733</Cost>
+    </AirLoopEquipment>
+    <AirLoopEquipment id="North1-Equip-6" equipmentType="Coil">
+      <Name>Hot Water Coil</Name>
+      <Description>Generic hot water coil</Description>
+      <Temp unit="C" tempType="Max">48.9</Temp>
+      <Temp unit="C" tempType="Min">12.8</Temp>
+      <Temp unit="C" tempType="CoolDesign">12.8</Temp>
+      <Temp unit="C" tempType="HeatDesign">48.9</Temp>
+      <Temp unit="C" tempType="Approach">1.7</Temp>
+      <Temp unit="C" tempType="EnteringWetBulb">19.4</Temp>
+      <Temp unit="C" tempType="LeavingDryBulb">48.9</Temp>
+      <Temp unit="C" tempType="EnteringDryBulb">21.1</Temp>
+      <DeltaP unit="Pascals">-124.400001525879</DeltaP>
+      <Cost>1305</Cost>
+      <HydronicLoopId hydronicLoopIdRef="HydLoop-8" hydronicLoopType="HotWater" />
+      <DeltaT unit="C">27.8</DeltaT>
+      <Cost>1305</Cost>
+      <Life unit="Years">20</Life>
+    </AirLoopEquipment>
+</AirLoop>
+</gbXML>

@@ -29,7 +29,7 @@
 # *                                                                         *
 ############################################################################*
 
-import FreeCAD as App
+# import FreeCAD as App
 
 class switch(object):
     value = None
@@ -52,14 +52,14 @@ class LXMLclass():
 		self.gbXML = None		# gbXML Element
 
 	def parseLXML(self, fileName):
-		print(f"Init lxml Class")
+		print("Init lxml Class")
 		
 		self.fileName = fileName
 		try:
 			from lxml import etree
 			#from xml import etree
 
-			print(f"Running with lxml etree\n")
+			print("Running with lxml etree\n")
 
 			self.parser = etree.XMLParser(ns_clean=True, encoding="utf-8")
 			self.tree = etree.parse(fileName, self.parser)
@@ -76,7 +76,7 @@ class LXMLclass():
 	
 				self.tree = etree.parse(fileName)
 				self.XmlRoot = self.tree.getroot()
-			except:
+			except ImportError:
 				print('No lxml or xml')
 		
 	def parseGbXmlFile(self, fileName): 
@@ -134,45 +134,88 @@ class LXMLclass():
 		#gbObj.Label = fullLabel
 		return gbObj
 
-	def getSet(self, obj, element, key):
-		print(f"getSet {obj.Label} element {element} key {key}")
-		if hasattr(obj, key):
-			prop = obj.getPropertyByName(key)
-			value = element.get(key)
-			print(f"Property {key} type {type(prop)}")
-			if isinstance(prop, bool):
-				print("Boolean")
-				if value == "True":
-					value = True
-				else:
-					value = False
-			print(f"Set {obj.Label} Value {key} property {prop} Value {value}")
-			setattr(obj, key, value)
+	#def getSet(self, obj, element, key):
+	#	print(f"getSet {obj.Label} element {element} key {key}")
+	#	if hasattr(obj, key):
+	#		prop = obj.getPropertyByName(key)
+	#		value = element.get(key)
+	#		print(f"Property {key} type {type(prop)}")
+	#		if isinstance(prop, bool):
+	#			print("Boolean")
+	#			if value == "True":
+	#				value = True
+	#			else:
+	#				value = False
+	#		print(f"Set {obj.Label} Value {key} property {prop} Value {value}")
+	#		setattr(obj, key, value)
 
 	def processKeys(self, obj, element, elemName):
 		print(f"processKeys - Set Keys {obj.Label} elemName {elemName}")
 		for key in element.keys():
 			#self.getSetValue(obj, elemName, key)
-			self.getSetValue(obj, key, element.get(key))
+			self.getSetPropValue(obj, key, element.get(key))
 		print("keys all set")
+		self.setPropText(obj, elemName, element)
+		
+
+	def setPropText(self, obj, elemName, element):
+		print(f"Set Property Text {elemName} {element.text}")
+		if element.text == "" or element.text is None:
+			return
+		else:
+			self.getSetPropValue(obj, elemName, element.text)
+			#
+			#if hasattr(obj, elemName):
+			#	try:
+			#		setattr(obj, elemName, element.text)
+			#	except ValueError:
+			#		print(f"Object {obj.Label} does not have attribute {elemName}")
 	
 	def setElementValues(self, parent, element):
 		# Values maybe in Group
-		elemName = self.cleanTag(element)
+		elemName = self.cleanTag(element)			# Remove extra url
+		cleanName = self.cleanName(elemName)		# Make sure valid FC property Name 
 		print(f"Set Element Values {parent.Label} elemName {elemName}")
 		# Values maybe in Group
 		gbObj = self.objectInGroup(parent, elemName)
 		if gbObj is not None: # set found object
 			print(f"Yes {elemName} is in Group")
+			#print(dir(gbObj))
 			#self.setElementValues(gbObj, element)
-			self.getSetValue(gbObj, self.cleanName(elemName), element.text)
+			
+			#gbObj = self.checkExistingProp(gbObj, elemName, cleanName)
+			#self.getSetPropValue(gbObj, element)
+
+
+			gbObj = self.checkExistingProp(parent, gbObj, elemName, cleanName)
+			self.processKeys(gbObj, element, cleanName)
+			#gbObj.setGroupOfProperty(cleanName, "gbXML") 
 		else:
-			#pass
-			self.processKeys(parent, element, elemName)
-			#self.getSetValue(parent, elemName, element.text)
+			self.processKeys(parent, element, cleanName)
+
+	def	checkExistingProp(self, parent, gbObj, elemName, cleanName):
+		# prop = obj.getPropertyByName(elemName)
+		print(f"Check Existing Property : Parent {parent.Label} Object {gbObj.Label} Element {elemName} CleanName {cleanName}")
+		if hasattr(gbObj, "ValSet"):
+			if not gbObj.ValSet: 
+				print("existing")
+				setattr(gbObj, "ValSet", True)
+				return gbObj
+			else:
+				print("new")
+				# Add new and create properties
+				# gbObj = self.createObjectGroup(parent, elemName)
+				# gbObj = self.gbXrb.processXrbElementByName(gbObj, elemName)
+				gbObj = self.gbXrb.processXrbElementByName(parent, elemName)
+				self.reorderGroup(parent, elemName)
+				setattr(gbObj, "ValSet", True)
+				return gbObj
+		else:
+			print(f"Error No ValSet")
 		
-	def getSetValue(self, obj, elemName, value):
-		print(f'getSetValue {obj.Label} element "{elemName}" value "{value}"')
+		
+	def getSetPropValue(self, obj, elemName, value):
+		print(f'getSetPropValue {obj.Label} element "{elemName}" value "{value}"')
 		if hasattr(obj, elemName):
 			prop = obj.getPropertyByName(elemName)
 			print(f"Property Type of {elemName} {type(prop)}")
@@ -190,7 +233,11 @@ class LXMLclass():
 			try:
 				setattr(obj, elemName, value)
 			except ValueError:
-				print(f"Invalid Value {value} for {elemName} property {prop}") 
+				print(f"Invalid Value {value} for {elemName} property {prop}")
+			setattr(obj, "ValSet", True)
+			obj.setGroupOfProperty(elemName, "gbXML") 
+		else:
+			print(f"{obj.Label} does not have attribute of {elemName}")
 	
 	def setValue(self, obj, element):
 		elemName = self.cleanTag(element)
@@ -391,11 +438,11 @@ class LXMLclass():
 			# process element and children
 			#self.processElementAndChildren(parent, element)
 
-			if self.processElement(gbObj, element, elemName, id) == False:
+			if not self.processElement(gbObj, element, elemName, id):
 			#elf.checkIfElementAttribute(parent, element, elemName)
 			#	#if id is not None:
 			#	#gbObj.Label = chkName + '__' + id
-				print(f"Process Children")
+				print("Process Children")
 				for elem in element.iterchildren():
 					#print(f'{elem} parent{elem.getparent()}')
 					#self.processElement(gbObj, elem)
@@ -404,7 +451,7 @@ class LXMLclass():
 		else:
 			print(f"Element {elemName} with no Id")
 			gbObj = parent
-			if self.processElement(gbObj, element) == False:
+			if not self.processElement(gbObj, element):
 				self.processChildren(gbObj, element)
 		
 	def processChildren(self, parent, element):
@@ -477,7 +524,7 @@ class LXMLclass():
 				#print(f"PolyLoop {planarObj}")
 				self.processPolyLoopObj(polyLoopObj, elem, elemName)
 			else:
-				print(f"Non PolyLoop")
+				print("Non PolyLoop")
 		return True
 
 	def processShell(self, parent, element, elemName, id):
@@ -489,11 +536,11 @@ class LXMLclass():
 			elemName = self.cleanTag(elem)
 			print(f"Process Shell Element {elemName}")
 			if elemName == "ClosedShell":
-				print(f"Set Shell Closed")
+				print("Set Shell Closed")
 				parent.Proxy.setShellIsClosed()
 				self.processClosedShell(parent, elem, elemName)
 		#	print(f"Process Shell Element {elem}")
-		print(f"End Process Shell")
+		print("End Process Shell")
 		return True
 
 	def processClosedShell(self, parent, element, elemName):
@@ -502,10 +549,10 @@ class LXMLclass():
 			elemName = self.cleanTag(elem)
 			print(f"Process Shell Element {elemName}")
 			if elemName == "PolyLoop":
-				print(f"PolyLoop")
+				print("PolyLoop")
 				polyLoopObj = self.gbXrb.createPolyLoop(parent)
 				self.processPolyLoopObj(polyLoopObj, elem, elemName)
-		print(f"End Process Closed Shell")
+		print("End Process Closed Shell")
 		return True
 
 	#def processSpaceBoundary(self, parent, element, elemName, id):
@@ -539,7 +586,7 @@ class LXMLclass():
 		if id:
 			self.processKeys(parent, element, elemName)
 		self.setElementValues(parent, element)			# Issue with Standard test ExtEquipId
-		self.checkIfElementAttribute(parent, element, elemName)
+		#self.checkIfElementAttribute(parent, element, elemName)
 		#elf.checkIfElementInParentGroup(parent, element, elemName)		# Example Area in Building
 		print(f"End Process Element {elemName}")
 		return False

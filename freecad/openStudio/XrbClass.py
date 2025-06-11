@@ -57,7 +57,7 @@ class XrbClass():
 
     def initLxsd(self):
         import os
-        print(f"Init lxsd Class")
+        print("Init lxsd Class")
         self.Campus = None		# Campus one per BMI
         self.ns = {'xsd': 'http://www.w3.org/2001/XMLSchema'}
         self.Resources = os.path.join(App.getUserAppDataDir(), "Mod", \
@@ -73,16 +73,12 @@ class XrbClass():
         #
         # Used by checkGbxml if self.gbXML has not yet been created
         #
-		#from freecad.openStudio.processXrb import processXrbElement
-        import FreeCAD
-		#self.gbObj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
+		# from freecad.openStudio.processXrb import processXrbElement
         self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
         self.processXrbElement(None, self.gbXML, decend=False)
 		
     def createGBxmlProcessObj(self):
-		#from freecad.openStudio.processXrb import processXrbElement
-        import FreeCAD
-		#self.gbObj = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroupPython", 'gbXML')
+		# from freecad.openStudio.processXrb import processXrbElement
         self.gbXML = self.xmlRoot.find('./xsd:element[@name="gbXML"]', namespaces=self.ns)
         self.gbXMLobj = self.processXrbElement(None, self.gbXML)
     
@@ -191,11 +187,11 @@ class XrbClass():
             #    FC_Type = "App::PropertyEnumration"
             #    element = self.xmlRoot.find('./xsd:element[@name="'+name+'"]', namespaces=self.ns)
             #    eNumLst = processRestriction(self, obj, element)
-            #    obj.addProperty("App::PropertyEnumeration", name, "GBxml", "Description")
+            #    obj.addProperty("App::PropertyEnumeration", name, "GBxsd", "Description")
             #    setattr(obj, name, eNumLst)
             chkName = self.checkName(name)
             print(f"Add property {chkName} to {obj.Label} type {type_}")
-            obj.addProperty(FC_Type, chkName, "GBxml")
+            obj.addProperty(FC_Type, chkName, "GBxsd")
             return True
         else:
             print("Not Single processXsdType {type_}")
@@ -203,7 +199,7 @@ class XrbClass():
             # Could be Enum
             # 
     def createPolyLoop(self, parent):
-        from freecad.openStudio.polyLoopClass import BaseClass, PolyLoopClass
+        from freecad.openStudio.polyLoopClass import PolyLoopClass
         # Treat PolyLoop Custom Object
         
         print(f"Create PolyLoop : Parent {parent.Label}")
@@ -212,7 +208,7 @@ class XrbClass():
         return obj
 
     def createPlanarGeometry(self, parent):
-        from freecad.openStudio.planarGeometryClass import BaseClass, PlanarGeometryClass
+        from freecad.openStudio.planarGeometryClass import PlanarGeometryClass
         # Treat PlanarGeometry as Custom Object
         
         print(f"Create PlanarGeometry : Parent {parent.Label}")
@@ -221,7 +217,7 @@ class XrbClass():
         return obj
 
     def createShellGeometry(self, parent):
-        from freecad.openStudio.shellGeometryClass import BaseClass, ShellGeometryClass
+        from freecad.openStudio.shellGeometryClass import ShellGeometryClass
         # Treat ShellGeometry as Custom Object
         
         print(f"Create ShellGeometry : Parent {parent.Label}")
@@ -244,7 +240,7 @@ class XrbClass():
             print(f"Process Element By Ref - Parent {parent.Label} Element Name {elemName}")
             self.processXrbElementByName(parent, elemName)
         else:
-            print(f"Process by Ref : But no Ref")
+            print("Process by Ref : But no Ref")
 
     def processXrbElementByName(self, parent, elemName, decend=False):
         print(f"Process Element By Name - Parent {parent.Label} Element Name {elemName}")
@@ -256,8 +252,8 @@ class XrbClass():
             return self.processXrbElement(parent, element, decend)
             
     def processXrbElement(self, parent, element, decend=False):
-        #from freecad.openStudio.baseObject import ViewProvider 
-        parentType = type(parent)
+        # from freecad.openStudio.baseObject import ViewProvider 
+        # parentType = type(parent)
         name = element.get('name')
         chkName = self.checkName(name)
         print(f"Process Element : {chkName}")
@@ -316,7 +312,7 @@ class XrbClass():
             if localName == "element":
                 print(f"{localName} : {elem.get('ref')}")
                 elemName = elem.get('ref')
-                parent.addProperty("App::PropertyLink", elemName, "GBxml", "Description - "+elemName)
+                parent.addProperty("App::PropertyLink", elemName, "GBxsd", "Description - "+elemName)
                 print(f"Add property {elemName} to {parent.Label}")
                 #
                 # Should handling of decend be im processXrbElement
@@ -380,7 +376,7 @@ class XrbClass():
                 self.processXrbElementByRef(parent, elem)
             else:
                 print(f"Process All {localName} Not Handled")
-        print(f"End Process All")
+        print("End Process All")
                 
     def processChoice(self, parent, element, decend):
         print(f"Process Choice <=== choice ===> Parent {parent.Label}")
@@ -394,7 +390,7 @@ class XrbClass():
                 print(f"Choice : {localName} : {elemName} Parent {parent.Label}")
                 # Here or in processXrbElementByName ??
                 if elemName == "PolyLoop":
-                    print(f"process PolyLoop")
+                    print("process PolyLoop")
                     self.createPolyLoop(parent)
                     break
                 elif elemName == "PlanarGeometry":
@@ -402,7 +398,7 @@ class XrbClass():
                 elif elemName == "ShellGeometry":
                     self.createShellGeometry(parent)
                 elif elemName == "ClosedShell":
-                    print(f"Closed Shell")
+                    print("Closed Shell")
                 else:
                     #parent = parent.newObject("App::DocumentObjectGroupPython", name)
                     #newParent = addProperty(self, parent, elemName, type_, decend
@@ -412,7 +408,7 @@ class XrbClass():
                     #print(f"Parent After {parent} {parent.Label}")
                     #self.processXrbElementByName(parent, elemName)
             elif localName == "any":
-                print(f"Choice - any")
+                print("Choice - any")
             else:
                 print(f"Not handled Choice {localName}")
         print(f"End Process Choice <=== choice ===> Parent {parent.Label}")
@@ -435,9 +431,9 @@ class XrbClass():
         print(f"Process Attribute parent {parent.Label} name {element.get('name')} type {element.get('type')} use {element.get('use')}")
         elemName = element.get('name')
         typeName = element.get('type')
-        use = element.get('use')
+        # use = element.get('use')
         if typeName is None:
-            print(f"Process Attribute - Type is None")
+            print("Process Attribute - Type is None")
             for elem in element:
                 localName = elem.xpath('local-name()')
                 if localName == "simpleType":
@@ -449,7 +445,7 @@ class XrbClass():
                     break
                 print(f"Add Enumertion Property to {parent.Label} name {elemName} length {len(XsdEnumLst)}")
                 print(f"XsdEnumLst {XsdEnumLst}")
-                eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxml", elemName+"Desctription")
+                eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxsd", elemName+"Desctription")
                 setattr(eNumObj, elemName, XsdEnumLst) 
 
     # Check for eNum types are enumerations in restricted in simplType
@@ -459,13 +455,13 @@ class XrbClass():
             print(f"Process XsdType - Found {element}")
             XsdEnumLst = self.processSimpleType(parent, element)
             print(f"Add Enumertion Property to {parent.Label} name {elemName} length {len(XsdEnumLst)}")
-            eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxml", elemName+"Desctription")
+            eNumObj = parent.addProperty("App::PropertyEnumeration", elemName, "GBxsd", elemName+"Desctription")
             setattr(eNumObj, elemName, XsdEnumLst)        
         else:
             print("Not Handled Process Attribute")
 
     def processRestriction(self, parent, element):
-        print(f"Process <=== Restriction ===> ")
+        print("Process <=== Restriction ===> ")
         eNumLst = []
         for elem in element:
             localName = elem.xpath('local-name()')
@@ -498,12 +494,12 @@ class XrbClass():
     def processBIMobject(self, obj):
         from freecad.openStudio.processIfc import processIfcSite
 
-        print(f"Process IFC Site ")
+        print("Process IFC Site ")
         objType = self.getFCType(obj)
         print(f"Label {obj.Label} Type {objType}")
         while switch (objType):
             if case("Site"):
-                print(f"Process IFC Site ")        
+                print("Process IFC Site ")        
                 processIfcSite(self, obj)
                 break
 
@@ -514,7 +510,7 @@ class XrbClass():
     def processIfcSpace(self, srcObj):
         from freecad.openStudio.processSpace import processIfcSpace
 
-        print(f"Process IFC Space ")
+        print("Process IFC Space ")
         processIfcSpace(self, srcObj)
 
     def copyParametersSameName(self, srcObj, trtObj):
@@ -540,13 +536,15 @@ class XrbClass():
     	if len(grps) == 0 or self.Group is None:
     		self.Group = doc.addObject("App::DocumentObjectGroup", self.GroupLabel)
 
-
     def createObjectGroup(self, parent, chkName):
         import FreeCAD
         if parent is not None:
-            return parent.newObject("App::DocumentObjectGroup", chkName)
+            grp = parent.newObject("App::DocumentObjectGroup", chkName)
         else:
-            return FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", chkName)
+            grp = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", chkName)
+
+        grp.addProperty("App::PropertyBool","ValSet","Base","Values Set").ValSet=False
+        return grp
 
     def findAndProcessSubElement(self, parent, elemName):
         element = self.xmlRoot.find('./xsd:element[@name="'+elemName+'"]', namespaces=self.ns)

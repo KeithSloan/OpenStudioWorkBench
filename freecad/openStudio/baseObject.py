@@ -21,13 +21,28 @@
 # *                                                                         *
 # *   Acknowledgements :                                                    *
 # *                                                                         *
-# *   Takes as input a Volume Name, GDML file  and outputs                  *
-# *             a directory structure starting at the specified Volume Name *
 # *                                                                         *
 # *                                                                         *
 # *                                                                         *
 # *                                                                         *
 ############################################################################*
+import Part
+import FreeCAD as App
+
+class BaseClass():
+    def __init__(self, obj, objType):
+	    super().__init__()
+	    self.obj = obj
+	    obj.Proxy = self
+	    obj.Proxy.Type = objType
+
+    def addProperties(self):
+        self.obj.addProperty("Part::PropertyPartShape", "Shape", "PartShape", "Base")
+        self.obj.addProperty("App::PropertyEnumeration", "ShapeValid", "ShapeValid", "Base")
+        self.obj.ShapeValid = ["UnSet", "Valid", "InValid"]
+        self.obj.ShapeValid = "UnSet"
+        self.obj.addProperty("App::PropertyBoolean", "CalcShape", "Compute FC Shape", "Base")
+        
 class dateClass():
     def __init__(self, obj):
         super().__init__(obj, "dateClass")
@@ -79,7 +94,35 @@ class baseObjectClass:
         else:
             	pass
 
+    def dumps(self):               # Post python 3.11
+        """
+        When saving the document this object gets stored using Python's
+		json module.
+		Since we have some un-serializable parts here -- the Coin stuff --
+		we must define this method
+		to return a tuple of all serializable objects or None.
+        """
+        if hasattr(self, "Type"):  # If not saved just return
+            return {"type": self.Type}
+        else:
+            	pass
+
     def __setstate__(self, arg):
+        """
+        When restoring the serialized object from document we have the
+		chance to set some internals here.
+		Since no data were serialized nothing needs to be done here.
+        """
+		# Handle bug in FreeCAD 0.21.2 handling of json
+		#print(f"setstate : arg {arg} type {type(arg)}")
+        if arg is not None and arg != {}:
+            if 'type' in arg:
+                self.Type = arg["type"]
+            else: #elif 'Type' in arg:
+                self.Type = arg["Type"]
+            #print(self.Type)
+
+    def loads(self, arg):       # Post python 3.11
         """
         When restoring the serialized object from document we have the
 		chance to set some internals here.

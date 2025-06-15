@@ -76,6 +76,25 @@ class PolyLoopClass(BaseClass):
 		print(f"Add points count {self.obj.Label} {count}")
 		polyLoop.PointsCount = count
 
+	def returnFace(self):
+		import Part
+		print(f"Return Face")
+		print(f"PointsList {self.obj.PointsList}")
+		shapePoints = self.obj.PointsList + self.obj.PointsList[:1]
+		#shapePoints = pl.PointsList.append(pl.PointsList[1:])
+		print(f"shapePoints {shapePoints}")
+		try:
+			shapeWire = Part.makePolygon(shapePoints)
+		except:
+			print("Invalid PolyGon")
+			return
+		try:
+			self.Face = Part.makeFace(shapeWire)
+		except:
+			print("Invalid Face")
+			return
+		return self.Face
+
 	def returnQtDialog(self):
 		# Or QtFrame ??
 		# ToDo

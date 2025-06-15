@@ -64,8 +64,29 @@ class ShellGeometryClass(BaseClass):
 		print(f"Closed shell {self.ClosedShell}")
 
 	def calcShape(self):		# Called from onChange in BaseClass
+
 		import Part
 		print(f"Shell Geometry calcShape")
+		if len(self.obj.Group) > 0:
+			faceList = []
+			for pl in self.obj.Group:
+				print(pl.Label)
+				face = pl.Proxy.returnFace()
+				print(face)
+				faceList.append(face)
+			try:
+				self.PartShape = Part.makeShell(faceList)
+				self.obj.ShapeValid = "Valid"
+				print("Shell Created")
+			except:
+				print("Invalid Shell")
+				self.obj.ShapeValid = "InValid"
+				return
+
+			if not hasattr(self.obj,"Volume"):
+				self.Volume = self.obj.addProperty("App::PropertyFloat","Volume","Base","Area of Shell Geometry")
+				print(f"PartShape Volume {self.PartShape.Volume}")
+				self.obj.Volume = self.PartShape.Volume
 		if self.ClosedShell:
 			print("Create Closed Shell")
 			print("Not yet handled : calcShape ShellGeometry")

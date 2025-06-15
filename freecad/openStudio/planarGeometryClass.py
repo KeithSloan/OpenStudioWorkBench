@@ -100,14 +100,17 @@ class PlanarGeometryClass(BaseClass):
 					shapeWire = Part.makePolygon(shapePoints)
 				except:
 					print("Invalid PolyGon")
+					self.obj.ShapeValid = "InValid"
 					return
 				try:
 					self.PartShape = Part.makeFace(shapeWire)
 				except:
 					print("Invalid Face")
+					self.obj.ShapeValid = "InValid"
 					return
+				self.obj.ShapeValid = "Valid"
 				if not hasattr(self.obj,"Area"):
-					self.Area = self.obj.addProperty("App::PropertyFloat","Area","Base","Area of PolyLoop")
+					self.Area = self.obj.addProperty("App::PropertyFloat","Area","Base","Area of PlanarGeometry")
 				print(f"PartShape Area {self.PartShape.Area}")
 				self.obj.Area = self.PartShape.Area
 		elif ln > 1:

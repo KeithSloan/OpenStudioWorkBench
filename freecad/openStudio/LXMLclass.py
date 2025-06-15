@@ -196,10 +196,10 @@ class LXMLclass():
 	def	checkExistingProp(self, parent, gbObj, elemName, cleanName):
 		# prop = obj.getPropertyByName(elemName)
 		print(f"Check Existing Property : Parent {parent.Label} Object {gbObj.Label} Element {elemName} CleanName {cleanName}")
-		if hasattr(gbObj, "ValSet"):
-			if not gbObj.ValSet: 
+		if hasattr(gbObj, "ValueSet"):
+			if not gbObj.ValueSet: 
 				print("existing")
-				setattr(gbObj, "ValSet", True)
+				setattr(gbObj, "ValueSet", True)
 				return gbObj
 			else:
 				print("new")
@@ -208,7 +208,7 @@ class LXMLclass():
 				# gbObj = self.gbXrb.processXrbElementByName(gbObj, elemName)
 				gbObj = self.gbXrb.processXrbElementByName(parent, elemName)
 				self.reorderGroup(parent, elemName)
-				setattr(gbObj, "ValSet", True)
+				setattr(gbObj, "ValueSet", True)
 				return gbObj
 		else:
 			print(f"Error No ValSet")
@@ -234,7 +234,7 @@ class LXMLclass():
 				setattr(obj, elemName, value)
 			except ValueError:
 				print(f"Invalid Value {value} for {elemName} property {prop}")
-			setattr(obj, "ValSet", True)
+			setattr(obj, "ValueSet", True)
 			obj.setGroupOfProperty(elemName, "gbXML") 
 		else:
 			print(f"{obj.Label} does not have attribute of {elemName}")
@@ -538,6 +538,7 @@ class LXMLclass():
 			if elemName == "ClosedShell":
 				print("Set Shell Closed")
 				parent.Proxy.setShellIsClosed()
+				#parent.setShellIsClosed()
 				self.processClosedShell(parent, elem, elemName)
 		#	print(f"Process Shell Element {elem}")
 		print("End Process Shell")

@@ -31,12 +31,19 @@
 
 import FreeCAD as App
 
-#lass BaseClass():
+# class BaseClass():
 #	def __init__(self, obj, type_):
 #		super().__init__()
 #		self.obj = obj
 #		obj.Proxy = self
 #		obj.Proxy.Type = type_
+
+# def addBaseProperties(self):
+#        self.obj.addProperty("Part::PropertyPartShape", "Shape", "PartShape", "Base")
+#        self.obj.addProperty("App::PropertyEnumeration", "ShapeValid", "ShapeValid", "Base")
+#        self.obj.ShapeValid = ["UnSet", "Valid", "InValid"]
+#        self.obj.ShapeValid = "UnSet"
+#        self.obj.addProperty("App::PropertyBoolean", "CalcShape", "Compute FC Shape", "Base")        
 
 from freecad.openStudio.baseObject import BaseClass
 
@@ -48,12 +55,13 @@ class PlanarGeometryClass(BaseClass):
 				
 	def initPlanarGeometry(self):
 		print(f"Init PolyLoop Class")
-		#self.PointsCount = self.obj.addProperty("App::PropertyInteger","PointsCount","gbXml","Points Count")
+		self.addBaseProperties()
+		#self.PointsCount = 
 		#self.PointsList = self.obj.addProperty("App::PropertyVectorList","PointsList","gbXml","Cartesian Points")
 		#self.PointsList = []
 
 	#def addPolyLoopObject(self, parent):
-	#	# Add new FC object to parent
+	#	# Add new FC object to parentself.obj.addProperty("App::PropertyInteger","PointsCount","gbXml","Points Count")
 	#	print(f"Add PolyLoop Object")
 	#	self.obj = parent.newObject("App::PythonFeature","PolyLoop")
 
@@ -75,6 +83,35 @@ class PlanarGeometryClass(BaseClass):
 	#def addCartesianPointCount(self, polyLoop, count):
 	#	print(f"Add points count {self.obj.Label} {count}")
 	#	polyLoop.PointsCount = count
+
+	def calcShape(self):		# Called from onChange in BaseClass
+		import Part
+		print(f"Planar Geometry calcShape")
+		ln = len(self.obj.Group)
+		if ln == 1:
+			pl = self.obj.Group[0]
+			print(f"PolyLoop {pl.Label}")
+			if len(pl.PointsList) > 3:
+				# Add a Point to Close Shape
+				shapePoints = pl.PointsList + pl.PointsList[:1]
+				#shapePoints = pl.PointsList.append(pl.PointsList[1:])
+				print(f"shapePoints {shapePoints}")
+				try:
+					shapeWire = Part.makePolygon(shapePoints)
+				except:
+					print("Invalid PolyGon")
+					return
+				try:
+					self.PartShape = Part.makeFace(shapeWire)
+				except:
+					print("Invalid Face")
+					return
+				if not hasattr(self.obj,"Area"):
+					self.Area = self.obj.addProperty("App::PropertyFloat","Area","Base","Area of PolyLoop")
+				print(f"PartShape Area {self.PartShape.Area}")
+				self.obj.Area = self.PartShape.Area
+		elif ln > 1:
+			print("Not yet handled : calcShape planarGeometry")
 
 	def returnQtDialog(self):
 		# Or QtFrame ??

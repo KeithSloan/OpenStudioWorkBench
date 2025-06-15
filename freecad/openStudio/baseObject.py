@@ -36,12 +36,27 @@ class BaseClass():
 	    obj.Proxy = self
 	    obj.Proxy.Type = objType
 
-    def addProperties(self):
-        self.obj.addProperty("Part::PropertyPartShape", "Shape", "PartShape", "Base")
-        self.obj.addProperty("App::PropertyEnumeration", "ShapeValid", "ShapeValid", "Base")
+    def addBaseProperties(self):
+        self.obj.addProperty("Part::PropertyPartShape", "PartShape", "Base", "PartShape")
+        self.obj.PartShape = Part.Shape()               # Empty Shape
+        self.obj.setPropertyStatus('PartShape', '-Hidden')
+        self.obj.addProperty("App::PropertyBool", "CalcShape", "Base", "Compute FC Shape")
+        self.obj.addProperty("App::PropertyEnumeration", "ShapeValid", "Base", "ShapeValid")
         self.obj.ShapeValid = ["UnSet", "Valid", "InValid"]
         self.obj.ShapeValid = "UnSet"
-        self.obj.addProperty("App::PropertyBoolean", "CalcShape", "Compute FC Shape", "Base")
+        self.obj.setEditorMode('ShapeValid', 1)         # Set read Only
+
+    def onChanged(self, fp, prop):                                         
+        # print(fp.Label+" State : "+str(fp.State)+" prop : "+prop) 
+        if "Restore" in fp.State:
+            return 
+    
+        if prop in ["CalcShape"]:
+            if fp.CalcShape:
+                print("Create PartShape Geometry")
+                self.calcShape()
+                fp.CalcShape = False
+
         
 class dateClass():
     def __init__(self, obj):

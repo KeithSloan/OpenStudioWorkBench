@@ -31,12 +31,14 @@
 
 import FreeCAD as App
 
-class BaseClass():
-	def __init__(self, obj, type_):
-		super().__init__()
-		self.obj = obj
-		obj.Proxy = self
-		obj.Proxy.Type = type_
+# class BaseClass():
+#	def __init__(self, obj, type_):
+#		super().__init__()
+#		self.obj = obj
+#		obj.Proxy = self
+#		obj.Proxy.Type = type_
+
+from freecad.openStudio.baseObject import BaseClass
 
 class PolyLoopClass(BaseClass):
 	def __init__(self, obj):

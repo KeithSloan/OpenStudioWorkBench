@@ -543,7 +543,7 @@ class XrbClass():
         else:
             grp = FreeCAD.ActiveDocument.addObject("App::DocumentObjectGroup", chkName)
 
-        grp.addProperty("App::PropertyBool","ValSet","Base","Values Set").ValSet=False
+        grp.addProperty("App::PropertyBool","ValueSet","Base","Values Set").ValueSet=False
         return grp
 
     def findAndProcessSubElement(self, parent, elemName):

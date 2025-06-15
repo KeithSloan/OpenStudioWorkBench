@@ -1,4 +1,4 @@
-import FreeCAD
+import FreeCAD, FreeCADGui
 
 from freecad.openStudio.Campus_Generated  import CampusGeneratedClass
 

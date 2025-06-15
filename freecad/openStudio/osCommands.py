@@ -116,6 +116,31 @@ class SyncGBxmlFeature:
 			),
 		}
 
-FreeCADGui.addCommand("buildGBxmlCmd", BuildGBxmlFeature())
+class CreateIFcFeature:
+	def Activated(self):
+		from freecad.openStudio.createIFcClass import CreateIFCclass
+		print(f"Create IFc Class")
+		self.createIfc = CreateIFCclass()
+		self.createIfc.processSelection()
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "CreateIFcFeature",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+                "CreateIFcFeature", "Create IFc Feature"
+                ),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "CreateIFcFeature", "Create IFc Feature"
+                ),
+            }
+
 FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())
+FreeCADGui.addCommand("buildGBxmlCmd", BuildGBxmlFeature())
+FreeCADGui.addCommand("createIFcCmd", CreateIFcFeature())
 FreeCADGui.addCommand("syncGBxmlCmd", SyncGBxmlFeature())

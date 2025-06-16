@@ -38,7 +38,8 @@ if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
 from freecad.openStudio.import_gbXML import processGbXmlFile
-from freecad.openStudio import link_IFC_gbXML_Convert
+from freecad.openStudio.link_IFC_gbXML_Convert import convert_IFC_to_gbXML
+#from freecad.openStudio import link_IFC_gbXML_Convert
 
 def open(filename):
     "called when freecad opens a file."
@@ -49,8 +50,8 @@ def open(filename):
         # profiler = cProfile.Profile()
         # profiler.enable()
         doc = FreeCAD.newDocument(docName)
-        link_IFC_gbXML_Convert(filename)
-        processGbXmlFile(doc, True, "New_Exported_gbXML.xml")
+        convert_IFC_to_gbXML(filename)
+        # processGbXmlFile(doc, True, "New_Exported_gbXML.xml")
         # profiler.disable()
         # stats = pstats.Stats(profiler).sort_stats('cumtime')
         # stats.print_stats()
@@ -75,7 +76,7 @@ def insert(filename, docName):
         doc = FreeCAD.newDocument(docName)
     if filename.lower().endswith(".ifc"):
         # False flag indicates import
-        link_IFC_gbXML_Convert(filename)
+        convert_IFC_to_gbXML(filename)
         processGbXmlFile(doc, False, filename)
 
     #elif filename.lower().endswith(".xml"):
@@ -92,3 +93,10 @@ def processGbXmlFile(docName, importFlag, fileName):
     gbXmlXrb.checkGBxml()
     gbXmlxml = LXMLclass(gbXmlXrb)
     gbXmlxml.processGbXml(docName, fileName)
+
+def convertIFC_gbXML(filename):
+    import subprocess
+    print(f"Convert File {filename} to gbXML")
+    subprocess.call(["python3", "linklink_IFC_gbXML_Convert.py "+filename])
+
+

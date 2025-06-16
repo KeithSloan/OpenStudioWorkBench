@@ -1,1 +1,0 @@
-IFC_gbXML_Converter/IFC_gbXML_Convert.py

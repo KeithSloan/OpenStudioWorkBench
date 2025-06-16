@@ -1,0 +1,3 @@
+[submodule "IFC_gbXML_Converter"]
+	path = IFC_gbXML_Converter
+	url = https://github.com/MGVisschers/IFC-to-gbXML-converter.git

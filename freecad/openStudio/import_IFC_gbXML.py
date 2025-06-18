@@ -38,7 +38,7 @@ if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
 from freecad.openStudio.import_gbXML import processGbXmlFile
-from freecad.openStudio.link_IFC_gbXML_Convert import convert_IFC_to_gbXML
+from 'freecad.openStudio.IFC-to-gbXML-converter' import convert_IFC_to_gbXML
 #from freecad.openStudio import link_IFC_gbXML_Convert
 
 def open(filename):

@@ -1,3 +1,6 @@
 [submodule "IFC_gbXML_Converter"]
 	path = IFC_gbXML_Converter
 	url = https://github.com/MGVisschers/IFC-to-gbXML-converter.git
+[submodule "freecad/openStudio/IFC-to-gbXML-converter"]
+	path = freecad/openStudio/IFC-to-gbXML-converter
+	url = https://github.com/MGVisschers/IFC-to-gbXML-converter.git

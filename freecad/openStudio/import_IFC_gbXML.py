@@ -30,28 +30,30 @@ __title__ = "FreeCAD - Front end to Maarten Visschers IFC to gbXML importer"
 __author__ = "Keith Sloan <ipad2@sloan-home.co.uk>"
 __url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
-import FreeCAD, FreeCADGui
-import os, tempfile
-
+import FreeCAD
+import os, pathlib, tempfile
 
 if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
 from freecad.openStudio.import_gbXML import processGbXmlFile
-from 'freecad.openStudio.IFC-to-gbXML-converter' import convert_IFC_to_gbXML
-#from freecad.openStudio import link_IFC_gbXML_Convert
+from freecad.openStudio.IFC_gbXML_Convert import convert_IFC_to_gbXML
+#from freecad.openStudio import link_IFC_gbXML_Convert                                
 
 def open(filename):
     "called when freecad opens a file."
     global doc
     print(f"Open : {filename}")
     docName = os.path.splitext(os.path.basename(filename))[0]
+    with tempfile.TemporaryDirectory() as tmpdir:
+        gbXMLname = os.path.join(tmpdir, docName + '.gbXML')
     if filename.lower().endswith(".ifc"):
         # profiler = cProfile.Profile()
         # profiler.enable()
         doc = FreeCAD.newDocument(docName)
-        convert_IFC_to_gbXML(filename)
-        # processGbXmlFile(doc, True, "New_Exported_gbXML.xml")
+        convert_IFC_to_gbXML(filename, gbXMLname)
+        processGbXmlFile(doc, False, gbXMLname)
+        tmpdir.cleanup()        
         # profiler.disable()
         # stats = pstats.Stats(profiler).sort_stats('cumtime')
         # stats.print_stats()
@@ -70,15 +72,18 @@ def open(filename):
 def insert(filename, docName):
     "called when freecad imports a file"
     print("Insert filename : " + filename + " docname : " + docName)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        gbXMLname = os.path.join(tmpdir, docName + '.gbXML')
     try:
         doc = FreeCAD.getDocument(docName)
     except NameError:
         doc = FreeCAD.newDocument(docName)
     if filename.lower().endswith(".ifc"):
         # False flag indicates import
-        convert_IFC_to_gbXML(filename)
-        processGbXmlFile(doc, False, filename)
-
+        convert_IFC_to_gbXML(filename, gbXMLname)
+        processGbXmlFile(doc, False, gbXMLname)
+        tmpdir.cleanup()  
+        
     #elif filename.lower().endswith(".xml"):
     #    processXML(doc, filename)
 
@@ -93,10 +98,4 @@ def processGbXmlFile(docName, importFlag, fileName):
     gbXmlXrb.checkGBxml()
     gbXmlxml = LXMLclass(gbXmlXrb)
     gbXmlxml.processGbXml(docName, fileName)
-
-def convertIFC_gbXML(filename):
-    import subprocess
-    print(f"Convert File {filename} to gbXML")
-    subprocess.call(["python3", "linklink_IFC_gbXML_Convert.py "+filename])
-
-
+    

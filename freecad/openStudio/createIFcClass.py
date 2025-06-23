@@ -30,21 +30,17 @@
 ############################################################################*
 
 # import FreeCAD as App
-import FreeCADGui
+import Arch, FreeCAD, FreeCADGui
+from nativeifc import ifc_tools
 
-class switch(object):
-    value = None
-
-    def __new__(class_, value):
-        class_.value = value
-        return True
-
-def case(*args):
-    return any((arg == switch.value for arg in args))
+#building = Arch.makeBuilding()
 
 class CreateIFCclass():
 	def __init__(self):
-		pass
+		self.doc = FreeCAD.ActiveDocument
+		self.project = ifc_tools.create_document(self.doc)
+		self.site = Arch.makeSite()
+		self.site = ifc_tools.aggregate(self.site, self.project)
 
 	def processSelection(self):
 		print("Process Selection")
@@ -55,12 +51,14 @@ class CreateIFCclass():
 				if hasattr(grp, "Group"):
 					print(f"Selected {grp.Label}")
 					if grp.Label == "Campus":
-						self.createSiteFromCampus()
+						self.createSiteFromCampus(grp)
 					elif grp.Label.startswith("Building"):
 						self.createBuilding()
 
-	def createSiteFromCampus(self):
+	def createSiteFromCampus(self, campus):
 		print("Create Site from Campus")
+		print(dir(self.site))
+		print(dir(campus))
 	
 	def createBuilding(self):
 		print("Create IFC Building")

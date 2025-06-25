@@ -31,32 +31,41 @@ __author__ = "Keith Sloan <ipad2@sloan-home.co.uk>"
 __url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
 
 import FreeCAD
-import os, pathlib, tempfile
+import os, sys, pathlib, tempfile
 
 if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
 from freecad.openStudio.import_gbXML import processGbXmlFile
-from freecad.openStudio.IFC_gbXML_Convert import convert_IFC_to_gbXML
-#from freecad.openStudio import link_IFC_gbXML_Convert                                
+#sys.path.append("../IFC-to-gbXML-converter")
+# Need to access parent
+child_dir = os.path.dirname(__file__)
+parent_dir = os.path.abspath(os.path.join(child_dir, '../IFC-to-gbXML-converter'))
+sys.path.append(parent_dir)
+# print(sys.path)
+
+import ifcgbxml
 
 def open(filename):
     "called when freecad opens a file."
     global doc
     print(f"Open : {filename}")
     docName = os.path.splitext(os.path.basename(filename))[0]
-    with tempfile.TemporaryDirectory() as tmpdir:
-        gbXMLname = os.path.join(tmpdir, docName + '.gbXML')
-    if filename.lower().endswith(".ifc"):
-        # profiler = cProfile.Profile()
-        # profiler.enable()
-        doc = FreeCAD.newDocument(docName)
-        convert_IFC_to_gbXML(filename, gbXMLname)
-        processGbXmlFile(doc, False, gbXMLname)
-        tmpdir.cleanup()        
-        # profiler.disable()
-        # stats = pstats.Stats(profiler).sort_stats('cumtime')
-        # stats.print_stats()
+    import tempfile
+    with tempfile.NamedTemporaryFile(delete=False) as gbXMLfile:
+        #gbXMLname = os.path.join(tmpdir, docName + '.gbXML')
+        print(f"gbXML fileName {gbXMLfile.name}")
+        if filename.lower().endswith(".ifc"):
+            # profiler = cProfile.Profile()
+            # profiler.enable()
+            doc = FreeCAD.newDocument(docName)
+            ifcgbxml.convertIfc2gbXML(filename, gbXMLfile.name)
+
+            #processGbXmlFile(doc, False, gbXMLfile)
+            #tmpdir.cleanup()        
+            # profiler.disable()
+            # stats = pstats.Stats(profiler).sort_stats('cumtime')
+            # stats.print_stats()
 
     #elif filename.lower().endswith(".xml"):
     #    try:
@@ -72,17 +81,16 @@ def open(filename):
 def insert(filename, docName):
     "called when freecad imports a file"
     print("Insert filename : " + filename + " docname : " + docName)
-    with tempfile.TemporaryDirectory() as tmpdir:
-        gbXMLname = os.path.join(tmpdir, docName + '.gbXML')
-    try:
-        doc = FreeCAD.getDocument(docName)
-    except NameError:
-        doc = FreeCAD.newDocument(docName)
-    if filename.lower().endswith(".ifc"):
-        # False flag indicates import
-        convert_IFC_to_gbXML(filename, gbXMLname)
-        processGbXmlFile(doc, False, gbXMLname)
-        tmpdir.cleanup()  
+    with tempfile.NamedTemporaryFile() as gbXMLfile:
+        try:
+            doc = FreeCAD.getDocument(docName)
+        except NameError:
+            doc = FreeCAD.newDocument(docName)
+        if filename.lower().endswith(".ifc"):
+            # False flag indicates import
+            ifcgbxml.convert_IFC_to_gbXML(filename, gbXMLfile.name)
+            processGbXmlFile(doc, False, gbXMLfile)
+            #tmpdir.cleanup()  
         
     #elif filename.lower().endswith(".xml"):
     #    processXML(doc, filename)

@@ -45,7 +45,7 @@ def open(filename):
     global doc
     print(f"Open : {filename}")
     docName = os.path.splitext(os.path.basename(filename))[0]
-    if filename.lower().endswith(".gbXml") or filename.lower().endswith(".xml"):
+    if filename.lower().endswith(".gbxml") or filename.lower().endswith(".xml"):
         # import cProfile, pstats
         # profiler = cProfile.Profile()
         # profiler.enable()
@@ -73,7 +73,7 @@ def insert(filename, docName):
         doc = FreeCAD.getDocument(docName)
     except NameError:
         doc = FreeCAD.newDocument(docName)
-    if filename.lower().endswith(".gbXml"):
+    if filename.lower().endswith(".gbxml") or filename.lower().endswith(".xml"):
         # False flag indicates import
         processGbXmlFile(doc, False, filename)
 

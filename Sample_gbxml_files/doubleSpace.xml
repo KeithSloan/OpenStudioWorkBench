@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+  <gbXML xmlns="http://www.gbxml.org/schema" temperatureUnit="C" lengthUnit="Meters" areaUnit="SquareMeters" volumeUnit="CubicMeters" useSIUnitsForResults="true" version="0.37">
+    <Campus id="campus_2tR_WTtCfB38Go5ngzuANp">
+      <Location>
+        <Longitude>5</Longitude>
+        <Latitude>51</Latitude>
+        <Elevation>0.0</Elevation>
+        <ZipcodeOrPostalCode>S1 2GH</ZipcodeOrPostalCode>
+      </Location>
+      <Building id="building_2tR_WTtCfB38Go5ngzuANm" buildingType="Unknown">
+        <StreetAddress>Eindhoven, Netherlands</StreetAddress>
+        <BuildingStorey id="buildingstorey_2tR_WTtCfB38Go5nf27ris">
+          <Name>Level 1</Name>
+          <Level>0.0</Level>
+        </BuildingStorey>
+        <Space id="space_0uP3DChXvDoxp5LoFKEKB3" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris">
+          <Area unit="SquareMeters">10.394983</Area>
+          <Volume unit="CubicMeters">41579.932</Volume>
+          <Name>1</Name>
+        </Space>
+        <Space id="space_0uP3DChXvDoxp5LoFKEJqy" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris">
+          <Area unit="SquareMeters">10.394983</Area>
+          <Volume unit="CubicMeters">41579.932</Volume>
+          <Name>2</Name>
+          <SpaceBoundary isSecondLevelBoundary="true" surfaceIdRef="id_09bRyE_P1AawL4C7otw4lw">
+          </SpaceBoundary>
+          <SpaceBoundary isSecondLevelBoundary="true" surfaceIdRef="id_1BkF8Gm4LEgA9U66TmTJMW">
+          </SpaceBoundary>
+</Space>
+</Building>
+</Campus>
+</gbXML>

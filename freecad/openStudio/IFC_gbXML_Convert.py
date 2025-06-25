@@ -1,1 +1,0 @@
-/Users/ksloan/Library/Application Support/FreeCAD/Mod/OpenStudioWorkBench/freecad/IFC-to-gbXML-converter/IFC_gbXML_Convert.py

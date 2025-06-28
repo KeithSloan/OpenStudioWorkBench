@@ -27,6 +27,26 @@ and gbxml.
 ## FreeCAD setting
   Set the FreeCAD Preference for Document - Allow duplicate object labels in one document
 
+
+### External Editor
+  
+   
+  To use an external editor for Template, Material Map, Schedule, IDFSpace Map
+  
+  You need to add a parameter to the OpenStudio workbench
+   
+      FreeCAD | Tools | Edit parameters
+  
+      Group : Base App
+          Preferences
+             WorkBench
+                OpenStudio_WorkBench
+                    externalEditor 
+                        Text : <path to editor > 
+                        examples  Text /usr/local/bin/code
+                                  Text /usr/local/bin/codium
+                            
+
 ## Gui Icons
 
     * Build GBxml Group Structure ( For testing )

@@ -55,6 +55,20 @@ and gbxml.
 
       -ToDo
         Create FC Shapes for Geometry and check with imported data
+        
+    * Import ifc file
+      - Import Ifc file using Maarten Visschers - ifc to gbXML converter
+          https://github.com/MGVisschers/IFC-to-gbXML-converter
+          Maintained by Bruno Postle
+          https://github.com/brunopostle/IFC-to-gbXML-converter
+          Current fork pull request to be made.
+          https://github.com/KeithSloan/IFC-to-gbXML-converter
+
+          On import should get a Frame prompt
+          
+          ![Screenshot] https://github.com/user-attachments/assets/64fe0bbd-6b72-4a1e-958b-c766655d218d
+
+          Click Okay to convert Ifc to gbXML and import        
 
     * Sync GBxml - Properties ( to be developed )
       - Sync FC object Properties with GBxml structure

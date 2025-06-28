@@ -318,15 +318,18 @@ class LXMLclass():
 				lst.append(obj.Label)
 			return lst
 
-	def objectInGroup(self, parent, name):
-		print(f"Is Object {name} in Group {parent.Label}")
+	def objectInGroup(self, parent, name, id=False):
+		print(f"Is Object {name} in Group {parent.Label} id {id}")
 		#self.printGroup(parent)
 		if hasattr(parent, "Group"):
 			for obj in parent.Group:
 				if '_' not in obj.Label:
-					if obj.Label.startswith(name):
-						print(f"Found {name} in {parent.Label}")
-						return obj
+					if name in ["ShellGeometry", "PlanarGeometry"]:		# Label will be ShellGeometry00x or PlanarGeometry00x
+						if obj.Label.startswith(name):
+							return obj
+					if id:		# Check whole Name
+						if obj.Label == name:
+							return obj
 			#if name in parent.Group:
 			#	return parent.Group.index(name)
 		print(f"{name} Not Found in {parent.Label} Group")
@@ -338,7 +341,7 @@ class LXMLclass():
 		if hasattr(grpObj, "Group"):
 			# Range needs to go to zero
 			# print(f"Range {range(len(grpObj.Group) - 2, -1, -1)}")
-			for i in range(len(grpObj.Group) - 2, -1, -1):
+			for i in range(len(grpObj.Group) - 1, -1, -1):
 				print(f"i {i}")
 				objName = grpObj.Group[i].Label
 				print(f"objName : {objName}")  
@@ -380,7 +383,7 @@ class LXMLclass():
 		# 
 		print(f"Find Object : Parent {parent.Label} Name {elemName} id {id}")
 		print(f"Parent Group {self.groupLabels(parent)}")
-		gbObj = self.objectInGroup(parent, elemName) 
+		gbObj = self.objectInGroup(parent, elemName, id) 
 		# Check attribute or in Group First?
 		#
 		# if gbObj is None:	# That means structure name used before
@@ -414,11 +417,11 @@ class LXMLclass():
 		if hasattr(parent, "Label"):
 			label = parent.Label
 		elemName, id = self.checkName(element)
-		if elemName == "AirLoop":
-			print(f"AirLoop id {id}")
-			#breakpoint()
+		#if elemName == "AirLoop":
+		#	print(f"AirLoop id {id}")
+		#	#breakpoint()
 		#print(f"Find Check Process Element :  parent {label} Element {element}")
-		print(f"Find Check Process Element :  parent {label} element {elemName}")
+		print(f"Find Check Process Element :  parent {label} element {elemName} id {id}")
 		#treatDiff = ["PolyLoop",
 		#			"CartesianPoint",
 		#			"Coordinate",
@@ -579,7 +582,7 @@ class LXMLclass():
 			self.processPlanar(parent, element, elemName)
 			return True
 		elif elemName == "ShellGeometry":
-			self.processShell(parent, element, elemName, id)
+			self.processShell(parent, element, elemName, id=False)
 			return True
 		#elif elemName == "SpaceBoundary":
 		#	self.processSpaceBoundary(parent, element, elemName, id)

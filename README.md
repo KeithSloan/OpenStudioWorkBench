@@ -74,7 +74,25 @@ and gbxml.
           
           ![Screenshot] https://github.com/user-attachments/assets/64fe0bbd-6b72-4a1e-958b-c766655d218d
 
-          Click Okay to convert Ifc to gbXML and import        
+          Click Okay to convert Ifc to gbXML and import 
+
+    * Branch gbXML2IDF
+
+       submodule add https://github.com/KeithSloan/gbXML2IDF which is a fork of https://github.com/Udaragithub/gbXML2IDF
+
+       Has facility to use external editor for 
+         - IDF_template.IDF
+         - IDF_Schedules.IDF
+         - material_data.csv
+         - space_data.csv
+
+        ToDo
+          - Create files baaed on gbXML source i.e. Avoid hand editing step 
+              - Providing mapping gbXML materials to IDF Materials
+              - Providing mapping gbXML Space to iDF Space
+              
+          - Run Energy Model
+           
 
    ## Other Functions
    

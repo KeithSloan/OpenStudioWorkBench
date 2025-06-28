@@ -44,6 +44,12 @@ and gbxml.
                    - Campus
                    - Building
                    - Building Storey
+                   
+    * Sync GBxml - Properties ( to be developed )
+      - Sync FC object Properties with GBxml structure
+
+                   
+## Import Functions
 
     * Import gbXML file
       - Currently 
@@ -70,9 +76,8 @@ and gbxml.
 
           Click Okay to convert Ifc to gbXML and import        
 
-    * Sync GBxml - Properties ( to be developed )
-      - Sync FC object Properties with GBxml structure
-
+   ## Other Functions
+   
     * Export GBxml - Export GBxml structure to gbxml file ( to be developed )
 
     * Import Weather - ToDo

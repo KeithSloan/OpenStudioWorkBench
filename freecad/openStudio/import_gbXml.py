@@ -30,7 +30,7 @@
 ############################################################################*
 __title__ = "FreeCAD - GBXML importer"
 __author__ = "Keith Sloan <ipad2@sloan-home.co.uk>"
-__url__ = ["https://github.com/KeithSloan/FreeCAD_GDML"]
+__url__ = ["https://github.com/KeithSloan/OpenStudioWorkBench"]
 
 import FreeCAD, FreeCADGui
 import sys, os

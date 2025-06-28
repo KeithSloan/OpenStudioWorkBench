@@ -60,8 +60,7 @@ def open(filename):
             # profiler.enable()
             doc = FreeCAD.newDocument(docName)
             ifcgbxml.convertIfc2gbXML(filename, gbXMLfile.name)
-
-            #processGbXmlFile(doc, False, gbXMLfile)
+            processGbXmlFile(doc, False, gbXMLfile)
             #tmpdir.cleanup()        
             # profiler.disable()
             # stats = pstats.Stats(profiler).sort_stats('cumtime')

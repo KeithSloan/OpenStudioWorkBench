@@ -59,6 +59,7 @@ class OpenStudio_Workbench ( FreeCADGui.Workbench ):
         commandList=[
             'buildGBxmlCmd', \
             'addGBxmlCmd', \
+            'exportGeometryCmd', \
             'IdfGroupCmd', \
             'createIFcCmd', \
 		    'syncGBxmlCmd', \

@@ -141,7 +141,6 @@ class CreateIFcFeature:
             }
 
 class ExportGeometryFeature:
-
 	def Activated(self):
 		from freecad.openStudio.exportShape import exportShape
 		
@@ -195,6 +194,57 @@ class RunEnergyModelFeature:
                 "RunEnergyModel", "Run Energy Model"
                 ),
             }
+
+
+class MapMaterialsFeature:
+	def Activated(self):
+		import FreeCADGui
+		from freecad.openStudio.materialMap import MaterialMapDialog
+		print("Map Materials")
+		workBenchMaterialMap = MaterialMapDialog(FreeCADGui.getMainWindow())
+		workBenchMaterialMap.show()
+		
+
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+        	"Pixmap": "MapMaterials",
+        	"MenuText": QtCore.QT_TRANSLATE_NOOP(
+            	"MapMaterials", "Map gbXML Materials to IDF materials"
+            ),
+        	"ToolTip": QtCore.QT_TRANSLATE_NOOP(
+				"MapMaterials", "Map gbXML Materials to IDF materials"
+            ),
+        }
+
+
+class MapSpaceFeature:
+	def Activated(self):
+		
+		print("Map Space")
+	
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+        	"Pixmap": "MapSpace",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+                "MapSpace", "Map gbXML Space to IDF Space"
+            ),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+            	"MapSpace", "Map gbXML Space to IDF Space"
+            ),
+        }
+
 
 class EditTemplateFeature:
 	def Activated(self):
@@ -287,14 +337,46 @@ class EditIDFSpaceFeature:
             "ToolTip": QtCore.QT_TRANSLATE_NOOP(
                 "EditIDFSpace", "Edit IDF Space Map"
                 ),
-			}		
+	}		
+
+
+class IdfEditGroupFeature:
+    """Group of To IDF Commands"""
+            
+    def GetCommands(self):
+        """Tuple of Commands"""
+        return ("EditTemplateCmd", \
+				"EditMaterialMapCmd", \
+				"EditScheduleCmd", \
+				"EditIDFSpaceCmd")
+
+    def GetResources(self):
+        """Set icon, menu and tooltip."""
+
+        return {
+            "Pixmap": "IDFeditGroup",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP("Edit IDF Group", "IDF Edit Group"),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP("Edit IDF Group", " IDF Edit Group"
+            ),
+        }
+
+    def IsActive(self):
+        """Return True when this command should be available."""
+        if FreeCAD.ActiveDocument is None:
+            return False
+        else:
+            return True
+			
 
 class IdfGroupFeature:
     """Group of To IDF Commands"""
             
     def GetCommands(self):
         """Tuple of Commands"""
-        return ("RunEnergyModelCmd", "EditTemplateCmd", "EditMaterialMapCmd", "EditScheduleCmd", "EditIDFSpaceCmd")
+        return ("RunEnergyModelCmd", \
+				"MapMaterialsCmd", \
+				"MapSpaceCmd", \
+				"IdfEditGroupCmd")
 
     def GetResources(self):
         """Set icon, menu and tooltip."""
@@ -314,7 +396,10 @@ class IdfGroupFeature:
             return True
 			
 
+FreeCADGui.addCommand("MapMaterialsCmd", MapMaterialsFeature())
+FreeCADGui.addCommand("MapSpaceCmd", MapSpaceFeature())
 FreeCADGui.addCommand("IdfGroupCmd", IdfGroupFeature())
+FreeCADGui.addCommand("IdfEditGroupCmd", IdfEditGroupFeature())
 FreeCADGui.addCommand("RunEnergyModelCmd", RunEnergyModelFeature())
 FreeCADGui.addCommand("EditTemplateCmd", EditTemplateFeature())
 FreeCADGui.addCommand("EditMaterialMapCmd", EditMaterialMapFeature())

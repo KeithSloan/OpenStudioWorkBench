@@ -87,8 +87,8 @@ class ShellGeometryClass(BaseClass):
 				self.Volume = self.obj.addProperty("App::PropertyFloat","Volume","Base","Area of Shell Geometry")
 			print(f"PartShape Volume {self.PartShape.Volume}")
 			if self.PartShape.Volume < 0:
-				print("Invert Shell")
-				self.PartShape = self.PartShape.complement()
+				print("Invert Shell ?")
+				#self.PartShape = self.PartShape.complement()
 				print(f"PartShape Volume {self.PartShape.Volume}")
 			self.obj.Volume = self.PartShape.Volume
 		if self.ClosedShell:

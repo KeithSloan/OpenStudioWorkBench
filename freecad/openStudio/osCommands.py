@@ -143,7 +143,7 @@ class CreateIFcFeature:
 class ExportGeometryFeature:
 
 	def Activated(self):
-		from freecad.openStudio.exportShape import exportShape
+		from freecad.openStudio.exportShape import exportDialog
 		
 		print("Export Geometry")
 		#   for obj in FreeCADGui.Selection.getSelection()
@@ -155,7 +155,7 @@ class ExportGeometryFeature:
 					# Calc Shape
 					pass
 				if sel.ShapeValid == 1:
-					exportShape(sel.ObjectName, sel.Object)
+					exportDialog(sel.ObjectName, sel.Object)
 	     
 	def IsActive(self):
 		if FreeCAD.ActiveDocument is None:

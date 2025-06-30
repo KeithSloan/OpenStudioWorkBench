@@ -26,9 +26,60 @@
 
 import FreeCAD, FreeCADGui
 
+from PySide import QtGui, QtCore
 
-def exportShape(name, Obj):
+# Step 1: Define an Enum
+#class ExportOptions():
+#    Brep = 1
+#    Sketch = 2
+
+# Step 2: Create the Enumeration Dialog
+class QtExportDialog(QtGui.QDialog):
+    def __init__(self, enum_class, parent=None):
+        super().__init__(parent)
+        self.enum_class = enum_class
+        self.selected_enum = None
+
+        self.setWindowTitle("Select an Enum Value")
+        self.layout = QtGui.QVBoxLayout(self)
+
+        self.label = QtGui.QLabel("Choose a value:")
+        self.layout.addWidget(self.label)
+
+        self.list_widget = QtGui.QListWidget()
+        for item in enum_class:
+            self.list_widget.addItem(item.name)
+        self.layout.addWidget(self.list_widget)
+
+        self.buttons = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel)
+        self.buttons.accepted.connect(self.accept)
+        self.buttons.rejected.connect(self.reject)
+        self.layout.addWidget(self.buttons)
+
+    def accept(self):
+        selected = self.list_widget.currentItem()
+        if selected:
+            self.selected_enum = self.enum_class[selected.text()]
+        super().accept()
+
+    def get_selection(self):
+        return self.selected_enum
+
+
+def exportDialog(name, Obj):
+	#from PySide import QtGui, QtCore
+
 	print(f"Export Shape {name} type{Obj.TypeId}")
+	print("Display Dialog")
+	ExportOptions = ["Brep", "Sketch"]
+	dialog = QtExportDialog(ExportOptions)
+	print(dialog.exec_())
+    #if dialog.exec_() == QtGui.QDialog.Accepted:
+    #    selected = dialog.get_selection()
+    #    print(f"Selected enum: {selected} ({selected.name})")
+    #else:
+    #    print("No selection made.")
+
 
 	# Qt Enumeration
 	#

@@ -150,11 +150,13 @@ class ExportGeometryFeature:
 		selectEx = FreeCADGui.Selection.getSelectionEx()
 		for sel in selectEx :
 			print(f"Selected-Ex {sel.ObjectName} {sel.Object.TypeId}")
-			if hasattr(sel, 'PartShape'):
-				if sel.ShapeValid == 0:		# Unset
+			if hasattr(sel.Object, 'PartShape'):
+				# ShapeValid ["UnSet", "Valid", "InValid"]
+				print(f"Part Shape {sel.Object.ShapeValid}")
+				if sel.Object.ShapeValid == "UnSet": # If Unset
 					# Calc Shape
-					pass
-				if sel.ShapeValid == 1:
+					sel.Object.Proxy.calcShape()
+				if sel.Object.ShapeValid == "Valid":
 					exportDialog(sel.ObjectName, sel.Object)
 	     
 	def IsActive(self):

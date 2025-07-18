@@ -80,6 +80,8 @@ class PolyLoopClass(BaseClass):
 		import Part
 		print(f"Return Face")
 		print(f"PointsList {self.obj.PointsList}")
+		# shapePoints = self.obj.PointsList
+		# shapePoints = shapePoints.append(shapePoints[0])
 		shapePoints = self.obj.PointsList + self.obj.PointsList[:1]
 		#shapePoints = pl.PointsList.append(pl.PointsList[1:])
 		print(f"shapePoints {shapePoints}")

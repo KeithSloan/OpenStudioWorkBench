@@ -88,7 +88,7 @@ class ShellGeometryClass(BaseClass):
 			print(f"PartShape Volume {self.PartShape.Volume}")
 			if self.PartShape.Volume < 0:
 				print("Invert Shell")
-				self.PartShape = self.PartShape.complement()
+				#self.PartShape = self.PartShape.complement()
 				print(f"PartShape Volume {self.PartShape.Volume}")
 			self.obj.Volume = self.PartShape.Volume
 		if self.ClosedShell:

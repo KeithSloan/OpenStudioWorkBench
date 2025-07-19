@@ -140,7 +140,301 @@ class CreateIFcFeature:
                 ),
             }
 
+class ExportGeometryFeature:
+	def Activated(self):
+		from freecad.openStudio.exportShape import exportShape
+		
+		print("Export Geometry")
+		#   for obj in FreeCADGui.Selection.getSelection()
+		selectEx = FreeCADGui.Selection.getSelectionEx()
+		for sel in selectEx :
+			print(f"Selected-Ex {sel.ObjectName} {sel.Object.TypeId}")
+			if hasattr(sel, 'PartShape'):
+				if sel.ShapeValid == 0:		# Unset
+					# Calc Shape
+					pass
+				if sel.ShapeValid == 1:
+					exportShape(sel.ObjectName, sel.Object)
+	     
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "ExportGeometry",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+                "ExportGeometry", "Export Geometry"
+                ),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "ExportGeometry", "Export Geometry"
+                ),
+            }
+
+
+class RunEnergyModelFeature:
+	def Activated(self):
+		print("Run Energy Model")
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "RunEnergyModel",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+                "RunEnergyModel", "Run Energy Model"
+                ),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "RunEnergyModel", "Run Energy Model"
+                ),
+            }
+
+class  CreateIFCfrom_gbXMLFeature:
+	def Activated(self):
+		print("Create IFC files from gbXML")
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "Create_IFC_from_gbXML",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"Create_IFC_from_gbXML","Create IFC files from gbXML"
+                ),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+				"Create_IFC_from_gbXML","Create IFC files from gbXML"
+                ),
+            }
+
+
+class MapMaterialsFeature:
+	def Activated(self):
+		import FreeCADGui
+		from freecad.openStudio.materialMap import MaterialMapDialog
+		print("Map Materials")
+		workBenchMaterialMap = MaterialMapDialog(FreeCADGui.getMainWindow())
+		workBenchMaterialMap.show()
+		
+
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+        	"Pixmap": "MapMaterials",
+        	"MenuText": QtCore.QT_TRANSLATE_NOOP(
+            	"MapMaterials", "Map gbXML Materials to IDF materials"
+            ),
+        	"ToolTip": QtCore.QT_TRANSLATE_NOOP(
+				"MapMaterials", "Map gbXML Materials to IDF materials"
+            ),
+        }
+
+
+class MapSpaceFeature:
+	def Activated(self):
+		
+		print("Map Space")
+	
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+
+	def GetResources(self):
+		return {
+        	"Pixmap": "MapSpace",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+                "MapSpace", "Map gbXML Space to IDF Space"
+            ),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+            	"MapSpace", "Map gbXML Space to IDF Space"
+            ),
+        }
+
+
+class EditTemplateFeature:
+	def Activated(self):
+		from freecad.openStudio.editFile import editFile
+		print("EditTemplate : IDF_template.idf")
+		editFile("IDF_template.idf")
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "EditTemplate",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"EditTemplate", "Edit Template"
+				),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "EditTemplate", "Edit Template"
+                ),
+            }
+
+
+class EditMaterialMapFeature:
+	def Activated(self):
+		from freecad.openStudio.editFile import editFile
+		print("EditMaterialMap : material_data.csv")
+		editFile("material_data.csv")
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "EditMaterialMap",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"EditMaterial", "Edit Material Map"
+				),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "EditMaterial", "Edit Material Map"
+                ),
+			}
+
+class EditScheduleFeature:
+	def Activated(self):
+		from freecad.openStudio.editFile import editFile
+		print("EditSchedule : IDF_schedules.idf")
+		editFile("IDF_schedules.idf")
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "EditSchedule",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"EditSchedule", "Edit Schedule"
+				),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "EditSchedule", "Edit Schedule"
+                ),
+			}
+
+class EditIDFSpaceFeature:
+	def Activated(self):
+		from freecad.openStudio.editFile import editFile
+		print("EditIDFSpace : space_data.csv")
+		editFile("space_data.csv")
+		
+	def IsActive(self):
+		if FreeCAD.ActiveDocument is None:
+			return False
+		else:
+			return True
+			
+	def GetResources(self):
+		return {
+            "Pixmap": "EditIDFSpaceMap",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP(
+				"EditIDFSpace", "Edit IDF Space Map"
+				),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
+                "EditIDFSpace", "Edit IDF Space Map"
+                ),
+	}		
+
+
+class IdfEditGroupFeature:
+    """Group of To IDF Commands"""
+            
+    def GetCommands(self):
+        """Tuple of Commands"""
+        return ("EditTemplateCmd", \
+				"EditMaterialMapCmd", \
+				"EditScheduleCmd", \
+				"EditIDFSpaceCmd")
+
+    def GetResources(self):
+        """Set icon, menu and tooltip."""
+
+        return {
+            "Pixmap": "IDFeditGroup",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP("Edit IDF Group", "IDF Edit Group"),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP("Edit IDF Group", " IDF Edit Group"
+            ),
+        }
+
+    def IsActive(self):
+        """Return True when this command should be available."""
+        if FreeCAD.ActiveDocument is None:
+            return False
+        else:
+            return True
+			
+
+class IdfGroupFeature:
+    """Group of To IDF Commands"""
+            
+    def GetCommands(self):
+        """Tuple of Commands"""
+        return ("CreateIFCfrom_gbXMLCmd", \
+				"RunEnergyModelCmd", \
+				"MapMaterialsCmd", \
+				"MapSpaceCmd", \
+				### "IdfEditGroupCmd")
+				### Seems to be a problem with Group of Group Commands
+				"EditTemplateCmd", \
+				"EditMaterialMapCmd", \
+				"EditScheduleCmd", \
+				"EditIDFSpaceCmd")
+
+    def GetResources(self):
+        """Set icon, menu and tooltip."""
+
+        return {
+            "Pixmap": "IDFeditGroup",
+            "MenuText": QtCore.QT_TRANSLATE_NOOP("Edit IDF Group", "IDF Group"),
+            "ToolTip": QtCore.QT_TRANSLATE_NOOP("Edit IDF Group", " Group of Gmsh Commands"
+            ),
+        }
+
+    def IsActive(self):
+        """Return True when this command should be available."""
+        if FreeCAD.ActiveDocument is None:
+            return False
+        else:
+            return True
+			
+
+FreeCADGui.addCommand("MapMaterialsCmd", MapMaterialsFeature())
+FreeCADGui.addCommand("MapSpaceCmd", MapSpaceFeature())
+FreeCADGui.addCommand("IdfGroupCmd", IdfGroupFeature())
+FreeCADGui.addCommand("IdfEditGroupCmd", IdfEditGroupFeature())
+FreeCADGui.addCommand("CreateIFCfrom_gbXMLCmd", CreateIFCfrom_gbXMLFeature())
+FreeCADGui.addCommand("RunEnergyModelCmd", RunEnergyModelFeature())
+FreeCADGui.addCommand("EditTemplateCmd", EditTemplateFeature())
+FreeCADGui.addCommand("EditMaterialMapCmd", EditMaterialMapFeature())
+FreeCADGui.addCommand("EditScheduleCmd", EditScheduleFeature())
+FreeCADGui.addCommand("EditIDFSpaceCmd", EditIDFSpaceFeature())
 FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())
 FreeCADGui.addCommand("buildGBxmlCmd", BuildGBxmlFeature())
 FreeCADGui.addCommand("createIFcCmd", CreateIFcFeature())
 FreeCADGui.addCommand("syncGBxmlCmd", SyncGBxmlFeature())
+FreeCADGui.addCommand("exportGeometry", ExportGeometryFeature())

@@ -75,42 +75,36 @@ def lookupMateria(col):
 
 
 
-class GDMLColour(QtGui.QLineEdit):
 
-    def __init__(self, colour):
+class Material(QtGui.QLineEdit):
+
+    def __init__(self, name):
         super().__init__()
-        palette = self.palette()
-        # palette.setColor(QtGui.QPalette.Button, QtGui.QColor(colour))
-        palette.setColor(QtGui.QPalette.Base, QtGui.QColor(colour))
-        # palette.setColor(QtGui.QPalette.Window, QtGui.QColor(colour))
-        self.setAutoFillBackground(True)
-        # palette.setColor(QtGui.QPalette.Window, QtGui.QColor(QtGui.qRed))
-        # palette.setColor(QtGui.QPalette.Window, QtGui.qRed)
-        self.setStyleSheet("QPushButton {border-color: black; border: 2px;}")
-        self.setPalette(palette)
+        
+        #self.setAutoFillBackground(True)
+       
+        #self.setStyleSheet("QPushButton {border-color: black; border: 2px;}")
+        self.insert(name)
         self.setReadOnly(True)
-        # self.setFlat(True)
         self.update()
 
 
-class GDMLColourHex(QtGui.QLineEdit):
+class Id(QtGui.QLineEdit):
 
-    def __init__(self, colhex):
+    def __init__(self, id):
         super().__init__()
-        self.insert(colhex)
+        self.insert(id)
         self.setReadOnly(True)
 
 
 class MaterialMapEntry(QtGui.QWidget):
 
-    def __init__(self, colour, colhex, material):
+    def __init__(self, id, name, material):
         super().__init__()
-        print('Map Entry : '+str(colour))
-        self.colour = colour
+        print(f"Material Map Entry - id : {id} Name : {name}")
         self.hbox = QtGui.QHBoxLayout()
-        self.hbox.addWidget(GDMLColour(colour))
-        self.hbox.addWidget(GDMLColourHex(colhex))
-        self.hbox.addWidget(material)
+        self.hbox.addWidget(Id(id))
+        self.hbox.addWidget(Material(name))
         self.setLayout(self.hbox)
 
     def dataPicker(self):
@@ -119,12 +113,13 @@ class MaterialMapEntry(QtGui.QWidget):
 
 class MaterialMapList(QtGui.QScrollArea):
 
-    def __init__(self, matList):
+    #def __init__(self, matList):
+    def __init__(self):
         super().__init__()
         # Scroll Area which contains the widgets, set as the centralWidget
         # Widget that contains the collection of Vertical Box
         self.widget = QtGui.QWidget()
-        self.matList = matList
+        #self.matList = matList
         # The Vertical Box that contains the Horizontal Boxes of  labels and buttons
         self.vbox = QtGui.QVBoxLayout()
         self.widget.setLayout(self.vbox)
@@ -135,11 +130,10 @@ class MaterialMapList(QtGui.QScrollArea):
         self.setWidgetResizable(True)
         self.setWidget(self.widget)
 
-    def addEntry(self, colour, colhex, mat):
-        #from .GDMLMaterials import GDMLMaterial
+    def addEntry(self, id, name, material):
         print('Add Entry')
         #matWidget = GDMLMaterial(self.matList, mat)
-        #self.vbox.addWidget(MaterialMapEntry(colour, colhex, matWidget))
+        self.vbox.addWidget(MaterialMapEntry(id, name, material))
 
     def getMaterial(self, index):
         # print(dir(self.vbox))
@@ -188,17 +182,14 @@ class MaterialMapDialog(QtGui.QDialog):
         mainLayout = QtGui.QVBoxLayout(self)
         mainLayout.addLayout(headerLayout)
         mainLayout.addLayout(self.materialsLayout)
-        #from .GDMLMaterials import getMaterialsList
-        #self.matList = getMaterialsList()
         #self.mapList = MaterialMapList(self.matList)
+        self.mapList = MaterialMapList()
         self.materialMapDict = {}
         self.scanDocument(1)
         print(self.materialMapDict)
-        # for c in self.colorList :
-        #    self.mapList.addEntry(QtGui.QColor(c[0]*255,c[1]*255,c[2]*255))
-        # create Labels
-        #self.label1 = self.mapList
-        #self.materialsLayout.addWidget(self.label1, 0, 0)
+        # create Labels & add scrollList
+        self.label1 = self.mapList
+        self.materialsLayout.addWidget(self.label1, 0, 0)
         #  cancel button
         cancelButton = QtGui.QPushButton('Cancel', self)
         cancelButton.clicked.connect(self.onCancel)
@@ -225,45 +216,32 @@ class MaterialMapDialog(QtGui.QDialog):
             # self.colorList = []
             for obj in doc.Objects:
                 # print(dir(obj))
-                if hasattr(obj, 'ViewObject'):
-                    # print(dir(obj.ViewObject))
-                    if hasattr(obj.ViewObject, 'isVisible'):
-                        if obj.ViewObject.isVisible:
-                            if hasattr(obj.ViewObject, 'ShapeColor'):
-                                colour = obj.ViewObject.ShapeColor
-                                # print(colour)
-                                colhex = '#'+''.join('{:02x}'.format(round(v*255))
-                                                     for v in colour)
-                                if action == 1:  # Build Map
-                                    if not(colhex in self.colorDict):
-                                        print(f'Add colour {colhex} {colour}')
-                                        if hasattr(obj, 'material'):
-                                            material = obj.material
-                                        else:
-                                            material = None
-                                        self.addColour2Map(
-                                            colour, colhex, material)
-                                        self.colorDict.update(
-                                            [(colhex, len(self.colorDict))])
-                                if action == 2:  # Update Object Material
-                                    if hasattr(obj, 'Shape'):
-                                        mapIdx = self.colorDict[colhex]
-                                        print(f'Found {colhex} : id {mapIdx}')
-                                        print(obj.Label)
-                                        m = self.mapList.getMaterial(mapIdx)
-                                        # Only add
-                                        if not hasattr(obj, 'material'):
-                                            obj.addProperty("App::PropertyEnumeration",
-                                                            "material", "GDML", "Material")
-                                            obj.material = self.matList
-                                        # Ignore GDML objects which will have Proxy
-                                        if not hasattr(obj, 'Proxy'):
-                                            obj.material = self.matList.index(
-                                                m)
+                # ToDo - Betters to set type in gbXML file
+                if obj.Label.startswith("Material") and obj.ValueSet:
+                    if action == 1:  # Build Map
+                        print(f"Material id {obj.id} Name {obj.Name}")
+                        #self.addMaterial2Map(obj.colour, obj.Name, material)
+                        self.addMaterial2Map(obj.id, obj.Name, "Material")
 
-    def addColour2Map(self, c, hex, material):
-        self.mapList.addEntry(QtGui.QColor(c[0]*255, c[1]*255,
-                                           c[2]*255), hex, material)
+                    elif action == 2:  # Update Object Material
+                        pass
+                        #if hasattr(obj, 'Shape'):
+                        #                mapIdx = self.colorDict[colhex]
+                        #                print(f'Found {colhex} : id {mapIdx}')
+                        #                print(obj.Label)
+                        #                m = self.mapList.getMaterial(mapIdx)
+                        #                # Only add
+                        #                if not hasattr(obj, 'material'):
+                        #                    obj.addProperty("App::PropertyEnumeration",
+                        #                                    "material", "GDML", "Material")
+                        #                    obj.material = self.matList
+                        #                # Ignore GDML objects which will have Proxy
+                        #                if not hasattr(obj, 'Proxy'):
+                        #                    obj.material = self.matList.index(
+                        #                        m)
+
+    def addMaterial2Map(self, id, name, material):
+        self.mapList.addEntry(id, name, material)
 
     def lookupColour(self, col):
         print('Lookup Colour')

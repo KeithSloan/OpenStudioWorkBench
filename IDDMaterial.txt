@@ -1,0 +1,715 @@
+Material,
+    \memo Regular materials described with full set of thermal properties
+    \min-fields 6
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+  A2 , \field Roughness
+       \required-field
+       \type choice
+       \key VeryRough
+       \key Rough
+       \key MediumRough
+       \key MediumSmooth
+       \key Smooth
+       \key VerySmooth
+  N1 , \field Thickness
+       \required-field
+       \units m
+       \type real
+       \minimum> 0
+       \ip-units in
+  N2 , \field Conductivity
+       \required-field
+       \units W/m-K
+       \type real
+       \minimum> 0
+  N3 , \field Density
+       \required-field
+       \units kg/m3
+       \type real
+       \minimum> 0
+  N4 , \field Specific Heat
+       \required-field
+       \units J/kg-K
+       \type real
+       \minimum 100
+  N5 , \field Thermal Absorptance
+       \type real
+       \minimum> 0
+       \default .9
+       \maximum 0.99999
+  N6 , \field Solar Absorptance
+       \type real
+       \default .7
+       \minimum 0
+       \maximum 1
+  N7 ; \field Visible Absorptance
+       \type real
+       \minimum 0
+       \default .7
+       \maximum 1
+
+Material:NoMass,
+    \memo Regular materials properties described whose principal description is R (Thermal Resistance)
+     \min-fields 3
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+  A2 , \field Roughness
+       \required-field
+       \type choice
+       \key VeryRough
+       \key Rough
+       \key MediumRough
+       \key MediumSmooth
+       \key Smooth
+       \key VerySmooth
+  N1 , \field Thermal Resistance
+       \required-field
+       \units m2-K/W
+       \type real
+       \minimum .001
+  N2 , \field Thermal Absorptance
+       \type real
+       \minimum> 0
+       \default .9
+       \maximum 0.99999
+  N3 , \field Solar Absorptance
+       \type real
+       \minimum 0
+       \default .7
+       \maximum 1
+  N4 ; \field Visible Absorptance
+       \type real
+       \minimum 0
+       \default .7
+       \maximum 1
+
+Material:InfraredTransparent,
+       \memo Special infrared transparent material. Similar to a Material:Nomass with low thermal resistance.
+       \memo  High absorptance in both wavelengths.
+       \memo  Area will be doubled internally to make internal radiant exchange accurate.
+       \memo  Should be only material in single layer surface construction.
+       \memo  All thermal properties are set internally. User needs only to supply name.
+       \memo Cannot be used with ConductionFiniteDifference solution algorithms
+       \min-fields 1
+  A1 ; \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+
+Material:AirGap,
+       \min-fields 2
+       \memo Air Space in Opaque Construction
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+  N1 ; \field Thermal Resistance
+       \required-field
+       \units m2-K/W
+       \type real
+       \minimum> 0
+
+Material:RoofVegetation,
+  \memo EcoRoof model, plant layer plus soil layer
+  \memo Implemented by Portland State University
+  \memo (Sailor et al., January, 2007)
+  \memo only one material must be referenced per simulation though the same EcoRoof material could be
+  \memo used in multiple constructions. New moisture redistribution scheme (2010) requires higher
+  \memo number of timesteps per hour (minimum 12 recommended).
+  \min-fields 19
+  A1 ,\field Name
+      \required-field
+      \type alpha
+      \reference MaterialName
+  N1 ,\field Height of Plants
+      \type real
+      \note The ecoroof module is designed for short plants and shrubs.
+      \minimum> 0.005
+      \maximum  1.0
+      \units m
+      \default .2
+  N2 ,\field Leaf Area Index
+      \units dimensionless
+      \note Entire surface is assumed covered, so decrease LAI accordingly.
+      \minimum> 0.001
+      \maximum 5.0
+      \default 1.0
+      \type real
+  N3 ,\field Leaf Reflectivity
+      \type real
+      \units dimensionless
+      \note Leaf reflectivity (albedo) is typically 0.18-0.25
+      \maximum 0.5
+      \minimum 0.05
+      \default 0.22
+  N4 ,\field Leaf Emissivity
+      \type real
+      \minimum 0.8
+      \maximum 1.0
+      \default 0.95
+  N5 ,\field Minimum Stomatal Resistance
+      \units s/m
+      \default 180.0
+      \note This depends upon plant type
+      \minimum 50.0
+      \maximum 300.
+      \type real
+  A2 ,\field Soil Layer Name
+      \type alpha
+      \default Green Roof Soil
+  A3 ,\field Roughness
+      \type choice
+      \key VeryRough
+      \key MediumRough
+      \key Rough
+      \key Smooth
+      \key MediumSmooth
+      \key VerySmooth
+      \default MediumRough
+  N6 ,\field Thickness
+      \note thickness of the soil layer of the EcoRoof
+      \units m
+      \type real
+      \note Soil depths of 0.15m (6in) and 0.30m (12in) are common.
+      \default 0.1
+      \minimum> 0.05
+      \maximum 0.7
+      \ip-units in
+  N7 ,\field Conductivity of Dry Soil
+      \units W/m-K
+      \type real
+      \note Thermal conductivity of dry soil.
+      \note Typical ecoroof soils range from 0.3 to 0.5
+      \default 0.35
+      \minimum  0.2
+      \maximum 1.5
+  N8 ,\field Density of Dry Soil
+      \units kg/m3
+      \note Density of dry soil (the code modifies this as the soil becomes moist)
+      \note Typical ecoroof soils range from 400 to 1000 (dry to wet)
+      \type real
+      \minimum 300
+      \maximum 2000
+      \default 1100
+  N9 ,\field Specific Heat of Dry Soil
+      \units J/kg-K
+      \type real
+      \note Specific heat of dry soil
+      \minimum> 500
+      \maximum 2000
+      \default 1200
+  N10,\field Thermal Absorptance
+      \type real
+      \note Soil emissivity is typically in range of 0.90 to 0.98
+      \minimum> 0.8
+      \default .9
+      \maximum 1.0
+  N11,\field Solar Absorptance
+      \type real
+      \note Solar absorptance of dry soil (1-albedo) is typically 0.60 to 0.85
+      \note corresponding to a dry albedo of 0.15 to 0.40
+      \default .70
+      \minimum 0.40
+      \maximum 0.9
+  N12,\field Visible Absorptance
+      \type real
+      \minimum> 0.5
+      \default .75
+      \maximum 1.0
+  N13,\field Saturation Volumetric Moisture Content of the Soil Layer
+      \type real
+      \note Maximum moisture content is typically less than 0.5
+      \minimum> 0.1
+      \maximum 0.5
+      \default 0.3
+  N14,\field Residual Volumetric Moisture Content of the Soil Layer
+      \type real
+      \minimum  0.01
+      \maximum  0.1
+      \default 0.01
+  N15,\field Initial Volumetric Moisture Content of the Soil Layer
+      \type real
+      \minimum> 0.05
+      \maximum  0.5
+      \default 0.1
+  A4; \field Moisture Diffusion Calculation Method
+      \note Advanced calculation requires increased number of timesteps (recommended >20).
+      \type choice
+      \key Simple
+      \key Advanced
+      \default Advanced
+
+WindowMaterial:SimpleGlazingSystem,
+       \min-fields 3
+       \memo Alternate method of describing windows
+       \memo This window material object is used to define an entire glazing system
+       \memo using simple performance parameters.
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+       \reference GlazingMaterialName
+  N1 , \field U-Factor
+       \required-field
+       \note Enter U-Factor including film coefficients
+       \units W/m2-K
+       \minimum> 0
+  N2 , \field Solar Heat Gain Coefficient
+       \required-field
+       \note SHGC at Normal Incidence
+       \minimum> 0
+       \maximum< 1
+  N3 ; \field Visible Transmittance
+       \note VT at Normal Incidence
+       \note optional
+       \minimum> 0
+       \maximum< 1
+
+WindowMaterial:Glazing,
+    \min-fields 14
+    \memo Glass material properties for Windows or Glass Doors
+    \memo Transmittance/Reflectance input method.
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+       \reference GlazingMaterialName
+       \reference CFSGlazingName
+  A2 , \field Optical Data Type
+       \required-field
+       \type choice
+       \key SpectralAverage
+       \key Spectral
+       \key BSDF
+       \key SpectralAndAngle
+  A3 , \field Window Glass Spectral Data Set Name
+       \note Used only when Optical Data Type = Spectral
+       \type object-list
+       \object-list SpectralDataSets
+  N1 , \field Thickness
+       \required-field
+       \units m
+       \type real
+       \minimum> 0.0
+       \ip-units in
+  N2 , \field Solar Transmittance at Normal Incidence
+       \note Used only when Optical Data Type = SpectralAverage
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+  N3 , \field Front Side Solar Reflectance at Normal Incidence
+       \note Used only when Optical Data Type = SpectralAverage
+       \note Front Side is side closest to outdoor air
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+  N4 , \field Back Side Solar Reflectance at Normal Incidence
+       \note Used only when Optical Data Type = SpectralAverage
+       \note Back Side is side closest to zone air
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+  N5 , \field Visible Transmittance at Normal Incidence
+       \note Used only when Optical Data Type = SpectralAverage
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+  N6 , \field Front Side Visible Reflectance at Normal Incidence
+       \note Used only when Optical Data Type = SpectralAverage
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+  N7 , \field Back Side Visible Reflectance at Normal Incidence
+       \note Used only when Optical Data Type = SpectralAverage
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+  N8 , \field Infrared Transmittance at Normal Incidence
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+       \default 0.0
+  N9 , \field Front Side Infrared Hemispherical Emissivity
+       \type real
+       \minimum> 0.0
+       \maximum< 1.0
+       \default 0.84
+  N10, \field Back Side Infrared Hemispherical Emissivity
+       \type real
+       \minimum> 0.0
+       \maximum< 1.0
+       \default 0.84
+  N11, \field Conductivity
+       \units W/m-K
+       \type real
+       \minimum> 0.0
+       \default 0.9
+  N12, \field Dirt Correction Factor for Solar and Visible Transmittance
+       \type real
+       \minimum> 0.0
+       \maximum 1.0
+       \default 1.0
+  A4,  \field Solar Diffusing
+       \type choice
+       \key No
+       \key Yes
+       \default No
+  N13, \field Young's modulus
+       \note coefficient used for deflection calculations. Used only with complex
+       \note fenestration when deflection model is set to TemperatureAndPressureInput
+       \units Pa
+       \type real
+       \minimum> 0.0
+       \default 7.2e10
+  N14, \field Poisson's ratio
+       \note coefficient used for deflection calculations. Used only with complex
+       \note fenestration when deflection model is set to TemperatureAndPressureInput
+       \type real
+       \minimum>  0.0
+       \maximum<  1.0
+       \default 0.22
+  A5 , \field Window Glass Spectral and Incident Angle Transmittance Data Set Table Name
+       \note Used only when Optical Data Type = SpectralAndAngle
+       \type object-list
+       \object-list BivariateFunctions
+  A6 , \field Window Glass Spectral and Incident Angle Front Reflectance Data Set Table Name
+       \note Used only when Optical Data Type = SpectralAndAngle
+       \type object-list
+       \object-list BivariateFunctions
+  A7 ; \field Window Glass Spectral and Incident Angle Back Reflectance Data Set Table Name
+       \note Used only when Optical Data Type = SpectralAndAngle
+       \type object-list
+       \object-list BivariateFunctions
+
+WindowMaterial:GlazingGroup:Thermochromic,
+    \min-fields 3
+    \extensible:2 - repeat last two fields remembering to remove ; from "inner" fields.
+    \memo thermochromic glass at different temperatures
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference MaterialName
+       \reference GlazingMaterialName
+  N1 , \field Optical Data Temperature 1
+       \begin-extensible
+       \required-field
+       \units C
+       \ip-units F
+       \type real
+  A2 , \field Window Material Glazing Name 1
+       \required-field
+       \type object-list
+       \object-list GlazingMaterialName
+  N2 , \field Optical Data Temperature 2
+       \units C
+       \ip-units F
+       \type real
+  A3 , \field Window Material Glazing Name 2
+       \type object-list
+       \object-list GlazingMaterialName
+  N3 , \field Optical Data Temperature 3
+       \units C
+       \ip-units F
+       \type real
+  A4 , \field Window Material Glazing Name 3
+       \type object-list
+       \object-list GlazingMaterialName
+  N4 , \field Optical Data Temperature 4
+       \units C
+       \ip-units F
+       \type real
+  A5 , \field Window Material Glazing Name 4
+       \type object-list
+       \object-list GlazingMaterialName
+  N5 , \field Optical Data Temperature 5
+       \units C
+       \ip-units F
+       \type real
+  A6 , \field Window Material Glazing Name 5
+       \type object-list
+       \object-list GlazingMaterialName
+  N6 , \field Optical Data Temperature 6
+       \units C
+       \ip-units F
+       \type real
+  A7 , \field Window Material Glazing Name 6
+       \type object-list
+       \object-list GlazingMaterialName
+  N7 , \field Optical Data Temperature 7
+       \units C
+       \ip-units F
+       \type real
+  A8 , \field Window Material Glazing Name 7
+       \type object-list
+       \object-list GlazingMaterialName
+  N8 , \field Optical Data Temperature 8
+       \units C
+       \ip-units F
+       \type real
+  A9 , \field Window Material Glazing Name 8
+       \type object-list
+       \object-list GlazingMaterialName
+  N9 , \field Optical Data Temperature 9
+       \units C
+       \ip-units F
+       \type real
+  A10, \field Window Material Glazing Name 9
+       \type object-list
+       \object-list GlazingMaterialName
+  N10, \field Optical Data Temperature 10
+       \units C
+       \ip-units F
+       \type real
+  A11, \field Window Material Glazing Name 10
+       \type object-list
+       \object-list GlazingMaterialName
+  N11, \field Optical Data Temperature 11
+       \units C
+       \ip-units F
+       \type real
+  A12, \field Window Material Glazing Name 11
+       \type object-list
+       \object-list GlazingMaterialName
+  N12, \field Optical Data Temperature 12
+       \units C
+       \ip-units F
+       \type real
+  A13, \field Window Material Glazing Name 12
+       \type object-list
+       \object-list GlazingMaterialName
+  N13, \field Optical Data Temperature 13
+       \units C
+       \ip-units F
+       \type real
+  A14, \field Window Material Glazing Name 13
+       \type object-list
+       \object-list GlazingMaterialName
+  N14, \field Optical Data Temperature 14
+       \units C
+       \ip-units F
+       \type real
+  A15, \field Window Material Glazing Name 14
+       \type object-list
+       \object-list GlazingMaterialName
+  N15, \field Optical Data Temperature 15
+       \units C
+       \ip-units F
+       \type real
+  A16, \field Window Material Glazing Name 15
+       \type object-list
+       \object-list GlazingMaterialName
+  N16, \field Optical Data Temperature 16
+       \units C
+       \ip-units F
+       \type real
+  A17, \field Window Material Glazing Name 16
+       \type object-list
+       \object-list GlazingMaterialName
+  N17, \field Optical Data Temperature 17
+       \units C
+       \ip-units F
+       \type real
+  A18, \field Window Material Glazing Name 17
+       \type object-list
+       \object-list GlazingMaterialName
+  N18, \field Optical Data Temperature 18
+       \units C
+       \ip-units F
+       \type real
+  A19, \field Window Material Glazing Name 18
+       \type object-list
+       \object-list GlazingMaterialName
+  N19, \field Optical Data Temperature 19
+       \units C
+       \ip-units F
+       \type real
+  A20, \field Window Material Glazing Name 19
+       \type object-list
+       \object-list GlazingMaterialName
+  N20, \field Optical Data Temperature 20
+       \units C
+       \ip-units F
+       \type real
+  A21, \field Window Material Glazing Name 20
+       \type object-list
+       \object-list GlazingMaterialName
+  N21, \field Optical Data Temperature 21
+       \units C
+       \ip-units F
+       \type real
+  A22, \field Window Material Glazing Name 21
+       \type object-list
+       \object-list GlazingMaterialName
+  N22, \field Optical Data Temperature 22
+       \units C
+       \ip-units F
+       \type real
+  A23, \field Window Material Glazing Name 22
+       \type object-list
+       \object-list GlazingMaterialName
+  N23, \field Optical Data Temperature 23
+       \units C
+       \ip-units F
+       \type real
+  A24, \field Window Material Glazing Name 23
+       \type object-list
+       \object-list GlazingMaterialName
+  N24, \field Optical Data Temperature 24
+       \units C
+       \ip-units F
+       \type real
+  A25, \field Window Material Glazing Name 24
+       \type object-list
+       \object-list GlazingMaterialName
+  N25, \field Optical Data Temperature 25
+       \units C
+       \ip-units F
+       \type real
+  A26, \field Window Material Glazing Name 25
+       \type object-list
+       \object-list GlazingMaterialName
+  N26, \field Optical Data Temperature 26
+       \units C
+       \ip-units F
+       \type real
+  A27, \field Window Material Glazing Name 26
+       \type object-list
+       \object-list GlazingMaterialName
+  N27, \field Optical Data Temperature 27
+       \units C
+       \ip-units F
+       \type real
+  A28, \field Window Material Glazing Name 27
+       \type object-list
+       \object-list GlazingMaterialName
+  N28, \field Optical Data Temperature 28
+       \units C
+       \ip-units F
+       \type real
+  A29, \field Window Material Glazing Name 28
+       \type object-list
+       \object-list GlazingMaterialName
+  N29, \field Optical Data Temperature 29
+       \units C
+       \ip-units F
+       \type real
+  A30, \field Window Material Glazing Name 29
+       \type object-list
+       \object-list GlazingMaterialName
+  N30, \field Optical Data Temperature 30
+       \units C
+       \ip-units F
+       \type real
+  A31, \field Window Material Glazing Name 30
+       \type object-list
+       \object-list GlazingMaterialName
+  N31, \field Optical Data Temperature 31
+       \units C
+       \ip-units F
+       \type real
+  A32, \field Window Material Glazing Name 31
+       \type object-list
+       \object-list GlazingMaterialName
+  N32, \field Optical Data Temperature 32
+       \units C
+       \ip-units F
+       \type real
+  A33, \field Window Material Glazing Name 32
+       \type object-list
+       \object-list GlazingMaterialName
+  N33, \field Optical Data Temperature 33
+       \units C
+       \ip-units F
+       \type real
+  A34, \field Window Material Glazing Name 33
+       \type object-list
+       \object-list GlazingMaterialName
+  N34, \field Optical Data Temperature 34
+       \units C
+       \ip-units F
+       \type real
+  A35, \field Window Material Glazing Name 34
+       \type object-list
+       \object-list GlazingMaterialName
+  N35, \field Optical Data Temperature 35
+       \units C
+       \ip-units F
+       \type real
+  A36, \field Window Material Glazing Name 35
+       \type object-list
+       \object-list GlazingMaterialName
+  N36, \field Optical Data Temperature 36
+       \units C
+       \ip-units F
+       \type real
+  A37, \field Window Material Glazing Name 36
+       \type object-list
+       \object-list GlazingMaterialName
+  N37, \field Optical Data Temperature 37
+       \units C
+       \ip-units F
+       \type real
+  A38, \field Window Material Glazing Name 37
+       \type object-list
+       \object-list GlazingMaterialName
+  N38, \field Optical Data Temperature 38
+       \units C
+       \ip-units F
+       \type real
+  A39, \field Window Material Glazing Name 38
+       \type object-list
+       \object-list GlazingMaterialName
+  N39, \field Optical Data Temperature 39
+       \units C
+       \ip-units F
+       \type real
+  A40, \field Window Material Glazing Name 39
+       \type object-list
+       \object-list GlazingMaterialName
+  N40, \field Optical Data Temperature 40
+       \units C
+       \ip-units F
+       \type real
+  A41, \field Window Material Glazing Name 40
+       \type object-list
+       \object-list GlazingMaterialName
+  N41, \field Optical Data Temperature 41
+       \units C
+       \ip-units F
+       \type real
+  A42, \field Window Material Glazing Name 41
+       \type object-list
+       \object-list GlazingMaterialName
+  N42, \field Optical Data Temperature 42
+       \units C
+       \ip-units F
+       \type real
+  A43, \field Window Material Glazing Name 42
+       \type object-list
+       \object-list GlazingMaterialName
+  N43, \field Optical Data Temperature 43
+       \units C
+       \ip-units F
+       \type real
+  A44, \field Window Material Glazing Name 43
+       \type object-list
+       \object-list GlazingMaterialName
+  N44, \field Optical Data Temperature 44
+       \units C
+       \ip-units F
+       \type real
+  A45, \field Window Material Glazing Name 44
+       \type object-list
+       \object-list GlazingMaterialName
+  N45, \field Optical Data Temperature 45
+       \units C
+       \ip-units F
+       \type real
+  A46; \field Window Material Glazing Name 45
+       \type object-list
+       \object-list GlazingMaterialName

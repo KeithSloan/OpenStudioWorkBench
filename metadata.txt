@@ -1,1 +1,1 @@
-pylibs=lxml
+pylibs=lxml,eppy,xgbxml

@@ -6,4 +6,4 @@
 	url = https://github.com/MGVisschers/IFC-to-gbXML-converter.git
 [submodule "freecad/gbXML2IDF"]
 	path = freecad/gbXML2IDF
-	url = https://github.com/Udaragithub/gbXML2IDF
+	url = https://github.com/KeithSloan/gbXML2IDF.git

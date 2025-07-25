@@ -1,0 +1,48 @@
+import openstudio
+
+def create_openstudio_model_from_gbxml(zones_data, output_dir="output"):
+    model = openstudio.model.Model()
+
+    # Set up default construction set (optional)
+    default_construction_set = openstudio.model.DefaultConstructionSet(model)
+    model.getBuilding().setDefaultConstructionSet(default_construction_set)
+
+    for zone_data in zones_data:
+        # Create a thermal zone
+        thermal_zone = openstudio.model.ThermalZone(model)
+        thermal_zone.setName(zone_data["name"])
+
+        # Create a space assigned to the zone
+        space = openstudio.model.Space(model)
+        space.setThermalZone(thermal_zone)
+        space.setName(f"{zone_data['name']}_space")
+
+        for surface_data in zone_data["surfaces"]:
+            vertices = surface_data["vertices"]
+
+            pts = openstudio.Point3dVector()
+            for v in vertices:
+                x, y, z = v
+                pts.append(openstudio.Point3d(x, y, z))  # convert to meters if needed
+
+            # Create the surface
+            surface = openstudio.model.Surface(pts, model)
+            surface.setSurfaceType(surface_data["type"])
+            surface.setOutsideBoundaryCondition(surface_data["outside_boundary_condition"])
+            surface.setSpace(space)
+
+    # Save OSM
+    osm_path = openstudio.path(f"{output_dir}/model.osm")
+    model.save(osm_path, True)
+    print(f"✅ OSM saved to: {osm_path}")
+
+    # Forward translate to IDF
+    translator = openstudio.energyplus.ForwardTranslator()
+    idf = translator.translateModel(model)
+
+    idf_path = openstudio.path(f"{output_dir}/model.idf")
+    idf.save(idf_path, True)
+    print(f"✅ IDF saved to: {idf_path}")
+
+    return model
+

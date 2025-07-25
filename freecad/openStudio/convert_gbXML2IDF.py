@@ -71,7 +71,7 @@ def convertGbXML2IDF(docName, fileName ): #importFlag, fileName):
     # Debugging
     # from sys import breakpointhook
 
-    from freecad.gbXML2IDF.gbxmlconvertor import convert
+    from freecad.gbXML2IDF.gbxmlconvertor import convertor
 	
     print(f"Convert GbXml file path {fileName}")
     #gbXmlxml.processGbXml(docName, fileName)

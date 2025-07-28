@@ -67,11 +67,35 @@ def insert(filename, docName):
         convertGbXML2IDF(doc, filename)
 
 
-def convertGbXML2IDF(docName, fileName ): #importFlag, fileName):
+def convertGbXML2IDF(docName, gbXMLfile ): #importFlag, fileName):
     # Debugging
     # from sys import breakpointhook
 
     from freecad.gbXML2IDF.gbxmlconvertor import convertor
 	
-    print(f"Convert GbXml file path {fileName}")
-    #gbXmlxml.processGbXml(docName, fileName)
+    print(f"Convert gbXML file path {gbXMLfile}")
+
+    # create workdir
+    import tempfile, os
+
+    workdir = tempfile.TemporaryDirectory()
+    print(workdir.name)
+    
+    # convertor(workdir,iddfile,gbxmlfile,idfsch,idftemp):
+    thisPath = os.path.dirname(os.path.realpath(__file__))
+    print(f"This Path {thisPath}")
+    from pathlib import Path
+
+    freecadPath = Path(thisPath).parents[0]
+    print(f"freecad path {freecadPath}")
+    gbXML2IDF_work = os.path.join(freecadPath,"gbXML2IDF_work")
+    print(f"gbXML2IDF_work Path {gbXML2IDF_work}")
+    idfschedule = os.path.join(gbXML2IDF_work, "IDF_Schedules.idf")
+    print(f"IDF_Schedule Path {idfschedule}")
+    idftemplate = os.path.join(gbXML2IDF_work, "IDF_template.idf")
+    print(f"idfTemplate Path {idftemplate}")
+    iddfile = os.path.join(gbXML2IDF_work, "eplusrevit.idf")
+    print(f"Revit Path {iddfile}")
+   
+    convertor(workdir,iddfile, gbXMLfile, idfschedule, idftemplate)
+

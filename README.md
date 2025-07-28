@@ -26,6 +26,11 @@ Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_mo
 Investingating creating the data as per OpenStudio's Skectcher plug
 and gbxml.
 
+## If you have previously installed vi the Addon Manager
+
+If you have previously installed vi the Addon Manager, you need to remove the OpenDesign directory from FreeCAD's Mod drectory
+as FreeCAD maybe picking up OpenStudio options from there.
+
 ## FreeCAD setting
   Set the FreeCAD Preference for Document - Allow duplicate object labels in one document
 

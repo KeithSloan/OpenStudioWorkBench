@@ -12,7 +12,7 @@ Rename to BIM or BEM workbench ?
 
 Due to an error by the developer in the original choice of tab name installation via the 
 Addon Manager and using the standard manual installation results in the workbench being installed in different locations. If you have an installed version that is less than 0.2
-then you need to unstall and then re install the workbench once the change in tab name has
+then you need to uninstall and then re install the workbench once the change in tab name has
 been merged into the main FreeCAD.
 
 ## Installation

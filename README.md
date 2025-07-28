@@ -9,7 +9,7 @@ Rename to BIM or BEM workbench ?
 
 # This workbench uses Submodules
 
-As this module uses submodules it cannot be installed by the Addon Manager
+As this module uses submodules it cannot currently be installed by the Addon Manager
 
 ## Installation
 

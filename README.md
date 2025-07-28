@@ -7,25 +7,18 @@ for OpenStudio & EnergyPlus
 
 Rename to BIM or BEM workbench ?
 
+# This workbench uses Submodules
 
-# IMPORTANT 
-
-Due to an error by the developer in the original choice of tab name installation via the 
-Addon Manager and using the standard manual installation results in the workbench being installed in different locations. If you have an installed version that is less than 0.2
-then you need to uninstall and then re install the workbench once the change in tab name has
-been merged into the main FreeCAD.
+As this module uses submodules it cannot be installed by the Addon Manager
 
 ## Installation
-
-It can be installed via the [Addon Manager](https://github.com/FreeCAD/FreeCAD-addons) (from Tools menu)
-
-
-## Alternative Installation
 
 Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_more_workbenches
 
    * Change to FreeCAD Mod directory
    * git clone https://github.com/KeithSloan/OpenStudioWorkBench.git
+   * git submodule init 
+   * git submodule update
 
 * Start/Restart FreeCAD
 

@@ -17,6 +17,7 @@ Clone into FreeCAD's Mod directory see https://wiki.freecadweb.org/Installing_mo
 
    * Change to FreeCAD Mod directory
    * git clone https://github.com/KeithSloan/OpenStudioWorkBench.git
+   * cd OpenStudioWorkBench
    * git submodule init 
    * git submodule update
 

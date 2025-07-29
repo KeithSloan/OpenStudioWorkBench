@@ -236,10 +236,10 @@ class MapMaterialsFeature:
 		return {
         	"Pixmap": "MapMaterials",
         	"MenuText": QtCore.QT_TRANSLATE_NOOP(
-            	"MapMaterials", "Map gbXML Materials to IDF materials"
+            	"MapMaterials", "Map gbXML Materials to OSM materials"
             ),
         	"ToolTip": QtCore.QT_TRANSLATE_NOOP(
-				"MapMaterials", "Map gbXML Materials to IDF materials"
+				"MapMaterials", "Map gbXML Materials to OSM materials"
             ),
         }
 

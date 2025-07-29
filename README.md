@@ -28,7 +28,7 @@ and gbxml.
 
 ## If you have previously installed vi the Addon Manager
 
-If you have previously installed vi the Addon Manager, you need to remove the OpenDesign directory from FreeCAD's Mod drectory
+If you have previously installed via the Addon Manager, you need to remove the OpenDesign directory from FreeCAD's Mod drectory
 as FreeCAD maybe picking up OpenStudio options from there.
 
 ## FreeCAD setting

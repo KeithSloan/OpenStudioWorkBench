@@ -26,10 +26,10 @@ __title__ = "FreeCAD GBxml Workbench - GUI Commands"
 __author__ = "Keith Sloan"
 __url__ = ["http://www.freecadweb.org"]
 
-from PySide import QtGui, QtCore
-from PySide.QtCore import Qt
+from PySide import QtCore
 
-import FreeCAD, FreeCADGui
+import FreeCAD
+import FreeCADGui
 
 class AddGBxmlFeature:
 	def Activated(self):
@@ -97,7 +97,7 @@ class BuildGBxmlFeature:
 
 class SyncGBxmlFeature:
 	def Activated(self):
-		print(f"Sync activated")
+		print("Sync activated")
 
 	def IsActive(self):
 		if FreeCAD.ActiveDocument is None:
@@ -115,30 +115,6 @@ class SyncGBxmlFeature:
 				"SyncGBxmlFeature", "Sync gbxml Properties"
 			),
 		}
-
-class CreateIFcFeature:
-	def Activated(self):
-		from freecad.openStudio.createIFcClass import CreateIFCclass
-		print(f"Create IFc Class")
-		self.createIfc = CreateIFCclass()
-		self.createIfc.processSelection()
-		
-	def IsActive(self):
-		if FreeCAD.ActiveDocument is None:
-			return False
-		else:
-			return True
-			
-	def GetResources(self):
-		return {
-            "Pixmap": "CreateIFcFeature",
-            "MenuText": QtCore.QT_TRANSLATE_NOOP(
-                "CreateIFcFeature", "Create IFc Feature"
-                ),
-            "ToolTip": QtCore.QT_TRANSLATE_NOOP(
-                "CreateIFcFeature", "Create IFc Feature"
-                ),
-            }
 
 class ExportGeometryFeature:
 	def Activated(self):
@@ -240,9 +216,8 @@ class MapMaterialsFeature:
             ),
         	"ToolTip": QtCore.QT_TRANSLATE_NOOP(
 				"MapMaterials", "Map gbXML Materials to OSM materials"
-            ),
-        }
-
+			),
+		}
 
 class MapSpaceFeature:
 	def Activated(self):
@@ -435,6 +410,6 @@ FreeCADGui.addCommand("EditScheduleCmd", EditScheduleFeature())
 FreeCADGui.addCommand("EditIDFSpaceCmd", EditIDFSpaceFeature())
 FreeCADGui.addCommand("addGBxmlCmd", AddGBxmlFeature())
 FreeCADGui.addCommand("buildGBxmlCmd", BuildGBxmlFeature())
-FreeCADGui.addCommand("createIFcCmd", CreateIFcFeature())
+FreeCADGui.addCommand("createIFcCmd", CreateIFCfrom_gbXMLFeature())
 FreeCADGui.addCommand("syncGBxmlCmd", SyncGBxmlFeature())
 FreeCADGui.addCommand("exportGeometry", ExportGeometryFeature())

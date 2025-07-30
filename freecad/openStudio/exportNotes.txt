@@ -1,0 +1,11 @@
+export_example.py
+
+This Python script shows how to:
+
+Load your standard material library (StandardMaterials.osm)
+Accept a material mapping dictionary
+Build an OpenStudio model with standard and custom materials
+Export to:
+.osm (OpenStudio format)
+.idf (EnergyPlus format)
+

@@ -73,9 +73,6 @@ def lookupMateria(col):
 
     #return mat
 
-
-
-
 class Material(QtGui.QLineEdit):
 
     def __init__(self, name):
@@ -274,13 +271,13 @@ class MaterialMapDialog(QtGui.QDialog):
 
     def onLoad(self):
         import csv
-        from .importGDML import processXML, joinDir
+        import os 
         print('onLoad')
         #processXML(FreeCAD.ActiveDocument, joinDir(
         #    'Resources/MapMaterials.xml'))
         # reset mapList
         self.mapList = MaterialMapList(self.matList)
-        with open(joinDir('Resources/ColorDict.csv'), 'r') as file:
+        with open(os.path.join('Resources/ColorDict.csv'), 'r') as file:
             reader = csv.reader(file)
             for i, row in enumerate(reader):
                 colhex = row[0]
@@ -295,15 +292,16 @@ class MaterialMapDialog(QtGui.QDialog):
                 self.mapList.setMaterial(i, material)
 
     def onSave(self):
+        import os 
         print('onSave')
         # Save materials
-        from .exportGDML import exportMaterials
-        from .init_gui import joinDir
-        matGrp = FreeCAD.ActiveDocument.getObject('Materials')
-        if matGrp is not None:
-            exportMaterials(matGrp, joinDir('Resources/MapMaterials.xml'))
+        #from .exportGDML import exportMaterials
+        
+        # matGrp = FreeCAD.ActiveDocument.getObject('Materials')
+        #if matGrp is not None:
+        #    exportMaterials(matGrp, joinDir('Resources/MapMaterials.xml'))
         # Save Color Dictionary
-        f = open(joinDir('Resources/ColorDict.csv'), 'w')
+        f = open(os.path.join('Resources/ColorDict.csv'), 'w')
         for key, value in self.colorDict.items():
             print(f'key {key} value {value}')
             print(self.mapList.getMaterial(value))
@@ -316,39 +314,39 @@ class MaterialMapDialog(QtGui.QDialog):
         print('Update Layout')
         self.coloursLayout.update()
 
-    def getGDMLMaterials(self):
-        print('getGDMLMaterials')
-        matList = []
-        doc = FreeCAD.activeDocument()
-        try:
-            materials = doc.Materials
-            geant4 = doc.Geant4
-            g4Mats = doc.getObject('G4Materials')
+    #def getGDMLMaterials(self):
+    #    print('getGDMLMaterials')
+    #    matList = []
+    #    doc = FreeCAD.activeDocument()
+    #    try:
+    #        materials = doc.Materials
+    #        geant4 = doc.Geant4
+    #        g4Mats = doc.getObject('G4Materials')
 
-        except:
-            from .importGDML import processXML
-            from .init_gui import joinDir
+    #   except:
+    #        from .importGDML import processXML
+    #        from .init_gui import joinDir
 
-            print('Load Geant4 Materials XML')
-            processXML(doc, joinDir("Resources/Geant4Materials.xml"))
-            materials = doc.Materials
-        try:
-            if materials is not None:
-                for m in materials.OutList:
-                    matList.append(m.Label)
-                # print(matList)
-        except:
-            pass
+    #        print('Load Geant4 Materials XML')
+    #        processXML(doc, joinDir("Resources/Geant4Materials.xml"))
+    #        materials = doc.Materials
+    #    try:
+    #        if materials is not None:
+    #            for m in materials.OutList:
+    #               matList.append(m.Label)
+    #            # print(matList)
+    #    except:
+    #        pass
 
-        try:
-            if g4Mats is not None:
-                for m in g4Mats.OutList:
-                    matList.append(m.Label)
-                # print(matList)
-        except:
-            pass
+    #   try:
+    #        if g4Mats is not None:
+    #            for m in g4Mats.OutList:
+    #                matList.append(m.Label)
+    #            # print(matList)
+    #    except:
+    #        pass
 
-        return matList
+    #   return matList
 
 
 # Class definitions

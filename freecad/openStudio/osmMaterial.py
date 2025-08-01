@@ -1,7 +1,24 @@
 # libpath ~/OpenAStudio/Materials.osm
+import openstudio
+
+def getLibPath():
+    import os
+    import FreeCAD
+    libPath  = FreeCAD.ParamGet(\
+                "User parameter:BaseApp/Preferences/Mod/OpenStudio").GetString('LibPath')
+    print(f"Path to OpenStudio LibPath {libPath}")
+    if libPath != "":
+        # check file exists
+        if os.path.isdir(libPath) is False:
+            print(f"libPath {libPath} does not exist")
+        else:
+            return libPath
+    
+def printOSMmaterials():
+    getLibPath
+    print(get_standard_material_names)
 
 def get_standard_material_names(lib_path):
-    import openstudio
 
     translator = openstudio.osversion.VersionTranslator()
     path = openstudio.path(lib_path)

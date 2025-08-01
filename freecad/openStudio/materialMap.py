@@ -45,6 +45,8 @@ if FreeCADGui:
             return QtGui.QApplication.translate(context, text, None)
 
 
+
+
 def resetMaterialMap():
     print('Reset Material Map')
     #global workBenchColourMap
@@ -156,6 +158,9 @@ class MaterialMapDialog(QtGui.QDialog):
         self.initUI()
 
     def initUI(self):
+        from freecad.openStudio.osmMaterial import printOSMmaterials
+        printOSMmaterials()
+        
         self.result = userCancelled
         # create our window
         # define window           xLoc,yLoc,xDim,yDim

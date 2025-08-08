@@ -485,10 +485,12 @@ class LXMLclass():
 	
 	def processPolyLoopObj(self, polyLoopObj, element, elemName):
 		print(f"Process PolyLoopObj : {polyLoopObj.Label} elemName {elemName}")
+		print(f"PolyLoopObj Proxy {polyLoopObj.Proxy}")
 		for cn, elem in enumerate(element.iterchildren()):
 			#elemName = self.cleanTag(elem)
 			#print(f"{elemName}")
 			self.processCartesianPoint(polyLoopObj, elem)
+		print(dir(polyLoopObj))
 		polyLoopObj.Proxy.addCartesianPointCount(polyLoopObj, cn+1)
 		return True
 
@@ -504,7 +506,10 @@ class LXMLclass():
 		print(f"Add Cartesian {vector}")
 		# # polyLoop.Proxy.PointsList = [FreeCAD.Vector(11,12,13)]
 		# Feature Python Methods are in Proxy, Variables are Not.
+		print(dir(polyLoop))
+		print(dir(polyLoop.Proxy))
 		polyLoop.Proxy.addCartesianPoint(polyLoop, vector)
+		#polyLoop.Proxy.addCartesianPoint(polyLoop, vector)
 		#print(f"Points List {polyLoop.PointsList}")
 		return True
 
@@ -524,6 +529,8 @@ class LXMLclass():
 			print(f"Plannar Element {elemName}")
 			if elemName == "PolyLoop":
 				polyLoopObj = self.gbXrb.createPolyLoop(planarObj)
+				# Add polyLoop to Parent Group
+				parent.Group.append(polyLoopObj)
 				#print(f"PolyLoop {planarObj}")
 				self.processPolyLoopObj(polyLoopObj, elem, elemName)
 			else:

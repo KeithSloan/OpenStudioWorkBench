@@ -20,8 +20,10 @@
 # *   USA                                                                   *
 # *                                                                         *
 # *   Acknowledgements :                                                    *
-# *                                                                         
-# *   Process Document and where                                                                   *
+# *                                                                         *
+# *   Takes as input a Volume Name, GDML file  and outputs                  *
+# *             a directory structure starting at the specified Volume Name *
+# *                                                                         *
 # *                                                                         *
 # *                                                                         *
 # *                                                                         *
@@ -37,58 +39,38 @@ if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
 
-from freecad.openStudio.gbxml_lxml import gbxml_lxml
-#from freecad.openStudio.docTree_gbxml import buildDocTree
+class gbxml_lxml():
+    from lxml import etree as ET
+    global ET                # Is there a better way ???
+    import os
 
-global gbXML
-gbXML = gbxml_lxml()
+    def __init__(self):
+        super().__init__()
+        self.gbXML = self.init_gbXML()
 
-####
-#    gbxml = ET.Element(
-#        "gbXML",
-#         attrib={
-#
-#    <?xml version="1.0"?>
-#<gbXML useSIUnitsForResults="false" temperatureUnit="C" lengthUnit="Feet" 
-#areaUnit="SquareFeet" volumeUnit="CubicFeet" version="0.37" xmlns="http://www.gbxml.org/schema">
-####
+    def setFileDetails(self, path):
+        self.filepath = path
 
-
-#def processExportActiveDocument(filename):
-#    import FreeCAD
-#
-#    for obj in FreeCAD.ActiveDocument.Objects:
-#        print(obj.Label)
-#        if hasattr(obj, "Valueset"):
-#            print("Value Set")
-
-def exportObj(gbXML, obj):
-    if hasattr(obj, "ValueSet"):
-        #print(f"Object {obj.Label} Value Set")
-        if obj.ValueSet :
-            print(f"Object : {obj.Label} - Values Set")
-
-    # Now process Group
-    if hasattr(obj,"Group"):
-        for ob in obj.Group:
-            print(f"Process Group {ob.Label}")
-            exportObj(gbXML, ob)
-
-def exportSelection(filename, obj):  
-    print(obj.Label)
-    #gbXML = gbXML_lxml()
-    exportObj(gbXML, obj)
-    #gbXML.writeElementTree(filename, gbXML, type, elem, ext="xml")
-    gbXML.writeElementTree(filename)
+    def init_gbXML(self):
+        NS = "http://www.w3.org/2001/XMLSchema-instance"                       
+        location_attribute = "{%s}noNamespaceSchemaLocation" % NS              
+        # For some reason on my system around Sep 30, 2024, the following url is unreachable,       
+        # I think because http:// is no longer accepted, so use https:// instead. DID NOT WORK!,
+        # although wget of url works. I don't know what's going on
+        gbXML = ET.Element(
+            "gbXML",
+                attrib={
+                    location_attribute: "https://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" 
+                },
+            )
+        return gbXML 
 
 
-def export(exportList, filename):
+    #def writeElementTree(self, path, sname, type, elem, ext="xml"):
 
-    "called when FreeCAD exports a file"
-    # from freecad.openStudio import gbxml_lxml
-    # process Objects
-    print("\nStart Export gbxml 0.1\n")
-    print(f"Open Output File : {filename} ExportList {exportList}")
-    #gbXML.setFileDetails(filename)
-    exportSelection(filename, exportList[0])
-    #processExportActiveDocument(filename)
+    def writeElementTree(self, pathname, ext="xml"):
+        #fpath = os.path.join(path, sname+'_'+type)
+        print(f"writing file : {pathname}")
+        #ET.ElementTree(elem).write(fpath+'.'+ext)
+        #ET.ElementTree(self.gbXML).write(fpath+'.'+ext)
+        ET.ElementTree(self.gbXML).write(pathname)

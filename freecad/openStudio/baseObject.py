@@ -37,9 +37,14 @@ class BaseClass():
 	    obj.Proxy.Type = objType
 
     def addBaseProperties(self):
-        self.obj.addProperty("Part::PropertyPartShape", "PartShape", "Base", "PartShape")
-        self.obj.PartShape = Part.Shape()               # Empty Shape
-        self.obj.setPropertyStatus('PartShape', '-Hidden')
+        #
+        # NOTE !!!
+        #
+        # Shape as property has problems saving as JSON so use Part::PythonFeature
+        #
+        #self.obj.addProperty("Part::PropertyPartShape", "PartShape", "Base", "PartShape")
+        #self.obj.PartShape = Part.Shape()               # Empty Shape
+        #self.obj.setPropertyStatus('PartShape', '-Hidden')
         self.obj.addProperty("App::PropertyBool", "CalcShape", "Base", "Compute FC Shape")
         self.obj.addProperty("App::PropertyEnumeration", "ShapeValid", "Base", "ShapeValid")
         self.obj.ShapeValid = ["UnSet", "Valid", "InValid"]
@@ -239,3 +244,9 @@ class ViewProvider():
     #           Since no data were serialized nothing needs to be done here."""
     #    return None
 
+class ViewProviderExtension():
+    def __init__(self,vobj):
+        print(f"ViewProviderExtension {vobj}")
+        vobj.addExtension("Gui::ViewProviderGroupExtensionPython")
+        #vobj.Proxy = self
+	

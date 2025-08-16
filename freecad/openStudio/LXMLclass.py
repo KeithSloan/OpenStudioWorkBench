@@ -324,7 +324,8 @@ class LXMLclass():
 		if hasattr(parent, "Group"):
 			for obj in parent.Group:
 				if '_' not in obj.Label:
-					if name in ["ShellGeometry", "PlanarGeometry"]:		# Label will be ShellGeometry00x or PlanarGeometry00x
+					# Label will be ShellGeometry00x or PlanarGeometry00x
+					if name in ["ShellGeometry", "PlanarGeometry", "RectangularGeometry"]:
 						if obj.Label.startswith(name):
 							return obj
 					if id:		# Check whole Name
@@ -490,7 +491,10 @@ class LXMLclass():
 			#elemName = self.cleanTag(elem)
 			#print(f"{elemName}")
 			self.processCartesianPoint(polyLoopObj, elem)
-		print(dir(polyLoopObj))
+		print(f"Now add Count {cn+1}")
+		#print(dir(polyLoopObj))
+		#print(dir(polyLoopObj.Proxy))
+		#
 		polyLoopObj.Proxy.addCartesianPointCount(polyLoopObj, cn+1)
 		return True
 
@@ -506,11 +510,9 @@ class LXMLclass():
 		print(f"Add Cartesian {vector}")
 		# # polyLoop.Proxy.PointsList = [FreeCAD.Vector(11,12,13)]
 		# Feature Python Methods are in Proxy, Variables are Not.
-		print(dir(polyLoop))
-		print(dir(polyLoop.Proxy))
+		#print(dir(polyLoop))
+		#print(dir(polyLoop.Proxy))
 		polyLoop.Proxy.addCartesianPoint(polyLoop, vector)
-		#polyLoop.Proxy.addCartesianPoint(polyLoop, vector)
-		#print(f"Points List {polyLoop.PointsList}")
 		return True
 
 	def processCordinate(self, parent, element):

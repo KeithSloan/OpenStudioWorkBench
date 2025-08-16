@@ -37,11 +37,11 @@ if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
 
-from freecad.openStudio.gbxml_lxml import gbxml_lxml
+#from freecad.openStudio.gbxml_lxml import gbxml_lxml
 #from freecad.openStudio.docTree_gbxml import buildDocTree
 
-global gbXML
-gbXML = gbxml_lxml()
+#global gbXML
+#gbXML = gbxml_lxml()
 
 ####
 #    gbxml = ET.Element(
@@ -62,24 +62,38 @@ gbXML = gbxml_lxml()
 #        if hasattr(obj, "Valueset"):
 #            print("Value Set")
 
-def exportObj(gbXML, obj):
-    if hasattr(obj, "ValueSet"):
+def exportObj(exporter, elemGrp, Obj):
+    print(f"ExportObj {elemGrp} Object {Obj.Label}")
+    if hasattr(Obj, "ValueSet"):
         #print(f"Object {obj.Label} Value Set")
-        if obj.ValueSet :
-            print(f"Object : {obj.Label} - Values Set")
+        if Obj.ValueSet :
+            print(f"Object : {Obj.Label} - Values Set")
+            #for prop in Obj.PropertiesList:
+            #    group = Obj.getGroupOfProperty(prop)
+            #    if group == "gbXML":
+            #        print(f"Property {prop} is in Group {group}")
+            #        attr = str(getattr(Obj, prop))
+            #        #elemGrp.set(prop, attr)
 
-    # Now process Group
-    if hasattr(obj,"Group"):
-        for ob in obj.Group:
-            print(f"Process Group {ob.Label}")
-            exportObj(gbXML, ob)
+        # Now process Group
+        # if Obj.ValueSet : ????
+        if hasattr(Obj,"Group"):
+            print(f"Process {Obj.Label} Group ")
+            for obj in Obj.Group:
+                print(f"Process Group {obj.Label}")
+                print(f"Add SubElement {obj.Label} to {elemGrp} ")
+                # add_element(self, parent, tag, text=None, attrib=None, ns="gbxml"):
+                newElemGrp = exporter.add_element(elemGrp, obj.Label)
+                exportObj(exporter, newElemGrp, obj)
 
-def exportSelection(filename, obj):  
+def exportSelection(filename, obj):
+    from freecad.openStudio.GbxmlExporterClass import GbxmlExporter  
     print(obj.Label)
-    #gbXML = gbXML_lxml()
-    exportObj(gbXML, obj)
+    # Set gbXML structure on each export
+    exporter = GbxmlExporter()
+    exportObj(exporter, exporter.root, obj)
     #gbXML.writeElementTree(filename, gbXML, type, elem, ext="xml")
-    gbXML.writeElementTree(filename)
+    exporter.writeTree(filename)
 
 
 def export(exportList, filename):

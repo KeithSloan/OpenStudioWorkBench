@@ -168,6 +168,23 @@ class ViewProvider():
         """If a property of the handled feature has changed we have the chance to handle this here"""
         # print("updateData")
         pass
+    
+    def addCartesianPoint(self, polyLoop, vector):
+		# Need to be passed polyLoop !!! ??
+		# self will be definition - polyLoop will be instance
+        import FreeCAD
+		#print(dir(self))
+		#print(f"add Cartesian - self {self} polyLoop {polyLoop}")
+        print(f"addCartesian - Vector passed {vector}")
+		#print(f"Before Points List {polyLoop.PointsList}")
+		#print(type(polyLoop.PointsList))
+        vecList = polyLoop.PointsList
+        vecList.append(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+        polyLoop.PointsList = vecList
+
+    def addCartesianPointCount(self, polyLoop, count):
+        print(f"Add points count {polyLoop.Label} {count}")
+        polyLoop.PointsCount = count
 
     def setTransparency(self, obj, value):
         obj.ViewObject.Transparency = value
@@ -248,5 +265,6 @@ class ViewProviderExtension():
     def __init__(self,vobj):
         print(f"ViewProviderExtension {vobj}")
         vobj.addExtension("Gui::ViewProviderGroupExtensionPython")
-        #vobj.Proxy = self
+        vobj.Proxy = self
 	
+

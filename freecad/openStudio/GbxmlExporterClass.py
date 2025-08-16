@@ -42,32 +42,35 @@ if open.__module__ in ['__builtin__', 'io']:
 from lxml import etree
 
 class GbxmlExporter:
-    def __init__(self, root_tag="gbXML", nsmap=None):
+
+    from lxml import etree
+
+class GbxmlExporter:
+    def __init__(self, root_tag="gbXML", ns="http://www.gbxml.org/schema"):
         """
-        Create a new gbXML document.
-        :param root_tag: Name of the root element.
-        :param nsmap: Optional namespace mapping dictionary.
+        Create a new gbXML document with a default namespace.
         """
-        if nsmap is None:
-            nsmap = {"gbxml": "http://www.gbxml.org/schema"}
-        self.nsmap = nsmap
-        self.root = etree.Element(f"{{{nsmap['gbxml']}}}{root_tag}", nsmap=nsmap)
+        self.ns = ns
+        self.root = etree.Element(root_tag, nsmap={None: ns})
         self.tree = etree.ElementTree(self.root)
 
-    def add_element(self, parent, tag, text=None, attrib=None, ns="gbxml"):
+    def add_element(self, parent, tag, text=None, attrib=None):
         """
         Add an element to the XML.
         :param parent: Parent element (or None for root).
-        :param tag: Tag name without namespace prefix.
+        :param tag: Tag name (no namespace needed).
         :param text: Optional text value.
         :param attrib: Optional dict of attributes.
-        :param ns: Namespace prefix to use from nsmap.
         """
         if attrib is None:
             attrib = {}
-        element = etree.SubElement(parent or self.root, f"{{{self.nsmap[ns]}}}{tag}", attrib)
+
+        target_parent = parent if parent is not None else self.root
+        element = etree.SubElement(target_parent, tag, attrib)
+
         if text is not None:
             element.text = str(text)
+
         return element
 
     def add_material(self, mat_id, name, thickness=None, conductivity=None, density=None, specific_heat=None):
@@ -86,14 +89,15 @@ class GbxmlExporter:
             self.add_element(mat, "SpecificHeat", specific_heat)
         return mat
 
-    def save(self, filepath, pretty=True, xml_declaration=True, encoding="UTF-8"):
+    def writeTree(self, filepath, pretty=True, xml_declaration=True, encoding="UTF-8"):
         """
         Save the XML to file.
         """
         self.tree.write(filepath, pretty_print=pretty, xml_declaration=xml_declaration, encoding=encoding)
 
 
-###
+
+"""
 # class gbxml_lxml():
     global ET                # Is there a better way ???
 #    from lxml import etree as ET
@@ -136,4 +140,4 @@ class GbxmlExporter:
         #ET.ElementTree(self.gbXML).write(fpath+'.'+ext)
         ET.indent(self.tree, space="\t", level=0)
         self.tree.write(pathname, encoding="utf-8")
-###
+"""

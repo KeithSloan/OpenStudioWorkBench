@@ -6,9 +6,9 @@
       <StationId/>
       <Elevation/>
     </Location>
-    <Building__building_2tR_WTtCfB38Go5ngzuANm>
+    <Building>
       <Area/>
-      <Space__space_0uP3DChXvDoxp5LoFKEKB3/>
-    </Building__building_2tR_WTtCfB38Go5ngzuANm>
+      <Space/>
+    </Building>
   </Campus>
 </gbXML>

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gbXML xmlns="http://www.gbxml.org/schema" areaUnit="SquareFeet" lengthUnit="Feet" temperatureUnit="F" useSIUnitsForResults="False" version="0.37" volumeUnit="CubicFeet">
+  <aecXML/>
+  <Campus Name="Boston, MA&#10;" id="aim0002">
+    <Location/>
+    <Building StreetAddress="Boston, MA&#10;" buildingType="MultiFamily" id="aim0013">
+      <Area/>
+      <Space buildingStoreyIdRef="aim0015" conditionType="HeatedAndCooled" equipmentScheduleIdRef="aim0100" id="aim0090" lightScheduleIdRef="aim0100" peopleScheduleIdRef="aim0106" spaceType="LivingQuartersHotel" zoneIdRef="aim0070">
+        <Lighting/>
+        <LightingControl/>
+        <InfiltrationFlow/>
+        <PeopleNumber/>
+        <PeopleHeatGain/>
+        <LightPowerPerArea/>
+        <EquipPowerPerArea/>
+        <Area/>
+        <Temperature/>
+        <Volume/>
+        <PlanarGeometry/>
+        <ShellGeometry002/>
+        <AirLoopId/>
+        <HydronicLoopId/>
+        <MeterId/>
+        <IntEquipId/>
+        <AirLoopEquipmentId/>
+        <HydronicLoopEquipmentId/>
+        <CADObjectId/>
+        <SpaceBoundary/>
+      </Space>
+      <InfiltrationFlow/>
+      <ShellGeometry003/>
+      <SpaceBoundary/>
+      <Lighting/>
+      <IntEquipId/>
+      <MeterId/>
+      <PeakDomesticHotWaterFlow/>
+      <BuildingStorey/>
+    </Building>
+    <Surface/>
+    <YearModeled/>
+    <Life/>
+    <AltEnergySource/>
+    <ShellGeometry005/>
+    <Vegetation/>
+    <Transportation/>
+    <MeterId/>
+    <ExtEquipId/>
+    <Lighting/>
+    <LightControlId/>
+  </Campus>
+</gbXML>

@@ -68,10 +68,11 @@ def exportObj(exporter, elemGrp, Obj):
         #print(f"Object {obj.Label} Value Set")
         if Obj.ValueSet :
             print(f"Object : {Obj.Label} - Values Set")
-            #for prop in Obj.PropertiesList:
-            #    group = Obj.getGroupOfProperty(prop)
-            #    if group == "gbXML":
-            #        print(f"Property {prop} is in Group {group}")
+            for prop in Obj.PropertiesList:
+                group = Obj.getGroupOfProperty(prop)
+                if group == "gbXML":
+                    print(f"Property {prop} is in Group {group}")
+                    elemGrp.set(str(prop), str(getattr(Obj, prop)))
             #        attr = str(getattr(Obj, prop))
             #        #elemGrp.set(prop, attr)
 
@@ -81,10 +82,19 @@ def exportObj(exporter, elemGrp, Obj):
             print(f"Process {Obj.Label} Group ")
             for obj in Obj.Group:
                 print(f"Process Group {obj.Label}")
-                print(f"Add SubElement {obj.Label} to {elemGrp} ")
-                # add_element(self, parent, tag, text=None, attrib=None, ns="gbxml"):
-                newElemGrp = exporter.add_element(elemGrp, obj.Label)
-                exportObj(exporter, newElemGrp, obj)
+                if hasattr(Obj, "ValueSet"):
+                    #print(f"Object {obj.Label} Value Set")
+                    if Obj.ValueSet :
+                        print(f"Object : {Obj.Label} - Values Set")
+                        print(f"Add SubElement {obj.Label} to {elemGrp} ")
+                        # add_element(self, parent, tag, text=None, attrib=None, ns="gbxml"):
+                        # id should also be property
+                        if "__" in obj.Label:
+                            label, id = obj.Label.split("__", 1)
+                        else:
+                            label = obj.Label
+                        newElemGrp = exporter.add_element(elemGrp, label)
+                        exportObj(exporter, newElemGrp, obj)
 
 def exportSelection(filename, obj):
     from freecad.openStudio.GbxmlExporterClass import GbxmlExporter  

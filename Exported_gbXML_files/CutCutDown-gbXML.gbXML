@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gbXML xmlns="http://www.gbxml.org/schema">
+  <aecXML/>
+  <Campus>
+    <Location>
+      <StationId/>
+      <Elevation/>
+    </Location>
+    <Building>
+      <Area/>
+      <Space/>
+    </Building>
+  </Campus>
+</gbXML>

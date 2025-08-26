@@ -54,7 +54,7 @@ class PlanarGeometryClass(BaseClass):
 		#self.sketch = None
 				
 	def initPlanarGeometry(self):
-		print(f"Init PolyLoop Class")
+		print(f"Init PlanarGeometry Class")
 		self.addBaseProperties()
 		#self.PointsCount = 
 		#self.PointsList = self.obj.addProperty("App::PropertyVectorList","PointsList","gbXml","Cartesian Points")

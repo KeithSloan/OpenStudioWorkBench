@@ -37,9 +37,14 @@ class BaseClass():
 	    obj.Proxy.Type = objType
 
     def addBaseProperties(self):
-        self.obj.addProperty("Part::PropertyPartShape", "PartShape", "Base", "PartShape")
-        self.obj.PartShape = Part.Shape()               # Empty Shape
-        self.obj.setPropertyStatus('PartShape', '-Hidden')
+        #
+        # NOTE !!!
+        #
+        # Shape as property has problems saving as JSON so use Part::PythonFeature
+        #
+        #self.obj.addProperty("Part::PropertyPartShape", "PartShape", "Base", "PartShape")
+        #self.obj.PartShape = Part.Shape()               # Empty Shape
+        #self.obj.setPropertyStatus('PartShape', '-Hidden')
         self.obj.addProperty("App::PropertyBool", "CalcShape", "Base", "Compute FC Shape")
         self.obj.addProperty("App::PropertyEnumeration", "ShapeValid", "Base", "ShapeValid")
         self.obj.ShapeValid = ["UnSet", "Valid", "InValid"]
@@ -163,6 +168,23 @@ class ViewProvider():
         """If a property of the handled feature has changed we have the chance to handle this here"""
         # print("updateData")
         pass
+    
+    def addCartesianPoint(self, polyLoop, vector):
+		# Need to be passed polyLoop !!! ??
+		# self will be definition - polyLoop will be instance
+        import FreeCAD
+		#print(dir(self))
+		#print(f"add Cartesian - self {self} polyLoop {polyLoop}")
+        print(f"addCartesian - Vector passed {vector}")
+		#print(f"Before Points List {polyLoop.PointsList}")
+		#print(type(polyLoop.PointsList))
+        vecList = polyLoop.PointsList
+        vecList.append(FreeCAD.Vector(vector[0], vector[1], vector[2]))
+        polyLoop.PointsList = vecList
+
+    def addCartesianPointCount(self, polyLoop, count):
+        print(f"Add points count {polyLoop.Label} {count}")
+        polyLoop.PointsCount = count
 
     def setTransparency(self, obj, value):
         obj.ViewObject.Transparency = value
@@ -238,4 +260,11 @@ class ViewProvider():
     #    """When restoring the serialized object from document we have the chance to set some internals here.\
     #           Since no data were serialized nothing needs to be done here."""
     #    return None
+
+class ViewProviderExtension():
+    def __init__(self,vobj):
+        print(f"ViewProviderExtension {vobj}")
+        vobj.addExtension("Gui::ViewProviderGroupExtensionPython")
+        vobj.Proxy = self
+	
 

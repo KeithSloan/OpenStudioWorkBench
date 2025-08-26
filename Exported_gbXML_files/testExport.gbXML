@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gbXML xmlns="http://www.gbxml.org/schema" areaUnit="SquareMeters" id="root" lengthUnit="Meters" temperatureUnit="C" useSIUnitsForResults="False" version="0.37" volumeUnit="CubicMeters">
+  <Campus id="campus_2tR_WTtCfB38Go5ngzuANp">
+    <Building StreetAddress="Eindhoven, Netherlands" buildingType="Unknown" id="building_2tR_WTtCfB38Go5ngzuANm">
+      <Space Name="1" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris" id="space_0uP3DChXvDoxp5LoFKEKB3">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2VJVB7XObA4RI87_K1nOqn"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3XDaj8nOz4oxVySzo5jQfE"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0Uf3DjXxD5se3nHQSXQf7D"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0FPvDZD6rDKvXM9aGJ19cL"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2tPF-MRXH1jOVMllHY2Kdl"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3tb_FYWZb4oBfBbHRENzjW"/>
+      </Space>
+      <BuildingStorey Name="Level 1" id="buildingstorey_2tR_WTtCfB38Go5nf27ris"/>
+      <Space Name="2" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris" id="space_0uP3DChXvDoxp5LoFKEJqy">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0c72NkchT13OzBCeSXViaJ"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_09bRyE_P1AawL4C7otw4lw"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1BkF8Gm4LEgA9U66TmTJMW"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0DTl4NA3j63wCfwkMWc7ch"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_38nqBFFzrDn9Xu4RN21yqs"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1V2KiHc7D9wuFaaWKsWE5T"/>
+      </Space>
+      <Space Name="3" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris" id="space_0uP3DChXvDoxp5LoFKEJqv">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3MZD-Bcb59SfLUmeiRWuNU"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1eAq6VbxPDRxMT6rqQSHrI"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0xy6E5wdr8dgj2dKhPi_Zc"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3x0iwDdr59G8Bs0oJP5rAy"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3wOawNddDFAvtBxBR_3kmW"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_38TAJDX4v1dAxo5MU9GWdw"/>
+      </Space>
+      <Space Name="4" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris" id="space_0uP3DChXvDoxp5LoFKEJqw">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0XrsOAbyn9Lfg421w-j05_"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3nDQhMoYH6Gv8tj31ZZjVT"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_19pCpDorr6A8_rtUnzDh6f"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3eeM24h5vBcgVdeUeiYvGa"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3QDSYgo5zDphUwxpBxHiIq"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2Sn_fMFiv5Kh6Se4NqVUNl"/>
+      </Space>
+      <Space Name="5" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27ris" id="space_0uP3DChXvDoxp5LoFKEJqm">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_05c-6Diz97EwwOm4vXiRgL"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0ePi-n0FLERxH3Y9qyK22R"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0pfTgBAwP63g26zI1uJ9Is"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_10oLlEHbL4v8f1eeouI63J"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1MvdyQjVD01xWsE8GFDZYk"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1PW2EVrND98uuNcJ84cfsq"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1o0-OexrfC9BOP7jxkQNcO"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3Cq6Q29fb0pQYdWBqIVu1Y"/>
+      </Space>
+      <BuildingStorey Name="Level 2" id="buildingstorey_2tR_WTtCfB38Go5nf27rYt"/>
+      <Space Name="6" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27rYt" id="space_0uP3DChXvDoxp5LoFKEJqk">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0w_SijGZ915A4vfKbCPoTY"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3DYDShVXz50ANvL3FrDiBE"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3yGsv9kcf2x9HA8LcTnagS"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2ttUD_tKz3KPPjPeQUUi0h"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3KuD8JHBvE1RvXDjWSZ4xO"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0a5z2_lWf7Eux44d-gPUPv"/>
+      </Space>
+      <Space Name="7" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27rYt" id="space_0uP3DChXvDoxp5LoFKEJqg">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1LOH1n7zjB_vzlBO1FhNYC"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3XnCQNZb5CG9_XU_CTKVUW"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1mhsZlE0vBhudvW3SAKc3n"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0NQQU8E796ugwRkOlzM1pH"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1EylhoSQ59pPlVmchxq8gr"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_171jjCsF9CEhaNrNGA_9Ao"/>
+      </Space>
+      <Space Name="8" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27rYt" id="space_0uP3DChXvDoxp5LoFKEJqd">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1VeFl9VfjEI9rEeUvU6NGo"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1XMoneHETA8RBvIlpo6uRC"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2LBwDe-CX0RQNymLoYCYrJ"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1SYmRgBKfA58MHPWQ55xJS"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2cGF1wm5H79f6grHZPbH_6"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2fKxIN6-1DiOv3OaS9wLDX"/>
+      </Space>
+      <Space Name="9" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27rYt" id="space_0uP3DChXvDoxp5LoFKEJqW">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3MI65r5Bz61BAvLpsG1m_U"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0nMU5cIp91bu2htWTsBWgE"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_35CIJQAFrCWhdVxbGdC2JH"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0gMJSD3Zn11wJR9jyOH0BO"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3C1_BcVir49hk6kOm3ihk1"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1Y5oo4zr17_eSnqS_FzU2c"/>
+      </Space>
+      <Space Name="10" buildingStoreyIdRef="buildingstorey_2tR_WTtCfB38Go5nf27rYt" id="space_0uP3DChXvDoxp5LoFKEJqT">
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_1dNxamlA1FUP-WLcBXmcI_"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2jns4KM0XBDheCt1iay_M1"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_2yNGCVSqH9yOn_Z-mKHnA4"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_38qvlQH013Ke5UIjtf61Sf"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_18Qzi_pvHEQAvw9KaHbTXh"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_0LgcSozUv6kxYxpVqbp1a3"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3e-ZPrqbX2m8oreUlS02KS"/>
+        <SpaceBoundary isSecondLevelBoundary="False" surfaceIdRef="id_3yKqP25N531B-SuH58a9tP"/>
+      </Space>
+      <BuildingStorey Name="Level 3" id="buildingstorey_2tR_WTtCfB38Go5nf26_tE"/>
+    </Building>
+  </Campus>
+  <Construction Name="Basic Wall:Exterior - Brick on Mtl. Stud" id="construction_2359"/>
+  <Layer id="layer_2359"/>
+  <Material Name="Brick, Common" id="mat_2353"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311336" Name="object_M_Fixed0915_x_1220mm311336" id="id_0uP3DChXvDoxp5LoFKEJqL"/>
+  <Surface Name="boundary_2VJVB7XObA4RI87_K1nOqn" constructionIdRef="construction_2359" exposedToSun="False" id="id_2VJVB7XObA4RI87_K1nOqn" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311336" id="Opening1" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJqL"/>
+  </Surface>
+  <Surface Name="boundary_3XDaj8nOz4oxVySzo5jQfE" constructionIdRef="construction_2359" exposedToSun="False" id="id_3XDaj8nOz4oxVySzo5jQfE" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_0Uf3DjXxD5se3nHQSXQf7D" constructionIdRef="construction_2890" id="id_0Uf3DjXxD5se3nHQSXQf7D" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_0FPvDZD6rDKvXM9aGJ19cL" constructionIdRef="construction_3040" exposedToSun="False" id="id_0FPvDZD6rDKvXM9aGJ19cL" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_2tPF-MRXH1jOVMllHY2Kdl" constructionIdRef="construction_3040" exposedToSun="False" id="id_2tPF-MRXH1jOVMllHY2Kdl" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_3tb_FYWZb4oBfBbHRENzjW" constructionIdRef="construction_2890" id="id_3tb_FYWZb4oBfBbHRENzjW" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_0c72NkchT13OzBCeSXViaJ" constructionIdRef="construction_2359" exposedToSun="False" id="id_0c72NkchT13OzBCeSXViaJ" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_09bRyE_P1AawL4C7otw4lw" constructionIdRef="construction_2359" exposedToSun="False" id="id_09bRyE_P1AawL4C7otw4lw" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311441" id="Opening2" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJsi"/>
+  </Surface>
+  <Surface Name="boundary_1BkF8Gm4LEgA9U66TmTJMW" constructionIdRef="construction_2890" id="id_1BkF8Gm4LEgA9U66TmTJMW" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_0DTl4NA3j63wCfwkMWc7ch" constructionIdRef="construction_3040" exposedToSun="False" id="id_0DTl4NA3j63wCfwkMWc7ch" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_38nqBFFzrDn9Xu4RN21yqs" constructionIdRef="construction_3040" exposedToSun="False" id="id_38nqBFFzrDn9Xu4RN21yqs" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_1V2KiHc7D9wuFaaWKsWE5T" constructionIdRef="construction_2890" id="id_1V2KiHc7D9wuFaaWKsWE5T" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3MZD-Bcb59SfLUmeiRWuNU" constructionIdRef="construction_3040" exposedToSun="False" id="id_3MZD-Bcb59SfLUmeiRWuNU" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_1eAq6VbxPDRxMT6rqQSHrI" constructionIdRef="construction_2359" exposedToSun="False" id="id_1eAq6VbxPDRxMT6rqQSHrI" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311521" id="Opening3" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJtS"/>
+  </Surface>
+  <Surface Name="boundary_0xy6E5wdr8dgj2dKhPi_Zc" constructionIdRef="construction_2359" exposedToSun="False" id="id_0xy6E5wdr8dgj2dKhPi_Zc" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_3x0iwDdr59G8Bs0oJP5rAy" constructionIdRef="construction_2890" id="id_3x0iwDdr59G8Bs0oJP5rAy" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3wOawNddDFAvtBxBR_3kmW" constructionIdRef="construction_3040" exposedToSun="False" id="id_3wOawNddDFAvtBxBR_3kmW" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_38TAJDX4v1dAxo5MU9GWdw" constructionIdRef="construction_2890" id="id_38TAJDX4v1dAxo5MU9GWdw" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_0XrsOAbyn9Lfg421w-j05_" constructionIdRef="construction_3040" exposedToSun="False" id="id_0XrsOAbyn9Lfg421w-j05_" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_3nDQhMoYH6Gv8tj31ZZjVT" constructionIdRef="construction_2359" exposedToSun="False" id="id_3nDQhMoYH6Gv8tj31ZZjVT" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311467" id="Opening4" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJsM"/>
+  </Surface>
+  <Surface Name="boundary_19pCpDorr6A8_rtUnzDh6f" constructionIdRef="construction_2359" exposedToSun="False" id="id_19pCpDorr6A8_rtUnzDh6f" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_3eeM24h5vBcgVdeUeiYvGa" constructionIdRef="construction_2890" id="id_3eeM24h5vBcgVdeUeiYvGa" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3QDSYgo5zDphUwxpBxHiIq" constructionIdRef="construction_3040" exposedToSun="False" id="id_3QDSYgo5zDphUwxpBxHiIq" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_2Sn_fMFiv5Kh6Se4NqVUNl" constructionIdRef="construction_2890" id="id_2Sn_fMFiv5Kh6Se4NqVUNl" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_05c-6Diz97EwwOm4vXiRgL" constructionIdRef="construction_3040" exposedToSun="False" id="id_05c-6Diz97EwwOm4vXiRgL" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_0ePi-n0FLERxH3Y9qyK22R" constructionIdRef="construction_3040" exposedToSun="False" id="id_0ePi-n0FLERxH3Y9qyK22R" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_0pfTgBAwP63g26zI1uJ9Is" constructionIdRef="construction_3040" exposedToSun="False" id="id_0pfTgBAwP63g26zI1uJ9Is" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_10oLlEHbL4v8f1eeouI63J" constructionIdRef="construction_3040" exposedToSun="False" id="id_10oLlEHbL4v8f1eeouI63J" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_1MvdyQjVD01xWsE8GFDZYk" constructionIdRef="construction_2359" exposedToSun="False" id="id_1MvdyQjVD01xWsE8GFDZYk" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0406_x_1830mm311791" id="Opening5" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJpI"/>
+  </Surface>
+  <Surface Name="boundary_1PW2EVrND98uuNcJ84cfsq" constructionIdRef="construction_2359" exposedToSun="False" id="id_1PW2EVrND98uuNcJ84cfsq" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0406_x_1830mm311828" id="Opening6" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJyf"/>
+  </Surface>
+  <Surface Name="boundary_1o0-OexrfC9BOP7jxkQNcO" constructionIdRef="construction_2890" id="id_1o0-OexrfC9BOP7jxkQNcO" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3Cq6Q29fb0pQYdWBqIVu1Y" constructionIdRef="construction_2890" id="id_3Cq6Q29fb0pQYdWBqIVu1Y" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_0w_SijGZ915A4vfKbCPoTY" constructionIdRef="construction_2890" id="id_0w_SijGZ915A4vfKbCPoTY" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3DYDShVXz50ANvL3FrDiBE" constructionIdRef="construction_2359" exposedToSun="False" id="id_3DYDShVXz50ANvL3FrDiBE" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311563" id="Opening7" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJms"/>
+  </Surface>
+  <Surface Name="boundary_3yGsv9kcf2x9HA8LcTnagS" constructionIdRef="construction_2359" exposedToSun="False" id="id_3yGsv9kcf2x9HA8LcTnagS" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_2ttUD_tKz3KPPjPeQUUi0h" constructionIdRef="construction_2890" id="id_2ttUD_tKz3KPPjPeQUUi0h" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3KuD8JHBvE1RvXDjWSZ4xO" constructionIdRef="construction_3040" exposedToSun="False" id="id_3KuD8JHBvE1RvXDjWSZ4xO" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_0a5z2_lWf7Eux44d-gPUPv" constructionIdRef="construction_3040" exposedToSun="False" id="id_0a5z2_lWf7Eux44d-gPUPv" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_1LOH1n7zjB_vzlBO1FhNYC" constructionIdRef="construction_2890" id="id_1LOH1n7zjB_vzlBO1FhNYC" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_3XnCQNZb5CG9_XU_CTKVUW" constructionIdRef="construction_2359" exposedToSun="False" id="id_3XnCQNZb5CG9_XU_CTKVUW" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_1mhsZlE0vBhudvW3SAKc3n" constructionIdRef="construction_2359" exposedToSun="False" id="id_1mhsZlE0vBhudvW3SAKc3n" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311635" id="Opening8" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJnk"/>
+  </Surface>
+  <Surface Name="boundary_0NQQU8E796ugwRkOlzM1pH" constructionIdRef="construction_2890" id="id_0NQQU8E796ugwRkOlzM1pH" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_1EylhoSQ59pPlVmchxq8gr" constructionIdRef="construction_3040" exposedToSun="False" id="id_1EylhoSQ59pPlVmchxq8gr" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_171jjCsF9CEhaNrNGA_9Ao" constructionIdRef="construction_3040" exposedToSun="False" id="id_171jjCsF9CEhaNrNGA_9Ao" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_1VeFl9VfjEI9rEeUvU6NGo" constructionIdRef="construction_2890" id="id_1VeFl9VfjEI9rEeUvU6NGo" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_1XMoneHETA8RBvIlpo6uRC" constructionIdRef="construction_3040" exposedToSun="False" id="id_1XMoneHETA8RBvIlpo6uRC" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_2LBwDe-CX0RQNymLoYCYrJ" constructionIdRef="construction_2359" exposedToSun="False" id="id_2LBwDe-CX0RQNymLoYCYrJ" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311723" id="Opening9" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJoM"/>
+  </Surface>
+  <Surface Name="boundary_1SYmRgBKfA58MHPWQ55xJS" constructionIdRef="construction_2359" exposedToSun="False" id="id_1SYmRgBKfA58MHPWQ55xJS" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_2cGF1wm5H79f6grHZPbH_6" constructionIdRef="construction_2890" id="id_2cGF1wm5H79f6grHZPbH_6" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_2fKxIN6-1DiOv3OaS9wLDX" constructionIdRef="construction_3040" exposedToSun="False" id="id_2fKxIN6-1DiOv3OaS9wLDX" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_3MI65r5Bz61BAvLpsG1m_U" constructionIdRef="construction_2890" id="id_3MI65r5Bz61BAvLpsG1m_U" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_0nMU5cIp91bu2htWTsBWgE" constructionIdRef="construction_3040" exposedToSun="False" id="id_0nMU5cIp91bu2htWTsBWgE" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_35CIJQAFrCWhdVxbGdC2JH" constructionIdRef="construction_2359" exposedToSun="False" id="id_35CIJQAFrCWhdVxbGdC2JH" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0915_x_1220mm311671" id="Opening10" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJnA"/>
+  </Surface>
+  <Surface Name="boundary_0gMJSD3Zn11wJR9jyOH0BO" constructionIdRef="construction_2359" exposedToSun="False" id="id_0gMJSD3Zn11wJR9jyOH0BO" surfaceType="ExteriorWall"/>
+  <Surface Name="boundary_3C1_BcVir49hk6kOm3ihk1" constructionIdRef="construction_2890" id="id_3C1_BcVir49hk6kOm3ihk1" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_1Y5oo4zr17_eSnqS_FzU2c" constructionIdRef="construction_3040" exposedToSun="False" id="id_1Y5oo4zr17_eSnqS_FzU2c" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_1dNxamlA1FUP-WLcBXmcI_" constructionIdRef="construction_2890" id="id_1dNxamlA1FUP-WLcBXmcI_" surfaceType="InteriorFloor"/>
+  <Surface Name="boundary_2jns4KM0XBDheCt1iay_M1" constructionIdRef="construction_3040" exposedToSun="False" id="id_2jns4KM0XBDheCt1iay_M1" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_2yNGCVSqH9yOn_Z-mKHnA4" constructionIdRef="construction_3040" exposedToSun="False" id="id_2yNGCVSqH9yOn_Z-mKHnA4" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_38qvlQH013Ke5UIjtf61Sf" constructionIdRef="construction_3040" exposedToSun="False" id="id_38qvlQH013Ke5UIjtf61Sf" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_18Qzi_pvHEQAvw9KaHbTXh" constructionIdRef="construction_3040" exposedToSun="False" id="id_18Qzi_pvHEQAvw9KaHbTXh" surfaceType="InteriorWall"/>
+  <Surface Name="boundary_0LgcSozUv6kxYxpVqbp1a3" constructionIdRef="construction_2359" exposedToSun="False" id="id_0LgcSozUv6kxYxpVqbp1a3" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0406_x_1830mm311890" id="Opening11" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJzl"/>
+  </Surface>
+  <Surface Name="boundary_3e-ZPrqbX2m8oreUlS02KS" constructionIdRef="construction_2359" exposedToSun="False" id="id_3e-ZPrqbX2m8oreUlS02KS" surfaceType="ExteriorWall">
+    <Opening Name="object_M_Fixed0406_x_1830mm311948" id="Opening12" openingType="OperableWindow" windowTypeIdRef="id_0uP3DChXvDoxp5LoFKEJ_n"/>
+  </Surface>
+  <Surface Name="boundary_3yKqP25N531B-SuH58a9tP" constructionIdRef="construction_2890" id="id_3yKqP25N531B-SuH58a9tP" surfaceType="InteriorFloor"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311441" Name="object_M_Fixed0915_x_1220mm311441" id="id_0uP3DChXvDoxp5LoFKEJsi"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311467" Name="object_M_Fixed0915_x_1220mm311467" id="id_0uP3DChXvDoxp5LoFKEJsM"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311521" Name="object_M_Fixed0915_x_1220mm311521" id="id_0uP3DChXvDoxp5LoFKEJtS"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311563" Name="object_M_Fixed0915_x_1220mm311563" id="id_0uP3DChXvDoxp5LoFKEJms"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311635" Name="object_M_Fixed0915_x_1220mm311635" id="id_0uP3DChXvDoxp5LoFKEJnk"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311671" Name="object_M_Fixed0915_x_1220mm311671" id="id_0uP3DChXvDoxp5LoFKEJnA"/>
+  <WindowType Description="object_M_Fixed0915_x_1220mm311723" Name="object_M_Fixed0915_x_1220mm311723" id="id_0uP3DChXvDoxp5LoFKEJoM"/>
+  <WindowType Description="object_M_Fixed0406_x_1830mm311791" Name="object_M_Fixed0406_x_1830mm311791" id="id_0uP3DChXvDoxp5LoFKEJpI"/>
+  <WindowType Description="object_M_Fixed0406_x_1830mm311828" Name="object_M_Fixed0406_x_1830mm311828" id="id_0uP3DChXvDoxp5LoFKEJyf"/>
+  <WindowType Description="object_M_Fixed0406_x_1830mm311890" Name="object_M_Fixed0406_x_1830mm311890" id="id_0uP3DChXvDoxp5LoFKEJzl"/>
+  <WindowType Description="object_M_Fixed0406_x_1830mm311948" Name="object_M_Fixed0406_x_1830mm311948" id="id_0uP3DChXvDoxp5LoFKEJ_n"/>
+  <Material Name="Air" id="mat_2355"/>
+  <Material Name="Plywood, Sheathing" id="mat_2356"/>
+  <Material Name="Metal Stud Layer" id="mat_2357"/>
+  <Material Name="Gypsum Wall Board" id="mat_2358"/>
+  <Construction Name="Floor:Concrete-Commercial 362mm" id="construction_2890"/>
+  <Layer id="layer_2890"/>
+  <Material Name="Concrete, Cast In Situ" id="mat_2887"/>
+  <Material Name="Sand" id="mat_2888"/>
+  <Material Name="Site - Hardcore" id="mat_2889"/>
+  <Construction Name="Basic Wall:Interior - 79mm Partition (1-hr)" id="construction_3040"/>
+  <Layer id="layer_3040"/>
+  <Material Name="Gypsum Wall Board" id="mat_3035"/>
+  <Material Name="Gypsum Wall Board" id="mat_3036"/>
+  <Material Name="Metal Stud Layer" id="mat_3037"/>
+  <Material Name="Gypsum Wall Board" id="mat_3038"/>
+  <Material Name="Gypsum Wall Board" id="mat_3039"/>
+</gbXML>

@@ -20,10 +20,8 @@
 # *   USA                                                                   *
 # *                                                                         *
 # *   Acknowledgements :                                                    *
-# *                                                                         *
-# *   Takes as input a Volume Name, GDML file  and outputs                  *
-# *             a directory structure starting at the specified Volume Name *
-# *                                                                         *
+# *                                                                         
+# *   Process Document and where                                                                   *
 # *                                                                         *
 # *                                                                         *
 # *                                                                         *
@@ -38,104 +36,84 @@ import sys, os
 if open.__module__ in ['__builtin__', 'io']:
     pythonopen = open # to distinguish python built-in open function from the one declared here
 
-class switch(object):
-    value = None
 
-    def __new__(class_, value):
-        class_.value = value
-        return True
+#from freecad.openStudio.gbxml_lxml import gbxml_lxml
+#from freecad.openStudio.docTree_gbxml import buildDocTree
 
-def case(*args):
-    return any((arg == switch.value for arg in args))
+#global gbXML
+#gbXML = gbxml_lxml()
 
-from freecad.openStudio.gbxml_lxml import gbxml_lxml
-from freecad.openStudio.docTree_gbxml import buildDocTree
-
-global gbxml
-gbxml = gbxml_lxml()
-
-def getType(obj):
-    if obj.TypeId == "Part::FeaturePython":
-        if hasattr(obj, "Proxy"):
-            if hasattr(obj.Proxy, "ifcType"):
-                return obj.Proxy.ifcType
-            elif hasattr(obj.Proxy, "Type"):
-                return obj.Proxy.Type
-    else:
-        return obj.TypeId
-
-def processSpaceSketch(wallObj, sketch):
-    for sObj in sketch.Geometry:
-        print(sObj.TypeId)
-        gType = sObj.TypeId
-        #while switch(gType):
-        #    if case("Part::GeomLineSegment"):
-        #        print(f"{sObj.StartPoint} , {sObj.EndPoint}")
-        #
-        #    print(f"{gType} Not yet handled")
-        #    return
-        if gType == "Part::GeomLineSegment":
-            print(f"{sObj.StartPoint} , {sObj.EndPoint}")
-        else:
-            print(f"{gType} Not yet handled")
+####
+#    gbxml = ET.Element(
+#        "gbXML",
+#         attrib={
+#
+#    <?xml version="1.0"?>
+#<gbXML useSIUnitsForResults="false" temperatureUnit="C" lengthUnit="Feet" 
+#areaUnit="SquareFeet" volumeUnit="CubicFeet" version="0.37" xmlns="http://www.gbxml.org/schema">
+####
 
 
-def processWall(wObj):
-    if hasattr(wObj, "Base"):
-        print(wObj.Base)
-        if wObj.Base is not None:
-            if wObj.Base.TypeId == "Sketcher::SketchObject":
-                processSpaceSketch(wObj, wObj.Base)
+#def processExportActiveDocument(filename):
+#    import FreeCAD
+#
+#    for obj in FreeCAD.ActiveDocument.Objects:
+#        print(obj.Label)
+#        if hasattr(obj, "Valueset"):
+#            print("Value Set")
 
-def getFace(obj, fName):
-    print(f"{obj.Label} Get Face {fName}")
+def exportObj(exporter, elemGrp, Obj):
+    print(f"ExportObj {elemGrp} Object {Obj.Label}")
+    if hasattr(Obj, "ValueSet"):
+        #print(f"Object {obj.Label} Value Set")
+        if Obj.ValueSet :
+            print(f"Object : {Obj.Label} - Values Set")
+            for prop in Obj.PropertiesList:
+                group = Obj.getGroupOfProperty(prop)
+                if group == "gbXML":
+                    print(f"Property {prop} is in Group {group}")
+                    elemGrp.set(str(prop), str(getattr(Obj, prop)))
+            #        attr = str(getattr(Obj, prop))
+            #        #elemGrp.set(prop, attr)
 
-def processBoundaryObjFaces(objFaces):
-    # objFaces - tuples
-    print(f"objFaces {objFaces}")
-    processWall(objFaces[0])
-    #for wObj in objFaces(0): 
-    #    processWall(wObj)
+        # Now process Group
+        # if Obj.ValueSet : ????
+        if hasattr(Obj,"Group"):
+            print(f"Process {Obj.Label} Group ")
+            for obj in Obj.Group:
+                print(f"Process Group {obj.Label}")
+                # What if Values Set in Group ??
+                if hasattr(obj, "ValueSet"):
+                    #print(f"Object {obj.Label} Value Set")
+                    if obj.ValueSet :
+                        print(f"Object : {Obj.Label} - Values Set")
+                        print(f"Add SubElement {obj.Label} to {elemGrp} ")
+                        # add_element(self, parent, tag, text=None, attrib=None, ns="gbxml"):
+                        # id should also be property
+                        if "__" in obj.Label:
+                            label, id = obj.Label.split("__", 1)
+                        else:
+                            label = obj.Label
+                        newElemGrp = exporter.add_element(elemGrp, label)
+                        exportObj(exporter, newElemGrp, obj)
 
-    #print(f"{obj.Label} type {getType(obj)}")
-    #for fn in fNames:
-    #    face = getFace(obj, fn)
+def exportSelection(filename, obj):
+    from freecad.openStudio.GbxmlExporterClass import GbxmlExporter  
+    print(obj.Label)
+    # Set gbXML structure on each export
+    exporter = GbxmlExporter()
+    exportObj(exporter, exporter.root, obj)
+    #gbXML.writeElementTree(filename, gbXML, type, elem, ext="xml")
+    exporter.writeTree(filename)
 
-def processBoundaries(bObjs):
-    print(bObjs)
-    for b in bObjs :
-        processBoundaryObjFaces(b)
-    #print(boundType)
-
-def processSpace(sObj):
-    if hasattr(sObj, "Boundaries"):
-        processBoundaries(sObj.Boundaries)
-
-def processExport(obj):
-    objType = getType(obj)
-    print(f"Label {obj.Label} Type {objType}")
-    while switch (objType):
-        if case("Site"):
-            print(f"Site")
-            #processSpace(obj)
-            print(gbxml)
-            print(dir(gbxml))
-            gbxml.exportSite() 
-        return
 
 def export(exportList, filename):
+
     "called when FreeCAD exports a file"
-    from freecad.openStudio import gbxml_lxml
+    # from freecad.openStudio import gbxml_lxml
     # process Objects
     print("\nStart Export gbxml 0.1\n")
-    print(f"Open Output File : ExportList {exportList}")
-    gbxml.setFileDetails(filename)
-    # global childObjects
-    # childObjects = {}  # dictionary of list of child objects for each object
-    # buildDocTree now creates global childObjects 
-    buildDocTree()  # creates global childObjects
-    #processExport()
-    print(f"Export List {exportList}")
-    for e in exportList:
-        if getType(e) == 'Site':
-            processExport(e)
+    print(f"Open Output File : {filename} ExportList {exportList}")
+    #gbXML.setFileDetails(filename)
+    exportSelection(filename, exportList[0])
+    #processExportActiveDocument(filename)

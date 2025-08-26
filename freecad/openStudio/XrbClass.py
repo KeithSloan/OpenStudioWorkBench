@@ -199,30 +199,59 @@ class XrbClass():
             # Could be Enum
             # 
     def createPolyLoop(self, parent):
-        from freecad.openStudio.polyLoopClass import PolyLoopClass
+        #
         # Treat PolyLoop Custom Object
-        
+        #
+        import FreeCAD
+        from freecad.openStudio.polyLoopClass import PolyLoopClass
+        from freecad.openStudio.baseObject import ViewProvider
         print(f"Create PolyLoop : Parent {parent.Label}")
-        obj = parent.newObject("App::FeaturePython", "PolyLoop")
+        if parent.TypeId != "Part::FeaturePython":
+            obj = parent.newObject("App::FeaturePython", "PolyLoop")
+        else:
+            obj = FreeCAD.ActiveDocument.addObject("App::FeaturePython","PolyLoop")
+            parent.addObject(obj)
         PolyLoopClass(obj)
+        ViewProvider(obj)
         return obj
+
+
+    def createRectangularGeometry(self, parent):
+        from freecad.openStudio.baseObject import ViewProviderExtension
+        from freecad.openStudio.rectangularGeometryClass import RectangularGeometryClass
+        # Treat RectangularGeometry as Custom Object     
+        print(f"Create RectangulerGeometry : Parent {parent.Label}")
+        obj = parent.newObject("Part::FeaturePython", "RectangularGeometry")
+        obj.addExtension("App::GroupExtensionPython")        # Means Group property created
+        RectangularGeometryClass(obj)
+        print(f"Add View Provider : {obj.ViewObject}")
+        ViewProviderExtension(obj.ViewObject)
+        #ViewProviderExtension()
+        print("Rectangular Geometry Created")
+        return obj
+
 
     def createPlanarGeometry(self, parent):
+        from freecad.openStudio.baseObject import ViewProviderExtension
         from freecad.openStudio.planarGeometryClass import PlanarGeometryClass
         # Treat PlanarGeometry as Custom Object
-        
         print(f"Create PlanarGeometry : Parent {parent.Label}")
-        obj = parent.newObject("App::DocumentObjectGroupPython", "PlanarGeometry")
+        obj = parent.newObject("Part::FeaturePython", "PlanarGeometry")
+        obj.addExtension("App::GroupExtensionPython")       # Means Group property created
         PlanarGeometryClass(obj)
+        ViewProviderExtension(obj.ViewObject)
         return obj
 
+
     def createShellGeometry(self, parent):
+        from freecad.openStudio.baseObject import ViewProviderExtension
         from freecad.openStudio.shellGeometryClass import ShellGeometryClass
         # Treat ShellGeometry as Custom Object
-        
         print(f"Create ShellGeometry : Parent {parent.Label}")
-        obj = parent.newObject("App::DocumentObjectGroupPython", "ShellGeometry")
+        obj = parent.newObject("Part::FeaturePython", "ShellGeometry")
+        obj.addExtension("App::GroupExtensionPython")       # Means Group property created
         ShellGeometryClass(obj)
+        ViewProviderExtension(obj.ViewObject)
         return obj 
 
     #def createClosedShellGeometry(self, parent):
@@ -393,6 +422,8 @@ class XrbClass():
                     print("process PolyLoop")
                     self.createPolyLoop(parent)
                     break
+                elif elemName == "RectangularGeometry":
+                    self.createRectangularGeometry(parent)
                 elif elemName == "PlanarGeometry":
                     self.createPlanarGeometry(parent)
                 elif elemName == "ShellGeometry":

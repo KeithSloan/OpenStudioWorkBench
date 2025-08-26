@@ -36,8 +36,7 @@ as FreeCAD maybe picking up OpenStudio options from there.
 
 
 ### External Editor
-  
-   
+     
   To use an external editor for Template, Material Map, Schedule, IDFSpace Map
   
   You need to add a parameter to the OpenStudio workbench
@@ -101,9 +100,19 @@ as FreeCAD maybe picking up OpenStudio options from there.
           
           ![Screenshot] https://github.com/user-attachments/assets/64fe0bbd-6b72-4a1e-958b-c766655d218d
 
-          Click Okay to convert Ifc to gbXML and import 
+          Click Okay to convert Ifc to gbXML and import
 
-    * Branch gbXML2IDF
+    * convert_IFC_gbXML file
+      Uses Maarten Visschers - ifc to gbXML converter to create a gbXML file without loading into Workbench
+    
+
+    * export gbXML file
+          Exports all gbXML objects with property ValueSet is True
+
+          For example import ifc file with create an gbXML structure but only some objects will have the ValueSet property set to Trur
+
+
+    * gbXML2IDF
 
        submodule add https://github.com/KeithSloan/gbXML2IDF which is a fork of https://github.com/Udaragithub/gbXML2IDF
 
@@ -113,7 +122,7 @@ as FreeCAD maybe picking up OpenStudio options from there.
          - material_data.csv
          - space_data.csv
 
-        ToDo
+## ToDo - Material Mapping !!!
           - Create files baaed on gbXML source i.e. Avoid hand editing step 
               - Providing mapping gbXML materials to IDF Materials
               - Providing mapping gbXML Space to iDF Space

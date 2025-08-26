@@ -82,9 +82,10 @@ def exportObj(exporter, elemGrp, Obj):
             print(f"Process {Obj.Label} Group ")
             for obj in Obj.Group:
                 print(f"Process Group {obj.Label}")
-                if hasattr(Obj, "ValueSet"):
+                # What if Values Set in Group ??
+                if hasattr(obj, "ValueSet"):
                     #print(f"Object {obj.Label} Value Set")
-                    if Obj.ValueSet :
+                    if obj.ValueSet :
                         print(f"Object : {Obj.Label} - Values Set")
                         print(f"Add SubElement {obj.Label} to {elemGrp} ")
                         # add_element(self, parent, tag, text=None, attrib=None, ns="gbxml"):

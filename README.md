@@ -2,12 +2,14 @@
 
 ## ( FreeCAD workbench to add facilities for OpenStudio & EnergyPlus )
 
-This is ane experimental workbench looking to create valid input
+This is an experimental workbench looking to create valid input
 for OpenStudio & EnergyPlus
 
 Rename to BIM or BEM workbench ?
 
-# This workbench uses Submodules
+# IMPORTANT !!!
+
+## This workbench uses Submodules
 
 As this module uses submodules it cannot currently be installed by the Addon Manager
 
@@ -89,6 +91,7 @@ as FreeCAD maybe picking up OpenStudio options from there.
         Create FC Shapes for Geometry and check with imported data
         
     * Import ifc file
+
       - Import Ifc file using Maarten Visschers - ifc to gbXML converter
           https://github.com/MGVisschers/IFC-to-gbXML-converter
           Maintained by Bruno Postle
@@ -97,10 +100,10 @@ as FreeCAD maybe picking up OpenStudio options from there.
           https://github.com/KeithSloan/IFC-to-gbXML-converter
 
           On import should get a Frame prompt
-          
-          ![Screenshot] https://github.com/user-attachments/assets/64fe0bbd-6b72-4a1e-958b-c766655d218d
 
-          Click Okay to convert Ifc to gbXML and import
+  ![Import IFC prompt](https://github.com/user-attachments/assets/bd427395-1230-42d0-8f41-0b2b56a5ad8b)
+         
+          Click Okay to import or convert or 
 
     * convert_IFC_gbXML file
       Uses Maarten Visschers - ifc to gbXML converter to create a gbXML file without loading into Workbench
